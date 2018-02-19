@@ -1,3 +1,4 @@
+# https://medium.com/@bod/cache-your-android-sdk-with-travis-c816b9264708 was the source of this file
 language: android
 jdk: oraclejdk8
 
