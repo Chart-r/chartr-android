@@ -1,0 +1,31 @@
+{
+  "language": "android",
+  "jdk": "oraclejdk8",
+  "before_cache": [
+    "rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock",
+    "rm -fr $HOME/.gradle/caches/*/plugin-resolution/"
+  ],
+  "cache": {
+    "directories": [
+      "$HOME/android-sdk-dl",
+      "$HOME/android-sdk",
+      "$HOME/.gradle/caches/",
+      "$HOME/.gradle/wrapper/",
+      "$HOME/.android/build-cache"
+    ]
+  },
+  "install": [
+    "if test ! -e $HOME/android-sdk-dl/sdk-tools.zip ; then curl https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip > $HOME/android-sdk-dl/sdk-tools.zip ; fi",
+    "unzip -qq -n $HOME/android-sdk-dl/sdk-tools.zip -d $HOME/android-sdk",
+    "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'tools' > /dev/null",
+    "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platform-tools' > /dev/null",
+    "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;26.0.1' > /dev/null",
+    "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-26' > /dev/null",
+    "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;m2repository' > /dev/null"
+  ],
+  "env": "ANDROID_HOME=$HOME/android-sdk",
+  "script": "./gradlew --no-daemon --parallel lintDebug testDebug",
+  "os": "linux",
+  "group": "stable",
+  "dist": "trusty"
+}
