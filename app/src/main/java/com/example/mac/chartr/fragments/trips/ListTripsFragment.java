@@ -16,7 +16,6 @@ public class ListTripsFragment extends Fragment {
     private static final String TAG = ListTripsFragment.class.getSimpleName();
     public static final String TRIP_TYPE_KEY = "TripTypeKey";
 
-
     public ListTripsFragment() {
         // Required empty public constructor
     }
