@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/app_main_screen_title"
+        android:text="Chartr"
         android:textSize="30dp"
         android:id="@+id/textViewAppMainTitle"
         android:layout_below="@+id/space_1"
@@ -45,7 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/app_main_desc"
+        android:text="A new way to ride"
+        android:gravity="center"
         android:id="@+id/textView"
         android:layout_below="@+id/space"
         android:layout_centerHorizontal="true" />
