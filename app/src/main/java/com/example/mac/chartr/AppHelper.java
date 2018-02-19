@@ -76,19 +76,19 @@ public class AppHelper {
     /**
      * Add your pool id here
      */
-    private static final String userPoolId = "us-east-2_osODiPWcX";
+    private static final String userPoolId = "us-east-2_OHZrHKLGQ";
 
     /**
      * Add you app id
      */
-    private static final String clientId = "3f6cuau293vd26uh43n7okm4j4";
+    private static final String clientId = "20d0tqg8ulln6v52hau17ttsc2";
 
     /**
      * App secret associated with your app id - if the App id does not have an associated App secret,
      * set the App secret to null.
      * e.g. clientSecret = null;
      */
-    private static final String clientSecret = "4i37snu03popvttusfomg9aj3k1qgiqdg3i5b12gfe7lp671pev";
+    private static final String clientSecret = "1iskopdp36s0eponkvduvfmqh0cj6aol31e74pan4bkjbn3722d1";
 
     /**
      * Set Your User Pools region.
@@ -435,15 +435,16 @@ public class AppHelper {
     private static void setData() {
         // Set attribute display sequence
         attributeDisplaySeq = new ArrayList<String>();
-        attributeDisplaySeq.add("given_name");
+        attributeDisplaySeq.add("name");
         attributeDisplaySeq.add("middle_name");
         attributeDisplaySeq.add("family_name");
         attributeDisplaySeq.add("nickname");
         attributeDisplaySeq.add("phone_number");
         attributeDisplaySeq.add("email");
+        attributeDisplaySeq.add("birthdate");
 
         signUpFieldsC2O = new HashMap<String, String>();
-        signUpFieldsC2O.put("Given name", "given_name");
+        signUpFieldsC2O.put("Given name", "name");
         signUpFieldsC2O.put("Family name", "family_name");
         signUpFieldsC2O.put("Nick name", "nickname");
         signUpFieldsC2O.put("Phone number", "phone_number");
@@ -451,6 +452,7 @@ public class AppHelper {
         signUpFieldsC2O.put("Email verified", "email_verified");
         signUpFieldsC2O.put("Email","email");
         signUpFieldsC2O.put("Middle name","middle_name");
+        signUpFieldsC2O.put("Birthday", "birthdate");
 
         signUpFieldsO2C = new HashMap<String, String>();
         signUpFieldsO2C.put("given_name", "Given name");

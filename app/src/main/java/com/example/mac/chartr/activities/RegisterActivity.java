@@ -26,17 +26,16 @@ import com.example.mac.chartr.R;
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
     
-    private EditText username;
+    private EditText email;
     private EditText password;
     private EditText givenName;
-    private EditText familyName;
-    private EditText email;
+    private EditText birthday;
     private EditText phone;
 
     private Button signUp;
     private AlertDialog userDialog;
     private ProgressDialog waitDialog;
-    private String usernameInput;
+    private String emailInput;
     private String userPasswd;
 
     @Override
@@ -59,27 +58,28 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void init() {
-        username = (EditText) findViewById(R.id.editTextRegUserId);
-        username.addTextChangedListener(new TextWatcher() {
+        email = (EditText) findViewById(R.id.editTextRegEmail);
+        email.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegUserIdLabel);
-                    label.setText(username.getHint());
-                    username.setBackground(getDrawable(R.drawable.text_border_selector));
+                    TextView label = (TextView) findViewById(R.id.textViewRegEmailLabel);
+                    label.setText(email.getHint());
+                    email.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView label = (TextView) findViewById(R.id.textViewRegUserIdMessage);
+                TextView label = (TextView) findViewById(R.id.textViewRegEmailMessage);
                 label.setText("");
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegUserIdLabel);
+                    TextView label = (TextView) findViewById(R.id.textViewRegEmailLabel);
                     label.setText("");
                 }
             }
@@ -138,20 +138,20 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
         //
-        email = (EditText) findViewById(R.id.editTextRegEmail);
-        email.addTextChangedListener(new TextWatcher() {
+        birthday = (EditText) findViewById(R.id.editTextRegBirthday);
+        birthday.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewRegEmailLabel);
                     label.setText(email.getHint());
-                    email.setBackground(getDrawable(R.drawable.text_border_selector));
+                    birthday.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView label = (TextView) findViewById(R.id.textViewRegEmailMessage);
+                TextView label = (TextView) findViewById(R.id.textViewRegBirthdayMessage);
                 label.setText("");
 
             }
@@ -159,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegEmailLabel);
+                    TextView label = (TextView) findViewById(R.id.textViewRegBirthdayLabel);
                     label.setText("");
                 }
             }
@@ -198,11 +198,11 @@ public class RegisterActivity extends AppCompatActivity {
                 // Read user data and register
                 CognitoUserAttributes userAttributes = new CognitoUserAttributes();
 
-                usernameInput = username.getText().toString();
-                if (usernameInput == null || usernameInput.isEmpty()) {
-                    TextView view = (TextView) findViewById(R.id.textViewRegUserIdMessage);
-                    view.setText(username.getHint() + " cannot be empty");
-                    username.setBackground(getDrawable(R.drawable.text_border_error));
+                emailInput = email.getText().toString();
+                if (emailInput == null || emailInput.isEmpty()) {
+                    TextView view = (TextView) findViewById(R.id.textViewRegEmailMessage);
+                    view.setText(email.getHint() + " cannot be empty");
+                    email.setBackground(getDrawable(R.drawable.text_border_error));
                     return;
                 }
 
@@ -229,6 +229,13 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
 
+                userInput = birthday.getText().toString();
+                if (userInput != null) {
+                    if (userInput.length() > 0) {
+                        userAttributes.addAttribute(AppHelper.getSignUpFieldsC2O().get(birthday.getHint()).toString(), userInput);
+                    }
+                }
+
                 userInput = phone.getText().toString();
                 if (userInput != null) {
                     if (userInput.length() > 0) {
@@ -238,7 +245,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 showWaitDialog("Signing up...");
 
-                AppHelper.getPool().signUpInBackground(usernameInput, userpasswordInput, userAttributes, null, signUpHandler);
+                AppHelper.getPool().signUpInBackground(emailInput, userpasswordInput, userAttributes, null, signUpHandler);
 
             }
         });
@@ -253,7 +260,7 @@ public class RegisterActivity extends AppCompatActivity {
             Boolean regState = signUpConfirmationState;
             if (signUpConfirmationState) {
                 // User is already confirmed
-                showDialogMessage("Sign up successful!",usernameInput+" has been Confirmed", true);
+                showDialogMessage("Sign up successful!",emailInput+" has been Confirmed", true);
             }
             else {
                 // User is not confirmed
@@ -264,9 +271,9 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onFailure(Exception exception) {
             closeWaitDialog();
-            TextView label = (TextView) findViewById(R.id.textViewRegUserIdMessage);
+            TextView label = (TextView) findViewById(R.id.textViewRegEmailMessage);
             label.setText("Sign up failed");
-            username.setBackground(getDrawable(R.drawable.text_border_error));
+            email.setBackground(getDrawable(R.drawable.text_border_error));
             showDialogMessage("Sign up failed",AppHelper.formatException(exception),false);
         }
     };
@@ -274,7 +281,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void confirmSignUp(CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
         Intent intent = new Intent(this, ConfirmRegisterActivity.class);
         intent.putExtra("source","signup");
-        intent.putExtra("name", usernameInput);
+        intent.putExtra("name", emailInput);
         intent.putExtra("destination", cognitoUserCodeDeliveryDetails.getDestination());
         intent.putExtra("deliveryMed", cognitoUserCodeDeliveryDetails.getDeliveryMedium());
         intent.putExtra("attribute", cognitoUserCodeDeliveryDetails.getAttributeName());
@@ -302,11 +309,11 @@ public class RegisterActivity extends AppCompatActivity {
                 try {
                     userDialog.dismiss();
                     if(exit) {
-                        exit(usernameInput);
+                        exit(emailInput);
                     }
                 } catch (Exception e) {
                     if(exit) {
-                        exit(usernameInput);
+                        exit(emailInput);
                     }
                 }
             }

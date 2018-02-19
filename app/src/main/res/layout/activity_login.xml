@@ -76,7 +76,7 @@
         android:layout_below="@+id/textViewUserIdLabel"
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
-        android:hint="Username"
+        android:hint="Email"
         android:inputType="textPersonName"/>
 
     <TextView

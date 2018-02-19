@@ -27,7 +27,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="@dimen/activity_text_size_small"
         android:text=" "
-        android:id="@+id/textViewRegUserIdLabel"
+        android:id="@+id/textViewRegEmailLabel"
         android:layout_below="@+id/textViewRegMessage"
         android:layout_centerHorizontal="true" />
 
@@ -36,24 +36,24 @@
         android:layout_height="@dimen/activity_text_height"
         android:paddingLeft="@dimen/activity_text_padding"
         android:paddingRight="@dimen/activity_text_padding"
-        android:id="@+id/editTextRegUserId"
-        android:layout_below="@+id/textViewRegUserIdLabel"
+        android:id="@+id/editTextRegEmail"
+        android:layout_below="@+id/textViewRegEmailLabel"
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
-        android:hint="Username"
-        android:inputType="textPersonName"/>
+        android:hint="Email"
+        android:inputType="textEmailAddress"/>
 
     <TextView
+        android:id="@+id/textViewRegEmailMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="@dimen/activity_text_padding"
-        android:text=" "
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editTextRegEmail"
         android:color="@color/alert"
+        android:text=" "
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/alert"
-        android:id="@+id/textViewRegUserIdMessage"
-        android:layout_below="@+id/editTextRegUserId"
-        android:layout_centerHorizontal="true" />
+        android:textSize="@dimen/activity_text_padding" />
 
     <TextView
         android:layout_width="match_parent"
@@ -63,7 +63,7 @@
         android:text=" "
         android:id="@+id/textViewRegUserPasswordLabel"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textViewRegUserIdMessage" />
+        android:layout_below="@+id/textViewRegEmailMessage" />
 
     <EditText
         android:layout_width="match_parent"
@@ -127,7 +127,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="@dimen/activity_text_size_small"
         android:text=" "
-        android:id="@+id/textViewRegEmailLabel"
+        android:id="@+id/textViewRegBirthdayLabel"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/textViewRegGivenNameMessage" />
 
@@ -136,12 +136,12 @@
         android:layout_height="@dimen/activity_text_height"
         android:paddingLeft="@dimen/activity_text_padding"
         android:paddingRight="@dimen/activity_text_padding"
-        android:id="@+id/editTextRegEmail"
-        android:layout_below="@id/textViewRegEmailLabel"
+        android:id="@+id/editTextRegBirthday"
+        android:layout_below="@id/textViewRegBirthdayLabel"
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
-        android:hint="Email"
-        android:inputType="textEmailAddress"/>
+        android:hint="Birthday"
+        android:inputType="date"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -150,8 +150,8 @@
         android:textSize="@dimen/activity_text_padding"
         android:text=" "
         android:textColor="@color/alert"
-        android:id="@+id/textViewRegEmailMessage"
-        android:layout_below="@id/editTextRegEmail"
+        android:id="@+id/textViewRegBirthdayMessage"
+        android:layout_below="@id/editTextRegBirthday"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -162,7 +162,7 @@
         android:text=" "
         android:id="@+id/textViewRegPhoneLabel"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/textViewRegEmailMessage" />
+        android:layout_below="@id/textViewRegBirthdayMessage" />
 
     <EditText
         android:layout_width="match_parent"
