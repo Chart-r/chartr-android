@@ -119,12 +119,14 @@
             android:hint="Return Time"
             android:inputType="date"/>
     </LinearLayout>
+
     <Space
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_inter_group_separation"
         android:layout_below="@+id/returnTimeLayout"
         android:layout_centerHorizontal="true"
         android:id="@+id/space3" />
+
     <Switch
         android:id="@+id/canPickUp"
         android:layout_width="match_parent"
@@ -133,19 +135,27 @@
         android:layout_below="@+id/space3"
         android:text="Can you pick up?" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_inter_group_separation"
+        android:layout_below="@+id/canPickUp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/space4" />
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:weightSum="8"
-        android:layout_below="@id/canPickUp"
+        android:layout_below="@id/space4"
         android:id="@+id/seatLayout"
         android:orientation="horizontal">
         <TextView
             android:id="@+id/seating"
             android:layout_width="0dp"
             android:layout_weight="4"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
             android:ems="20"
             android:layout_below="@id/canPickUp"
             android:text="Seating" />
@@ -154,8 +164,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/activity_text_height_post_trip"
             android:layout_weight="1"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/button_selector"
             android:onClick="logIn"
             android:text="-"
@@ -168,22 +177,18 @@
             android:layout_height="@dimen/activity_text_height_post_trip"
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
+            android:layout_gravity="center_vertical"
             android:id="@+id/seatValue"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="center"
+            android:gravity="center"
             android:background="@drawable/text_border_selector"
             android:hint="number"
-            android:inputType="date"/>
+            android:inputType="number"/>
         <Button
             android:id="@+id/seatsIncrement"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="@dimen/activity_text_height_post_trip"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="20dp"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/button_selector"
             android:onClick="logIn"
             android:text="+"
@@ -192,13 +197,21 @@
             android:textSize="@dimen/activity_button_text_size" />
 
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_inter_group_separation"
+        android:layout_below="@+id/seatLayout"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/space5" />
+
     <TextView
         android:id="@+id/tripPreferences"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:ems="20"
-        android:layout_below="@id/seatLayout"
+        android:layout_below="@id/space5"
         android:text="Trip Preferences" />
     <Switch
         android:id="@+id/noSmoking"
