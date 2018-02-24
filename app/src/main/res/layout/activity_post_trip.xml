@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.mac.chartr.activities.LoginActivity">
+
+
+    <TextView
+        android:id="@+id/logistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:ems="20"
+        android:text="Logistics" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_text_height_post_trip"
+        android:paddingLeft="@dimen/activity_text_padding"
+        android:paddingRight="@dimen/activity_text_padding"
+        android:id="@+id/startLocation"
+        android:layout_below="@+id/logistics"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/text_border_selector"
+        android:hint="Start Location"
+        android:inputType="text"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_text_height_post_trip"
+        android:paddingLeft="@dimen/activity_text_padding"
+        android:paddingRight="@dimen/activity_text_padding"
+        android:id="@+id/destination"
+        android:layout_below="@+id/startLocation"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/text_border_selector"
+        android:hint="End Location"
+        android:inputType="text"/>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_inter_group_separation"
+        android:layout_below="@+id/destination"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/space1" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:layout_below="@id/space1"
+        android:id="@+id/departureTimeLayout"
+        android:orientation="horizontal">
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:id="@+id/departureDate"
+            android:layout_below="@+id/space1"
+            android:layout_centerHorizontal="true"
+
+            android:background="@drawable/text_border_selector"
+            android:hint="Departure Date"
+            android:inputType="date"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:id="@+id/departureTime"
+            android:layout_below="@+id/space1"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/text_border_selector"
+            android:hint="Departure Time"
+            android:inputType="date"/>
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/returnSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_text_height_post_trip"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/departureTimeLayout"
+        android:text="Return?" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:layout_below="@id/returnSwitch"
+        android:id="@+id/returnTimeLayout"
+        android:orientation="horizontal">
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:id="@+id/returnDate"
+            android:layout_below="@+id/space1"
+            android:layout_centerHorizontal="true"
+
+            android:background="@drawable/text_border_selector"
+            android:hint="Return Date"
+            android:inputType="date"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:id="@+id/returnTime"
+            android:layout_below="@+id/space1"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/text_border_selector"
+            android:hint="Return Time"
+            android:inputType="date"/>
+    </LinearLayout>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_inter_group_separation"
+        android:layout_below="@+id/returnTimeLayout"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/space3" />
+    <Switch
+        android:id="@+id/canPickUp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_text_height_post_trip"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/space3"
+        android:text="Can you pick up?" />
+    <TextView
+        android:id="@+id/seating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:ems="20"
+        android:layout_below="@id/canPickUp"
+        android:text="Seating" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="4"
+        android:layout_below="@id/seating"
+        android:id="@+id/seatLayout"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/seatsDecrement"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_selector"
+            android:onClick="logIn"
+            android:text="Add Trip"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/activity_button_text_size" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:id="@+id/seatValue"
+            android:layout_below="@+id/space1"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/text_border_selector"
+            android:hint="Return Time"
+            android:inputType="date"/>
+        <Button
+            android:id="@+id/seatsIncrement"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_selector"
+            android:onClick="logIn"
+            android:text="Add Trip"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/activity_button_text_size" />
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/buttonLogIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_selector"
+        android:onClick="logIn"
+        android:text="Add Trip"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/activity_button_text_size" />
+
+
+</RelativeLayout>
