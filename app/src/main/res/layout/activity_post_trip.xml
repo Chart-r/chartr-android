@@ -132,33 +132,33 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/space3"
         android:text="Can you pick up?" />
-    <TextView
-        android:id="@+id/seating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:ems="20"
-        android:layout_below="@id/canPickUp"
-        android:text="Seating" />
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:weightSum="4"
-        android:layout_below="@id/seating"
+        android:weightSum="8"
+        android:layout_below="@id/canPickUp"
         android:id="@+id/seatLayout"
         android:orientation="horizontal">
-
+        <TextView
+            android:id="@+id/seating"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:ems="20"
+            android:layout_below="@id/canPickUp"
+            android:text="Seating" />
         <Button
             android:id="@+id/seatsDecrement"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/activity_text_height_post_trip"
             android:layout_weight="1"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="20dp"
             android:background="@drawable/button_selector"
             android:onClick="logIn"
-            android:text="Add Trip"
+            android:text="-"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/activity_button_text_size" />
@@ -169,27 +169,51 @@
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
             android:id="@+id/seatValue"
-            android:layout_below="@+id/space1"
             android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center"
             android:background="@drawable/text_border_selector"
-            android:hint="Return Time"
+            android:hint="number"
             android:inputType="date"/>
         <Button
             android:id="@+id/seatsIncrement"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/activity_text_height_post_trip"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_selector"
             android:onClick="logIn"
-            android:text="Add Trip"
+            android:text="+"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/activity_button_text_size" />
 
     </LinearLayout>
+    <TextView
+        android:id="@+id/tripPreferences"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:ems="20"
+        android:layout_below="@id/seatLayout"
+        android:text="Trip Preferences" />
+    <Switch
+        android:id="@+id/noSmoking"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_text_height_post_trip"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tripPreferences"
+        android:text="No Smoking" />
+    <Switch
+        android:id="@+id/quite"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_text_height_post_trip"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/noSmoking"
+        android:text="Quite" />
     <Button
         android:id="@+id/buttonLogIn"
         android:layout_width="match_parent"
