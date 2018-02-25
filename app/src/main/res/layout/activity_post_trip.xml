@@ -15,6 +15,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:ems="20"
+        android:textStyle="bold"
+        android:textColor="@color/grey_700"
+        android:textSize="15dp"
         android:text="Logistics" />
     <EditText
         android:layout_width="match_parent"
@@ -26,6 +29,8 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
         android:hint="Start Location"
+        android:textStyle="italic"
+        android:textSize="15dp"
         android:inputType="text"/>
 
     <EditText
@@ -38,6 +43,8 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
         android:hint="End Location"
+        android:textStyle="italic"
+        android:textSize="15dp"
         android:inputType="text"/>
     <Space
         android:layout_width="match_parent"
@@ -64,6 +71,8 @@
 
             android:background="@drawable/text_border_selector"
             android:hint="Departure Date"
+            android:textStyle="italic"
+            android:textSize="15dp"
             android:inputType="date"/>
         <EditText
             android:layout_width="0dp"
@@ -76,6 +85,8 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/text_border_selector"
             android:hint="Departure Time"
+            android:textStyle="italic"
+            android:textSize="15dp"
             android:inputType="date"/>
     </LinearLayout>
 
@@ -105,6 +116,8 @@
 
             android:background="@drawable/text_border_selector"
             android:hint="Return Date"
+            android:textStyle="italic"
+            android:textSize="15dp"
             android:inputType="date"/>
         <EditText
             android:layout_width="0dp"
@@ -117,6 +130,8 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/text_border_selector"
             android:hint="Return Time"
+            android:textStyle="italic"
+            android:textSize="15dp"
             android:inputType="date"/>
     </LinearLayout>
 
@@ -158,6 +173,9 @@
             android:gravity="center_vertical"
             android:ems="20"
             android:layout_below="@id/canPickUp"
+            android:textStyle="bold"
+            android:textColor="@color/grey_700"
+            android:textSize="15dp"
             android:text="Seating" />
         <Button
             android:id="@+id/seatsDecrement"
@@ -170,6 +188,7 @@
             android:text="-"
             android:textAllCaps="false"
             android:textColor="@color/white"
+            android:backgroundTint="@color/grey_700"
             android:textSize="@dimen/activity_button_text_size" />
         <TextView
             android:layout_width="0dp"
@@ -194,6 +213,7 @@
             android:text="+"
             android:textAllCaps="false"
             android:textColor="@color/white"
+            android:backgroundTint="@color/grey_700"
             android:textSize="@dimen/activity_button_text_size" />
 
     </LinearLayout>
@@ -212,6 +232,9 @@
         android:layout_alignParentStart="true"
         android:ems="20"
         android:layout_below="@id/space5"
+        android:textStyle="bold"
+        android:textColor="@color/grey_700"
+        android:textSize="15dp"
         android:text="Trip Preferences" />
     <Switch
         android:id="@+id/noSmoking"
@@ -239,6 +262,7 @@
         android:text="Add Trip"
         android:textAllCaps="false"
         android:textColor="@color/white"
+        android:backgroundTint="@color/grey_700"
         android:textSize="@dimen/activity_button_text_size" />
 
 

@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Chartr.iml" filepath="$PROJECT_DIR$/Chartr.iml" />
+      <module fileurl="file://C:\Users\User\Documents\GitHub\chartr-android\Chartr.iml" filepath="C:\Users\User\Documents\GitHub\chartr-android\Chartr.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\User\Documents\GitHub\chartr-android\app\app.iml" filepath="C:\Users\User\Documents\GitHub\chartr-android\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chartr-android.iml" filepath="$PROJECT_DIR$/chartr-android.iml" />
     </modules>
   </component>
 </project>
