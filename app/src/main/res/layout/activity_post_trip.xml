@@ -6,7 +6,8 @@
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
     android:layout_marginRight="@dimen/activity_horizontal_margin"
     android:layout_marginTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.mac.chartr.activities.LoginActivity">
+    tools:context="com.example.mac.chartr.activities.PostTripActivity">
+
 
 
     <TextView
@@ -184,7 +185,7 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:background="@drawable/button_selector"
-            android:onClick="logIn"
+            android:onClick="decrementSeats"
             android:text="-"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -209,7 +210,7 @@
             android:layout_height="@dimen/activity_text_height_post_trip"
             android:layout_gravity="center_vertical"
             android:background="@drawable/button_selector"
-            android:onClick="logIn"
+            android:onClick="incrementSeats"
             android:text="+"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -258,12 +259,11 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_selector"
-        android:onClick="logIn"
+        android:onClick="postTrip"
         android:text="Add Trip"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:backgroundTint="@color/grey_700"
         android:textSize="@dimen/activity_button_text_size" />
-
 
 </RelativeLayout>

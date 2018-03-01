@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.RegisterActivity" />
-        <activity android:name=".activities.ConfirmRegisterActivity"></activity>
+        <activity android:name=".activities.ConfirmRegisterActivity" />
+        <activity android:name=".activities.PostTripActivity"></activity>
     </application>
 
 </manifest>
