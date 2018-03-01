@@ -201,7 +201,7 @@
             android:id="@+id/seatValue"
             android:gravity="center"
             android:background="@drawable/text_border_selector"
-            android:hint="number"
+            android:text="1"
             android:inputType="number"/>
         <Button
             android:id="@+id/seatsIncrement"
