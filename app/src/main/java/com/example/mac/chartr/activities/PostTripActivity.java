@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.example.mac.chartr.R;
 
-import org.w3c.dom.Text;
 
 import java.sql.Time;
 import java.util.Date;
@@ -49,15 +48,15 @@ public class PostTripActivity extends AppCompatActivity {
         inNumSeats = (TextView) findViewById(R.id.seatValue);
         numSeats = Integer.parseInt(inNumSeats.getText().toString());
         if(numSeats < 4) {
-            inNumSeats.setText(numSeats + 1);
+            inNumSeats.setText(String.valueOf(numSeats + 1));
         }
     }
 
     public void decrementSeats(View view){
         inNumSeats = (TextView) findViewById(R.id.seatValue);
         numSeats = Integer.parseInt(inNumSeats.getText().toString());
-        if(numSeats > 2) {
-            inNumSeats.setText(numSeats - 1);
+        if(numSeats > 1) {
+            inNumSeats.setText(String.valueOf(numSeats - 1));
         }
     }
 

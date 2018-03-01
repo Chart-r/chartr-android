@@ -1,17 +1,17 @@
 package com.example.mac.chartr.fragments.trips;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.mac.chartr.R;
+import com.example.mac.chartr.activities.PostTripActivity;
 
 public class TripsFragment extends Fragment {
     public static final String TAG = TripsFragment.class.getSimpleName();
@@ -30,6 +30,14 @@ public class TripsFragment extends Fragment {
                              Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Trips");
         ((AppCompatActivity) getActivity()).findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
+        Button goToCreateTrip = (Button) ((AppCompatActivity) getActivity()).findViewById(R.id.buttonAddTrip);
+        goToCreateTrip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), PostTripActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_trips, container, false);
@@ -50,6 +58,8 @@ public class TripsFragment extends Fragment {
         arg3.putString(ListTripsFragment.TRIP_TYPE_KEY, "Posted");
         tabHost.addTab(tabHost.newTabSpec("PostedTab").setIndicator("Posted"),
                 ListTripsFragment.class, arg3);
+
+
 
         return root;
     }
