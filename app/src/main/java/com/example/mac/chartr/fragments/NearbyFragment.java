@@ -29,6 +29,7 @@ public class NearbyFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Nearby");
+        ((AppCompatActivity) getActivity()).findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
         return inflater.inflate(R.layout.fragment_nearby, container, false);
     }
 

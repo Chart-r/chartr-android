@@ -29,6 +29,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Profile");
+        ((AppCompatActivity) getActivity()).findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         Button logoutButton = (Button) root.findViewById(R.id.logout_button);

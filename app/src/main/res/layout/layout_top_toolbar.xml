@@ -11,7 +11,20 @@
                 android:id="@+id/topToolBar"
                 android:background="@color/colorPrimary"
                 app:titleTextAppearance="@style/Toolbar.TitleText">
-        </android.support.v7.widget.Toolbar>>
+        </android.support.v7.widget.Toolbar>
+
+        <Button
+            android:id="@+id/buttonAddTrip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:textSize="50dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/grey_100"
+            android:fontFamily="serif"
+            android:visibility="gone"
+            android:text="+" />>
 
     </RelativeLayout>
 </merge>

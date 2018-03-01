@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.mac.chartr.R;
 
@@ -27,9 +29,10 @@ public class TripsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Trips");
+        ((AppCompatActivity) getActivity()).findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
+
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_trips, container, false);
-
         FragmentTabHost tabHost = (FragmentTabHost) root.findViewById(android.R.id.tabhost);
         tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
