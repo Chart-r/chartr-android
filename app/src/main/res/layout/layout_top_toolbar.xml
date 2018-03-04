@@ -19,12 +19,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:textSize="50dp"
             android:backgroundTint="@color/colorPrimary"
-            android:textColor="@color/grey_100"
             android:fontFamily="serif"
-            android:visibility="gone"
-            android:text="+" />>
+            android:text="+"
+            android:textColor="@color/grey_100"
+            android:textSize="50dp"
+            android:visibility="gone" />>
 
     </RelativeLayout>
 </merge>
