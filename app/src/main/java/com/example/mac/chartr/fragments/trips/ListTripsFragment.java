@@ -6,6 +6,10 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.mac.chartr.R;
@@ -31,11 +35,24 @@ public class ListTripsFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_list_trips, container, false);
         if (getArguments() != null) {
-            TextView placeholder = (TextView) root.findViewById(R.id.placeholder);
-            placeholder.setText(getArguments().getString(TRIP_TYPE_KEY));
+
+            LinearLayout tripsLinearLayout = root.findViewById(R.id.tripsLinearLayout);
+            addTripView(tripsLinearLayout);
+            addTripView(tripsLinearLayout);
+            addTripView(tripsLinearLayout);
+            addTripView(tripsLinearLayout);
         }
 
         return root;
     }
 
+    /**
+     * Adds an individual trip view to the linear layout passed in.
+     *
+     */
+    private void addTripView(LinearLayout parentLayout) {
+        //create a view to inflate the layout_item (the xml with the textView created before)
+        View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container, parentLayout,false);
+        parentLayout.addView(tripContainer);
+    }
 }

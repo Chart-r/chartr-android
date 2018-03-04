@@ -59,8 +59,6 @@ public class TripsFragment extends Fragment {
         tabHost.addTab(tabHost.newTabSpec("PostedTab").setIndicator("Posted"),
                 ListTripsFragment.class, arg3);
 
-
-
         return root;
     }
 

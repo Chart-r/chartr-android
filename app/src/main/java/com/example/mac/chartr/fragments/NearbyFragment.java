@@ -1,13 +1,12 @@
 package com.example.mac.chartr.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.mac.chartr.R;
 
@@ -30,7 +29,24 @@ public class NearbyFragment extends Fragment {
         // Inflate the layout for this fragment
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Nearby");
         ((AppCompatActivity) getActivity()).findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-        return inflater.inflate(R.layout.fragment_nearby, container, false);
+        View root = inflater.inflate(R.layout.fragment_nearby, container, false);
+
+        LinearLayout tripsLinearLayout = root.findViewById(R.id.tripsLinearLayout);
+        addTripView(tripsLinearLayout);
+        addTripView(tripsLinearLayout);
+        addTripView(tripsLinearLayout);
+        addTripView(tripsLinearLayout);
+
+        return root;
     }
 
+    /**
+     * Adds an individual trip view to the linear layout passed in.
+     * Duplicate of this method is in ListTripsFragment, possible refactoring in future.
+     */
+    private void addTripView(LinearLayout parentLayout) {
+        //create a view to inflate the layout_item (the xml with the textView created before)
+        View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container, parentLayout,false);
+        parentLayout.addView(tripContainer);
+    }
 }
