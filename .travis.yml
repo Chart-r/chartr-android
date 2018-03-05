@@ -1,6 +1,13 @@
 {
   "language": "android",
   "jdk": "oraclejdk8",
+  "addons": {
+    "apt": {
+      "packages": [
+        "lynx"
+      ]
+    }
+  },
   "before_cache": [
     "rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock",
     "rm -fr $HOME/.gradle/caches/*/plugin-resolution/"
@@ -22,6 +29,9 @@
     "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;26.0.1' > /dev/null",
     "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-26' > /dev/null",
     "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;m2repository' > /dev/null"
+  ],
+  "after_failure": [
+    "if [ -f /home/travis/build/Chart-r/chartr-android/app/build/reports/lint-results-debug.html ]; then lynx -dump /home/travis/build/Chart-r/chartr-android/app/build/reports/lint-results-debug.html; fi"
   ],
   "env": "ANDROID_HOME=$HOME/android-sdk",
   "script": "./gradlew --no-daemon --parallel lintDebug testDebug",

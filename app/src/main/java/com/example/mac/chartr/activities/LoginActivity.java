@@ -27,8 +27,8 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.Authentic
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.ForgotPasswordHandler;
 import com.example.mac.chartr.AppHelper;
 import com.example.mac.chartr.R;
+import com.example.mac.chartr.objects.User;
 
-import java.util.List;
 import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity {
@@ -300,6 +300,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.d(TAG, " -- Auth Success");
             AppHelper.setCurrSession(cognitoUserSession);
             AppHelper.newDevice(device);
+            AppHelper.setLoggedInUser(new User(username, "Person", (float) 4.5));
             closeWaitDialog();
             launchUser();
         }
