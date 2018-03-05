@@ -1,41 +1,49 @@
-{
-  "language": "android",
-  "jdk": "oraclejdk8",
-  "addons": {
-    "apt": {
-      "packages": [
-        "lynx"
-      ]
-    }
-  },
-  "before_cache": [
-    "rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock",
-    "rm -fr $HOME/.gradle/caches/*/plugin-resolution/"
-  ],
-  "cache": {
-    "directories": [
-      "$HOME/android-sdk-dl",
-      "$HOME/android-sdk",
-      "$HOME/.gradle/caches/",
-      "$HOME/.gradle/wrapper/",
-      "$HOME/.android/build-cache"
-    ]
-  },
-  "install": [
-    "if test ! -e $HOME/android-sdk-dl/sdk-tools.zip ; then curl https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip > $HOME/android-sdk-dl/sdk-tools.zip ; fi",
-    "unzip -qq -n $HOME/android-sdk-dl/sdk-tools.zip -d $HOME/android-sdk",
-    "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'tools' > /dev/null",
-    "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platform-tools' > /dev/null",
-    "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;26.0.1' > /dev/null",
-    "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-26' > /dev/null",
-    "echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;m2repository' > /dev/null"
-  ],
-  "after_failure": [
-    "if [ -f /home/travis/build/Chart-r/chartr-android/app/build/reports/lint-results-debug.html ]; then lynx -dump /home/travis/build/Chart-r/chartr-android/app/build/reports/lint-results-debug.html; fi"
-  ],
-  "env": "ANDROID_HOME=$HOME/android-sdk",
-  "script": "./gradlew --no-daemon --parallel lintDebug testDebug",
-  "os": "linux",
-  "group": "stable",
-  "dist": "trusty"
-}
+# https://medium.com/@bod/cache-your-android-sdk-with-travis-c816b9264708 was the source of this file
+language: android
+jdk: oraclejdk8
+
+addons:
+  apt:
+    packages:
+      - lynx
+
+before_cache:
+  # Do not cache a few Gradle files/directories (see https://docs.travis-ci.com/user/languages/java/#Caching)
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    # Android SDK
+    - $HOME/android-sdk-dl
+    - $HOME/android-sdk
+
+    # Gradle dependencies
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+    # Android build cache (see http://tools.android.com/tech-docs/build-cache)
+    - $HOME/.android/build-cache
+
+install:
+  # Download and unzip the Android SDK tools (if not already there thanks to the cache mechanism)
+  # Latest version available here: https://developer.android.com/studio/index.html#downloads
+  - if test ! -e $HOME/android-sdk-dl/sdk-tools.zip ; then curl https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip > $HOME/android-sdk-dl/sdk-tools.zip ; fi
+  - unzip -qq -n $HOME/android-sdk-dl/sdk-tools.zip -d $HOME/android-sdk
+
+  # Install or update Android SDK components (will not do anything if already up to date thanks to the cache mechanism)
+  - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'tools' > /dev/null
+  - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platform-tools' > /dev/null
+  - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;26.0.1' > /dev/null
+  - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-26' > /dev/null
+  - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;m2repository' > /dev/null
+
+after_failure:
+  - if [ -f /home/travis/build/Chart-r/chartr-android/app/build/reports/lint-results-debug.html ]; then lynx -dump /home/travis/build/Chart-r/chartr-android/app/build/reports/lint-results-debug.html; fi
+
+env:
+- ANDROID_HOME=$HOME/android-sdk
+script: "./gradlew --no-daemon --parallel lintDebug testDebug"
+notifications:
+  slack:
+    secure: Z3cHzrBwz/LX9UnBdhJWLSPHixZd6vWuSRKB4OLAAyI5zSRGlke7i5F54OnGQIc2W5KJnFoAAMrs5qS4sN3ZagkRatQTA3SCO9ai9PUZPpOwa8kTMyOlmeYHHabXxgqwoMeSupzxkrmyqbx0N93+sQgtJSLufxwwD9rIEISD5m+vuEbnXJjuCD2kmq58QtSDLwY/j4XuQCjIQS8MmkxgELE8wHCAGcnPdPssfGw9KfQ2Ex+I02z/Ct0Mo0V0UdggQrctsuIIl77aiWvKq8SorPTmtxoCAGWh1Plfh0oj5P0LmwD21z4Fx2xq7vJGst49O3oxbLQx2ZHZ6jdRr6t+VddPtQl1lBVQFdtksPez9ER6ROy8rjailsdFEm9zDZu7ruiu2CxNrI6BVkS1VbwUdVYepbaZlsjYdc3l43Ry8bhXztqlsWj5yfO892LhswNmKWQeNqiEy0f6ifbi3UUVBtzhXiwAl98WlAJnaVbQRjwdyfRU0lsd9fzj+jSCB7hwIh+89rvoErsgxrEH4iH2Qk+f1jLljeJ/P/8hygFxyZ2z6/Uy8p4jpxoTryfRBQSV7hfPCGQ5IeQvsEUKptG5FJNOH4ELJhVe164wHW3CKW4Deol4umKGEPOEAZ+MtU0Gtndj5VKUKLRwy6+8sfYkddakGmJAubI+9BAsbrX7UFE=
