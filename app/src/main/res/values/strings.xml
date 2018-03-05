@@ -1,3 +1,36 @@
 <resources>
     <string name="app_name">Chartr</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_main_screen">Sign in</string>
+    <string name="app_main_screen_title">Cognito Identity</string>
+    <string name="app_main_desc">A sample app to showcase Cognito Identity and the SDK for Android.</string>
+    <string name="nav_drawer_open">Open navigation drawer</string>
+    <string name="nav_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_user">UserActivity</string>
+    <string name="Username">Username</string>
+    <string name="Password">Password</string>
+    <string name="Menu">Menu</string>
+    <string name="pick_MFA">MFA Options</string>
+    <string name="title_activity_about_app">AboutApp</string>
+    <string name="more_info">This is a sample app to showcase Cognito Identity and the SDK for Android.</string>
+    <string name="title_activity_sign_up_confirm">SignUpConfirm</string>
+    <string name="title_activity_mfa">MFAActivity</string>
+    <string name="title_activity_choose_mfa">ChooseMFA</string>
+    <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_change_password">ChangePasswordActivity</string>
+    <string name="title_activity_verify">VerifyActivity</string>
+    <string name="title_activity_add_attribute">AddAttributeActivity</string>
+    <string name="title_activity_device_settings">DeviceSettings</string>
+    <string name="title_activity_new_password">NewPassword</string>
+    <string name="name_placeholder">Name</string>
+    <string name="rating_placeholder">Rating</string>
+    <string name="seat_number_placeholder">Seats</string>
+    <string name="seat_text">Seats Filled</string>
+    <string name="start_placeholder">Start</string>
+    <string name="destination_placeholder">Destination</string>
+    <string name="user_profile_icon">A user uploaded profile image.</string>
+    <string name="title_logistics">Logistics</string>
 </resources>
