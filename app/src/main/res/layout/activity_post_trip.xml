@@ -8,30 +8,28 @@
     android:layout_marginTop="@dimen/activity_vertical_margin"
     tools:context="com.example.mac.chartr.activities.PostTripActivity">
 
-
-
     <TextView
-        android:id="@+id/logistics"
+        android:id="@+id/textViewLogistics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:ems="20"
         android:textStyle="bold"
         android:textColor="@color/grey_700"
-        android:textSize="15dp"
-        android:text="Logistics" />
+        android:textSize="@dimen/post_trip_text_size"
+        android:text="@+string/title_logistics" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:paddingLeft="@dimen/activity_text_padding"
         android:paddingRight="@dimen/activity_text_padding"
         android:id="@+id/startLocation"
-        android:layout_below="@+id/logistics"
+        android:layout_below="@+id/textViewLogistics"
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
         android:hint="Start Location"
         android:textStyle="italic"
-        android:textSize="15dp"
+        android:textSize="@dimen/post_trip_text_size"
         android:inputType="text"/>
 
     <EditText
@@ -45,7 +43,7 @@
         android:background="@drawable/text_border_selector"
         android:hint="End Location"
         android:textStyle="italic"
-        android:textSize="15dp"
+        android:textSize="@dimen/post_trip_text_size"
         android:inputType="text"/>
     <Space
         android:layout_width="match_parent"
@@ -67,13 +65,11 @@
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
             android:id="@+id/departureDate"
-            android:layout_below="@+id/space1"
-            android:layout_centerHorizontal="true"
 
             android:background="@drawable/text_border_selector"
             android:hint="Departure Date"
             android:textStyle="italic"
-            android:textSize="15dp"
+            android:textSize="@dimen/post_trip_text_size"
             android:inputType="date"/>
         <EditText
             android:layout_width="0dp"
@@ -82,12 +78,10 @@
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
             android:id="@+id/departureTime"
-            android:layout_below="@+id/space1"
-            android:layout_centerHorizontal="true"
             android:background="@drawable/text_border_selector"
             android:hint="Departure Time"
             android:textStyle="italic"
-            android:textSize="15dp"
+            android:textSize="@dimen/post_trip_text_size"
             android:inputType="date"/>
     </LinearLayout>
 
@@ -112,13 +106,11 @@
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
             android:id="@+id/returnDate"
-            android:layout_below="@+id/space1"
-            android:layout_centerHorizontal="true"
 
             android:background="@drawable/text_border_selector"
             android:hint="Return Date"
             android:textStyle="italic"
-            android:textSize="15dp"
+            android:textSize="@dimen/post_trip_text_size"
             android:inputType="date"/>
         <EditText
             android:layout_width="0dp"
@@ -127,12 +119,10 @@
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
             android:id="@+id/returnTime"
-            android:layout_below="@+id/space1"
-            android:layout_centerHorizontal="true"
             android:background="@drawable/text_border_selector"
             android:hint="Return Time"
             android:textStyle="italic"
-            android:textSize="15dp"
+            android:textSize="@dimen/post_trip_text_size"
             android:inputType="date"/>
     </LinearLayout>
 
@@ -144,7 +134,7 @@
         android:id="@+id/space3" />
 
     <Switch
-        android:id="@+id/canPickUp"
+        android:id="@+id/switchCanPickUp"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:layout_alignParentEnd="true"
@@ -154,7 +144,7 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_inter_group_separation"
-        android:layout_below="@+id/canPickUp"
+        android:layout_below="@+id/switchCanPickUp"
         android:layout_centerHorizontal="true"
         android:id="@+id/space4" />
 
@@ -173,10 +163,9 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:ems="20"
-            android:layout_below="@id/canPickUp"
             android:textStyle="bold"
             android:textColor="@color/grey_700"
-            android:textSize="15dp"
+            android:textSize="@dimen/post_trip_text_size"
             android:text="Seating" />
         <Button
             android:id="@+id/seatsDecrement"
@@ -234,24 +223,24 @@
         android:layout_below="@id/space5"
         android:textStyle="bold"
         android:textColor="@color/grey_700"
-        android:textSize="15dp"
+        android:textSize="@dimen/post_trip_text_size"
         android:text="Trip Preferences" />
     <Switch
-        android:id="@+id/noSmoking"
+        android:id="@+id/switchNoSmoking"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/tripPreferences"
         android:text="No Smoking" />
     <Switch
-        android:id="@+id/quite"
+        android:id="@+id/switchQuite"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/noSmoking"
+        android:layout_below="@+id/switchNoSmoking"
         android:text="Quite" />
     <Button
-        android:id="@+id/buttonLogIn"
+        android:id="@+id/buttonAddTrip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

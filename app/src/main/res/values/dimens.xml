@@ -23,4 +23,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="profile_icon_small">40dp</dimen>
     <dimen name="location_icon_small">16dp</dimen>
+    <dimen name="post_trip_text_size">15sp</dimen>
 </resources>

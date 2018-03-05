@@ -18,7 +18,6 @@
 package com.example.mac.chartr;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
@@ -28,6 +27,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.cognitoidentityprovider.model.AttributeType;
+import com.example.mac.chartr.objects.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,6 +108,8 @@ public class AppHelper {
     private static boolean emailAvailable;
 
     private static Set<String> currUserAttributes;
+
+    private static User loggedInUser;
 
     public static void init(Context context) {
         setData();
@@ -549,6 +551,14 @@ public class AppHelper {
 
     private static void deleteAttribute(String attributeName) {
 
+    }
+
+    public static User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public static void setLoggedInUser(User loggedInUser) {
+        AppHelper.loggedInUser = loggedInUser;
     }
 }
 

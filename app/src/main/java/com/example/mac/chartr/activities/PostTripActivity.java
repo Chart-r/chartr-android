@@ -1,25 +1,15 @@
 package com.example.mac.chartr.activities;
 
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.sql.Time;
 import java.util.Date;
 
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.mac.chartr.R;
 
 
@@ -72,9 +62,12 @@ public class PostTripActivity extends AppCompatActivity {
     }
 
     public void postTrip(View view) {
+
+        /**
+         * Sample http request with volley
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://99sepehum8.execute-api.us-east-2.amazonaws.com/prod/user/?email=%22joe.smitty@gmail.com%22";
+        String url ="https://99sepehum8.execute-api.us-east-2.amazonaws.com/prod/user/*?email=joe.smitty@gmail.com";
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -82,7 +75,7 @@ public class PostTripActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
-                        Log.d(TAG, "Response is: "+ response.substring(0,500));
+                        Log.d(TAG, "Response is: "+ response.substring(0,response.length()));
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -92,5 +85,7 @@ public class PostTripActivity extends AppCompatActivity {
         });
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+
+         **/
     }
 }

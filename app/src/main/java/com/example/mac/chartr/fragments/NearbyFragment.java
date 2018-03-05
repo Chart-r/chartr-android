@@ -3,6 +3,7 @@ package com.example.mac.chartr.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +30,11 @@ public class NearbyFragment extends Fragment {
         // Inflate the layout for this fragment
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Nearby");
         ((AppCompatActivity) getActivity()).findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-        View root = inflater.inflate(R.layout.fragment_nearby, container, false);
 
+        View root = inflater.inflate(R.layout.fragment_nearby, container, false);
+        Log.d(TAG, root.toString());
         LinearLayout tripsLinearLayout = root.findViewById(R.id.tripsLinearLayout);
-        addTripView(tripsLinearLayout);
-        addTripView(tripsLinearLayout);
-        addTripView(tripsLinearLayout);
+        Log.d(TAG, tripsLinearLayout.toString());
         addTripView(tripsLinearLayout);
 
         return root;
