@@ -17,7 +17,7 @@
         android:textStyle="bold"
         android:textColor="@color/grey_700"
         android:textSize="@dimen/post_trip_text_size"
-        android:text="@+string/title_logistics" />
+        android:text="@string/title_logistics" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_text_height_post_trip"

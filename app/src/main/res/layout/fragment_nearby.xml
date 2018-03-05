@@ -4,20 +4,9 @@
     android:layout_height="match_parent"
     tools:context="com.example.mac.chartr.fragments.NearbyFragment">
 
-    <!-- Container for trips which are added dynamically -->
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/tripsScroll"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:id="@+id/tripsLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
-
-    </ScrollView>
+        android:text="Nearby Fragment" />
 
 </RelativeLayout>
