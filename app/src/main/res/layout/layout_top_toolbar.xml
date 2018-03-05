@@ -1,0 +1,30 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_alignParentTop="true">
+
+        <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/topToolBar"
+                android:background="@color/colorPrimary"
+                app:titleTextAppearance="@style/Toolbar.TitleText">
+        </android.support.v7.widget.Toolbar>
+
+        <Button
+            android:id="@+id/buttonAddTrip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="@color/colorPrimary"
+            android:fontFamily="serif"
+            android:text="+"
+            android:textColor="@color/grey_100"
+            android:textSize="50dp"
+            android:visibility="gone" />>
+
+    </RelativeLayout>
+</merge>
