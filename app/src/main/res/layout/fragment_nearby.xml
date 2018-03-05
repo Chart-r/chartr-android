@@ -4,20 +4,96 @@
     android:layout_height="match_parent"
     tools:context="com.example.mac.chartr.fragments.NearbyFragment">
 
-    <!-- Container for trips which are added dynamically -->
+    <!-- TODO: Update blank fragment layout -->
+
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/tripsScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
 
         <LinearLayout
-            android:id="@+id/tripsLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+            <ListView
+                android:id="@+id/container1"
+                android:layout_width="301dp"
+                android:layout_height="123dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="41dp"
+                android:background="@drawable/edit_text_posted_trip"
+                android:elevation="4dp"
+                android:entries="@array/post_trip_card"
+                android:paddingVertical="12dp"
+                android:divider="@null"
+                />
+
+
+            <ListView
+                android:id="@+id/container2"
+                android:layout_width="301dp"
+                android:layout_height="123dp"
+                android:layout_alignStart="@+id/container1"
+                android:layout_below="@+id/container1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/edit_text_posted_trip"
+                android:elevation="4dp"
+                android:entries="@array/post_trip_card"
+                android:dividerHeight="0dp"
+                android:paddingVertical="12dp"
+                android:divider="@null"/>
+
+            <ListView
+                android:id="@+id/container3"
+                android:layout_width="301dp"
+                android:layout_height="123dp"
+                android:layout_alignStart="@+id/container2"
+                android:layout_below="@+id/container2"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/edit_text_posted_trip"
+                android:elevation="4dp"
+                android:entries="@array/post_trip_card"
+                android:dividerHeight="0dp"
+                android:paddingVertical="12dp"
+                android:divider="@null"/>
+
+            <ListView
+                android:id="@+id/container4"
+                android:layout_width="301dp"
+                android:layout_height="123dp"
+                android:layout_alignStart="@+id/container3"
+                android:layout_below="@+id/container3"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/edit_text_posted_trip"
+                android:elevation="4dp"
+                android:entries="@array/post_trip_card"
+                android:dividerHeight="0dp"
+                android:paddingVertical="12dp"
+                android:divider="@null"/>
+
+            <ListView
+                android:id="@+id/container5"
+                android:layout_width="301dp"
+                android:layout_height="123dp"
+                android:layout_alignStart="@+id/container4"
+                android:layout_below="@+id/container4"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/edit_text_posted_trip"
+                android:elevation="4dp"
+                android:entries="@array/post_trip_card"
+                android:dividerHeight="0dp"
+                android:paddingVertical="12dp"
+                android:divider="@null"/>
+
+        </LinearLayout>
     </ScrollView>
+
 
 </RelativeLayout>
