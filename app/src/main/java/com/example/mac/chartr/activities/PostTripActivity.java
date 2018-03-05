@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
+<<<<<<< HEAD
 
 import com.example.mac.chartr.R;
 
@@ -14,6 +15,8 @@ import com.example.mac.chartr.R;
 import org.w3c.dom.Text;
 
 
+=======
+>>>>>>> 518b5eeef11de23a83280cb1dd448de5fa474c19
 import java.sql.Time;
 import java.util.Date;
 
