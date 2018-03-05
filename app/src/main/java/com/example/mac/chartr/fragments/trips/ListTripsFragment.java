@@ -33,12 +33,20 @@ public class ListTripsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_list_trips, container, false);
         if (getArguments() != null) {
 
+            // Populate scrollview
             LinearLayout tripsLinearLayout = root.findViewById(R.id.tripsLinearLayout);
+            // TODO: implement api call for get trip, store formatted result in trips variable
             // Test data to show that functionality is working
-            addTripView(tripsLinearLayout, new Trip("10:30pm", "11:30pm", false, true, 30, 30, 40, 40, 4, (float)10.20, "id", new User[] {AppHelper.getLoggedInUser()}));
-            addTripView(tripsLinearLayout, new Trip("12:30pm", "4:30pm", false, true, 40, 40, 30, 30, 4, (float)20.0, "id", new User[] {AppHelper.getLoggedInUser()}));
-            addTripView(tripsLinearLayout, new Trip("2:30pm", "3:30pm", false, true, 50, 50, 20, 20, 4, (float)23.0, "id", new User[] {AppHelper.getLoggedInUser()}));
-            addTripView(tripsLinearLayout, new Trip("1:30pm", "5:30pm", false, true, 60, 60, 10, 10, 4, (float)15.60, "id", new User[] {AppHelper.getLoggedInUser()}));
+            Trip [] trips = {
+                    new Trip("10:30pm", "11:30pm", false, true, 30, 30, 40, 40, 4, (float) 10.20, "id", new User[]{AppHelper.getLoggedInUser()}),
+                    new Trip("12:30pm", "4:30pm", false, true, 40, 40, 30, 30, 4, (float) 20.0, "id", new User[]{AppHelper.getLoggedInUser()}),
+                    new Trip("2:30pm", "3:30pm", false, true, 50, 50, 20, 20, 4, (float) 23.0, "id", new User[]{AppHelper.getLoggedInUser()}),
+                    new Trip("1:30pm", "5:30pm", false, true, 60, 60, 10, 10, 4, (float)15.60, "id", new User[] {AppHelper.getLoggedInUser()})
+            };
+
+            for (Trip trip : trips) {
+                addTripView(tripsLinearLayout, trip);
+            }
         }
 
         return root;

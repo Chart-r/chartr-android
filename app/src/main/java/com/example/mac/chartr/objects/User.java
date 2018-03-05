@@ -16,6 +16,7 @@ public class User {
     public User(String email, String name, float rating) {
         this.email = email;
         this.name = name;
+        this.rating = rating;
     }
 
     public User(String email, String name, float rating, Map<String, String> trips) {
