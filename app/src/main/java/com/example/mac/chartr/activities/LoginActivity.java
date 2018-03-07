@@ -26,12 +26,15 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.NewP
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.ForgotPasswordHandler;
 import com.example.mac.chartr.AppHelper;
+import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.User;
 
 import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity {
+    private CommonDependencyProvider provider;
+
     private static final String TAG = LoginActivity.class.getSimpleName();
     
     private AlertDialog userDialog;
@@ -60,6 +63,11 @@ public class LoginActivity extends AppCompatActivity {
         AppHelper.init(getApplicationContext());
         initApp();
         findCurrent();
+        setCommonDependencyProvider(new CommonDependencyProvider());
+    }
+
+    public void setCommonDependencyProvider(CommonDependencyProvider provider) {
+        this.provider = provider;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -68,64 +76,83 @@ public class LoginActivity extends AppCompatActivity {
         switch (requestCode) {
             case 1:
                 // Register user
-                if(resultCode == RESULT_OK) {
-                    String name = data.getStringExtra("name");
-                    if (!name.isEmpty()) {
-                        inUsername.setText(name);
-                        inPassword.setText("");
-                        inPassword.requestFocus();
-                    }
-                    String userPasswd = data.getStringExtra("password");
-                    if (!userPasswd.isEmpty()) {
-                        inPassword.setText(userPasswd);
-                    }
-                    if (!name.isEmpty() && !userPasswd.isEmpty()) {
-                        // We have the user details, so sign in!
-                        username = name;
-                        password = userPasswd;
-                        AppHelper.getPool().getUser(username).getSessionInBackground(authenticationHandler);
-                    }
-                }
+                registerUser(resultCode, data);
                 break;
             case 2:
                 // Confirm register user
-                if(resultCode == RESULT_OK) {
-                    String name = data.getStringExtra("name");
-                    if (!name.isEmpty()) {
-                        inUsername.setText(name);
-                        inPassword.setText("");
-                        inPassword.requestFocus();
-                    }
-                }
+                confirmRegisterUser(resultCode, data);
                 break;
             case 3:
                 // Forgot password
-                if(resultCode == RESULT_OK) {
-                    String newPass = data.getStringExtra("newPass");
-                    String code = data.getStringExtra("code");
-                    if (newPass != null && code != null) {
-                        if (!newPass.isEmpty() && !code.isEmpty()) {
-                            showWaitDialog("Setting new password...");
-                            forgotPasswordContinuation.setPassword(newPass);
-                            forgotPasswordContinuation.setVerificationCode(code);
-                            forgotPasswordContinuation.continueTask();
-                        }
-                    }
-                }
+                forgotPassword(resultCode, data);
                 break;
             case 4:
                 // User
-                if(resultCode == RESULT_OK) {
-                    clearInput();
-                    String name = data.getStringExtra("TODO");
-                    if(name != null) {
-                        if (!name.isEmpty()) {
-                            name.equals("exit");
-                            onBackPressed();
-                        }
-                    }
-                }
+                userBack(resultCode, data);
                 break;
+        }
+    }
+
+    /*
+        TODO: GIVE A BETTER NAME. I have no clue what code "4" means
+     */
+    protected void userBack(int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            clearInput();
+            String name = data.getStringExtra("TODO");
+            if(name != null) {
+                if (!name.isEmpty()) {
+                    name.equals("exit");
+                    onBackPressed();
+                }
+            }
+        }
+    }
+
+    protected void forgotPassword(int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            String newPass = data.getStringExtra("newPass");
+            String code = data.getStringExtra("code");
+            if (newPass != null && code != null) {
+                if (!newPass.isEmpty() && !code.isEmpty()) {
+                    showWaitDialog("Setting new password...");
+                    forgotPasswordContinuation.setPassword(newPass);
+                    forgotPasswordContinuation.setVerificationCode(code);
+                    forgotPasswordContinuation.continueTask();
+                }
+            }
+        }
+    }
+
+    protected void confirmRegisterUser(int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            String name = data.getStringExtra("name");
+            if (!name.isEmpty()) {
+                inUsername.setText(name);
+                inPassword.setText("");
+                inPassword.requestFocus();
+            }
+        }
+    }
+
+    protected void registerUser(int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            String name = data.getStringExtra("name");
+            if (!name.isEmpty()) {
+                inUsername.setText(name);
+                inPassword.setText("");
+                inPassword.requestFocus();
+            }
+            String userPasswd = data.getStringExtra("password");
+            if (!userPasswd.isEmpty()) {
+                inPassword.setText(userPasswd);
+            }
+            if (!name.isEmpty() && !userPasswd.isEmpty()) {
+                // We have the user details, so sign in!
+                username = name;
+                password = userPasswd;
+                AppHelper.getPool().getUser(username).getSessionInBackground(authenticationHandler);
+            }
         }
     }
 
@@ -365,13 +392,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showWaitDialog(String message) {
         closeWaitDialog();
-        waitDialog = new ProgressDialog(this);
+        waitDialog = provider.getProgressDialog(this);
         waitDialog.setTitle(message);
         waitDialog.show();
     }
 
-    private void showDialogMessage(String title, String body) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    protected void showDialogMessage(String title, String body) {
+        final AlertDialog.Builder builder = provider.getAlertDialogBuilder(this);
         builder.setTitle(title).setMessage(body).setNeutralButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
