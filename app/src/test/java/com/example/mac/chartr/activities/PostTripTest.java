@@ -49,6 +49,8 @@ import com.example.mac.chartr.R;
 import com.example.mac.chartr.activities.MainActivity;
 import com.example.mac.chartr.fragments.trips.TripsFragment;
 
+import junit.framework.Assert;
+
 /**
  * Created by Michael Rush on 3/3/2018.
  */
@@ -64,6 +66,12 @@ public class PostTripTest {
     public void setup() {
         provider = mock(CommonDependencyProvider.class);
     }
+
+    @Test
+    public void stub() {
+        Assert.assertTrue(true);
+    }
+
     /*@Rule
     public ActivityTestRule<PostTripActivity> mActivityRule = new ActivityTestRule(PostTripActivity.class);
 
