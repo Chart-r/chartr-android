@@ -91,6 +91,7 @@
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/departureTimeLayout"
+        android:theme="@style/SCBSwitch"
         android:text="Return?" />
     <LinearLayout
         android:layout_width="fill_parent"
@@ -139,6 +140,7 @@
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/space3"
+        android:theme="@style/SCBSwitch"
         android:text="Can you pick up?" />
 
     <Space
@@ -231,14 +233,16 @@
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/tripPreferences"
-        android:text="No Smoking" />
+        android:text="No Smoking"
+        android:theme="@style/SCBSwitch"/>
     <Switch
         android:id="@+id/switchQuite"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/switchNoSmoking"
-        android:text="Quite" />
+        android:text="Quite"
+        android:theme="@style/SCBSwitch"/>
     <Button
         android:id="@+id/buttonAddTrip"
         android:layout_width="match_parent"
