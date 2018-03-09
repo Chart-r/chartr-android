@@ -56,7 +56,7 @@ public class ListTripsFragment extends Fragment {
      * Adds an individual trip view to the linear layout passed in.
      *
      */
-    private void addTripView(LinearLayout parentLayout, Trip trip) {
+    protected void addTripView(LinearLayout parentLayout, Trip trip) {
         //create a view to inflate the layout_item (the xml with the textView created before)
         View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container, parentLayout,false);
 

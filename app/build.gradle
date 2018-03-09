@@ -53,6 +53,8 @@ dependencies {
 
 
     testCompile "org.mockito:mockito-core:2.7.22"
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '1.7.3'
+    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.7.3'
     androidTestCompile 'org.mockito:mockito-android:2.7.22'
     testCompile 'junit:junit:4.12'
     testCompile 'commons-logging:commons-logging:1.1.1'
