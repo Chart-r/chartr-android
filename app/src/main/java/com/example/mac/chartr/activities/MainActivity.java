@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             TripsFragment initialFragment = new TripsFragment();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.content, initialFragment).commit();
+            finishAffinity();
         }
 
         toolbar = (Toolbar) findViewById(R.id.topToolBar);
