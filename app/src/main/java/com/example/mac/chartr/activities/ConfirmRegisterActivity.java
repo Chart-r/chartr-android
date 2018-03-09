@@ -18,10 +18,13 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDel
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.VerificationHandler;
 import com.example.mac.chartr.AppHelper;
+import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 
 public class ConfirmRegisterActivity extends AppCompatActivity {
     private static final String TAG = ConfirmRegisterActivity.class.getSimpleName();
+
+    private CommonDependencyProvider provider;
 
     private EditText username;
     private EditText confCode;
@@ -37,7 +40,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_register);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+        setCommonDependencyProvider(new CommonDependencyProvider());
         init();
     }
 
@@ -142,34 +145,42 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         });
     }
 
+    public void setCommonDependencyProvider(CommonDependencyProvider provider) {
+        this.provider = provider;
+    }
 
     private void sendConfCode() {
         userName = username.getText().toString();
         String confirmCode = confCode.getText().toString();
 
         if(userName == null || userName.length() < 1) {
-            TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
-            label.setText(username.getHint()+" cannot be empty");
-            username.setBackground(getDrawable(R.drawable.text_border_error));
+            setConfirmCodeMessage(username);
             return;
         }
 
         if(confirmCode == null || confirmCode.length() < 1) {
-            TextView label = (TextView) findViewById(R.id.textViewConfirmCodeMessage);
-            label.setText(confCode.getHint()+" cannot be empty");
-            confCode.setBackground(getDrawable(R.drawable.text_border_error));
+            setConfirmCodeMessage(confCode);
             return;
         }
 
         AppHelper.getPool().getUser(userName).confirmSignUpInBackground(confirmCode, true, confHandler);
     }
 
+    /**
+     * Set the text for the field textViewConfirmCodeMessage in the ConfirmRegister Layout
+     * @param et is and EditText
+     */
+    private void setConfirmCodeMessage(EditText et) {
+        TextView label = (TextView) findViewById(R.id.textViewConfirmCodeMessage);
+        label.setText(et.getHint()+" cannot be empty");
+        et.setBackground(getDrawable(R.drawable.text_border_error));
+        return;
+    }
+
     private void reqConfCode() {
         userName = username.getText().toString();
         if(userName == null || userName.length() < 1) {
-            TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
-            label.setText(username.getHint()+" cannot be empty");
-            username.setBackground(getDrawable(R.drawable.text_border_error));
+            setConfirmCodeMessage(username);
             return;
         }
         AppHelper.getPool().getUser(userName).resendConfirmationCodeInBackground(resendConfCodeHandler);
@@ -215,8 +226,8 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         }
     };
 
-    private void showDialogMessage(String title, String body, final boolean exitActivity) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    protected void showDialogMessage(String title, String body, final boolean exitActivity) {
+        final AlertDialog.Builder builder = provider.getAlertDialogBuilder(this);
         builder.setTitle(title).setMessage(body).setNeutralButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
