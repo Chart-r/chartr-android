@@ -2,26 +2,28 @@ package com.example.mac.chartr.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
-
+import com.android.volley.Response;
 import com.example.mac.chartr.R;
-
-
-import org.w3c.dom.Text;
-
 
 import java.sql.Time;
 import java.util.Date;
 
 import com.example.mac.chartr.R;
+import com.example.mac.chartr.objects.TripInvoker;
+import com.example.mac.chartr.utils.VolleyCallback;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 public class PostTripActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = PostTripActivity.class.getSimpleName();
 
     private EditText inStartLocation;
     private EditText inEndLocation;
@@ -69,30 +71,6 @@ public class PostTripActivity extends AppCompatActivity {
     }
 
     public void postTrip(View view) {
-
-        /**
-         * Sample http request with volley
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://99sepehum8.execute-api.us-east-2.amazonaws.com/prod/user/*?email=joe.smitty@gmail.com";
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        Log.d(TAG, "Response is: "+ response.substring(0,response.length()));
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "That didn't work!");
-            }
-        });
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-
-         **/
+        // TODO: implement
     }
 }
