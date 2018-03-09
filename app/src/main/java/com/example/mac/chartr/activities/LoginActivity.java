@@ -1,5 +1,6 @@
 package com.example.mac.chartr.activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -174,6 +175,7 @@ public class LoginActivity extends AppCompatActivity {
     private void launchUser() {
         Intent userActivity = new Intent(this, MainActivity.class);
         userActivity.putExtra("name", username);
+        userActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivityForResult(userActivity, 4);
     }
 

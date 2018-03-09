@@ -75,4 +75,5 @@ public class ListTripsFragment extends Fragment {
 
         parentLayout.addView(tripContainer);
     }
+
 }

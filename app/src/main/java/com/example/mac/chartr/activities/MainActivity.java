@@ -1,5 +1,6 @@
 package com.example.mac.chartr.activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,8 +30,12 @@ import com.example.mac.chartr.fragments.RequestsFragment;
 import com.example.mac.chartr.fragments.trips.TripsFragment;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+
     public static final String TAG = MainActivity.class.getSimpleName();
+
 
     private String username;
     private CognitoUser user;
@@ -50,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             TripsFragment initialFragment = new TripsFragment();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.content, initialFragment).commit();
-            finishAffinity();
+
         }
 
         toolbar = (Toolbar) findViewById(R.id.topToolBar);
@@ -245,4 +250,10 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+@Override
+    public void onBackPressed(){
+        if(getSupportFragmentManager().getBackStackEntryCount() != 0){
+            super.onBackPressed();
+        }
+}
 }

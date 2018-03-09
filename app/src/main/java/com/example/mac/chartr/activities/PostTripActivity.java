@@ -95,4 +95,10 @@ public class PostTripActivity extends AppCompatActivity {
 
          **/
     }
+    @Override
+    public void onBackPressed(){
+        if(getSupportFragmentManager().getBackStackEntryCount() != 0){
+            super.onBackPressed();
+        }
+    }
 }
