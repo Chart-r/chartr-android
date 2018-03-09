@@ -1,5 +1,6 @@
 package com.example.mac.chartr.fragments.trips;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,9 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.zip.Inflater;
+
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -62,5 +66,25 @@ public class ListTripsFragmentTest {
 
         verify(view,times(5)).findViewById(any(int.class));
         verify(layout, times(1)).addView(any(View.class));
+    }
+
+    @Test
+    public void testOnCreateView() {
+        PowerMockito.mockStatic(AppHelper.class);
+
+        ListTripsFragment fragment = mock(ListTripsFragment.class);
+
+        LayoutInflater inflater = mock(LayoutInflater.class);
+        View root = mock(View.class);
+        LinearLayout layout = mock(LinearLayout.class);
+
+        when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class))).thenReturn(root);
+        when(root.findViewById(any(int.class))).thenReturn(layout);
+
+        Mockito.doCallRealMethod().when(fragment).onCreateView(any(LayoutInflater.class), any(ViewGroup.class), any(Bundle.class));
+
+        fragment.onCreateView(inflater, null, null);
+
+        verify(fragment, atLeast(0)).addTripView(Mockito.eq(layout), any(Trip.class));
     }
 }
