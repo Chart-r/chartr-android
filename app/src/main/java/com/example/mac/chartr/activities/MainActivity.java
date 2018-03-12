@@ -1,6 +1,7 @@
 package com.example.mac.chartr.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -159,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupBottomNavigation() {
         Log.d(TAG, "Setting up Bottom Navigation");
         final BottomNavigationViewEx navBar = findViewById(R.id.bottomNavigationBar);
+        final Context context = this;
         navBar.enableAnimation(false);
         navBar.enableShiftingMode(false);
         navBar.enableItemShiftingMode(false);
@@ -179,6 +182,16 @@ public class MainActivity extends AppCompatActivity {
                                 getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.content, new TripsFragment())
                                         .addToBackStack("Trips").commit();
+                                getSupportActionBar().setTitle("Trips");
+                                findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
+                                Button goToCreateTrip = findViewById(R.id.buttonAddTrip);
+                                goToCreateTrip.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(context, PostTripActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
                                 break;
                             case R.id.ic_requests:
                                 getSupportFragmentManager().beginTransaction()
