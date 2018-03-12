@@ -8,18 +8,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mac.chartr.AppHelper;
+import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-
-import java.util.zip.Inflater;
 
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.when;
@@ -32,16 +26,22 @@ import static org.mockito.Mockito.times;
  * Created by cygnus on 3/7/18.
  *
  */
-
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(AppHelper.class)
 public class ListTripsFragmentTest {
+
+
+    private CommonDependencyProvider provider;
+    private AppHelper helper;
 
     @Test
     public void testAddTripView() {
-        PowerMockito.mockStatic(AppHelper.class);
+        provider = mock(CommonDependencyProvider.class);
+        helper = mock(AppHelper.class);
 
         ListTripsFragment fragment = mock(ListTripsFragment.class);
+        Mockito.doCallRealMethod().when(fragment).setCommonDependencyProvider(any(CommonDependencyProvider.class));
+        fragment.setCommonDependencyProvider(provider);
+
+        when(provider.getAppHelper()).thenReturn(helper);
 
         LayoutInflater inflater = mock(LayoutInflater.class);
         LinearLayout layout = mock(LinearLayout.class);
@@ -59,7 +59,7 @@ public class ListTripsFragmentTest {
         when(fragment.getLayoutInflater()).thenReturn(inflater);
         when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class))).thenReturn(view);
         when(view.findViewById(any(int.class))).thenReturn(textView);
-        when(AppHelper.getLoggedInUser()).thenReturn(new User("me@there.com", "Joe Smo", 50f, null));
+        when(helper.getLoggedInUser()).thenReturn(new User("me@there.com", "Joe Smo", 50f, null));
         Mockito.doCallRealMethod().when(fragment).addTripView(any(LinearLayout.class), any(Trip.class));
 
         fragment.addTripView(layout, trip);
@@ -70,8 +70,6 @@ public class ListTripsFragmentTest {
 
     @Test
     public void testOnCreateView() {
-        PowerMockito.mockStatic(AppHelper.class);
-
         ListTripsFragment fragment = mock(ListTripsFragment.class);
 
         LayoutInflater inflater = mock(LayoutInflater.class);

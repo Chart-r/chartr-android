@@ -58,12 +58,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setCommonDependencyProvider(new CommonDependencyProvider());
 
         // Initialize application
-        AppHelper.init(getApplicationContext());
+        provider.getAppHelper(getApplicationContext());
         initApp();
         findCurrent();
-        setCommonDependencyProvider(new CommonDependencyProvider());
     }
 
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                 // We have the user details, so sign in!
                 username = name;
                 password = userPasswd;
-                AppHelper.getPool().getUser(username).getSessionInBackground(authenticationHandler);
+                provider.getAppHelper().getPool().getUser(username).getSessionInBackground(authenticationHandler);
             }
         }
     }
@@ -173,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        AppHelper.setUser(username);
+        provider.getAppHelper().setUser(username);
 
         password = inPassword.getText().toString();
         if(password == null || password.length() < 1) {
@@ -184,7 +184,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         showWaitDialog("Signing in...");
-        AppHelper.getPool().getUser(username).getSessionInBackground(authenticationHandler);
+        provider.getAppHelper().getPool().getUser(username).getSessionInBackground(authenticationHandler);
     }
 
     // Forgot password processing
@@ -205,10 +205,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void findCurrent() {
-        CognitoUser user = AppHelper.getPool().getCurrentUser();
+        CognitoUser user = provider.getAppHelper().getPool().getCurrentUser();
         username = user.getUserId();
         if(username != null) {
-            AppHelper.setUser(username);
+            provider.getAppHelper().setUser(username);
             inUsername.setText(user.getUserId());
             user.getSessionInBackground(authenticationHandler);
         }
@@ -217,7 +217,7 @@ public class LoginActivity extends AppCompatActivity {
     private void getUserAuthentication(AuthenticationContinuation continuation, String username) {
         if(username != null) {
             this.username = username;
-            AppHelper.setUser(username);
+            provider.getAppHelper().setUser(username);
         }
         if(this.password == null) {
             inUsername.setText(username);
@@ -316,7 +316,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onFailure(Exception e) {
             closeWaitDialog();
-            showDialogMessage("Forgot password failed",AppHelper.formatException(e));
+            showDialogMessage("Forgot password failed",provider.getAppHelper().formatException(e));
         }
     };
 
@@ -325,9 +325,9 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onSuccess(CognitoUserSession cognitoUserSession, CognitoDevice device) {
             Log.d(TAG, " -- Auth Success");
-            AppHelper.setCurrSession(cognitoUserSession);
-            AppHelper.newDevice(device);
-            AppHelper.setLoggedInUser(new User(username, "Person", (float) 4.5));
+            provider.getAppHelper().setCurrSession(cognitoUserSession);
+            provider.getAppHelper().newDevice(device);
+            provider.getAppHelper().setLoggedInUser(new User(username, "Person", (float) 4.5));
             closeWaitDialog();
             launchUser();
         }
@@ -354,7 +354,7 @@ public class LoginActivity extends AppCompatActivity {
             label.setText("Sign-in failed");
             inUsername.setBackground(getDrawable(R.drawable.text_border_error));
 
-            showDialogMessage("Sign-in failed", AppHelper.formatException(e));
+            showDialogMessage("Sign-in failed", provider.getAppHelper().formatException(e));
         }
 
         @Override
@@ -366,7 +366,7 @@ public class LoginActivity extends AppCompatActivity {
             if ("NEW_PASSWORD_REQUIRED".equals(continuation.getChallengeName())) {
                 // This is the first sign-in attempt for an admin created user
                 newPasswordContinuation = (NewPasswordContinuation) continuation;
-//                AppHelper.setUserAttributeForDisplayFirstLogIn(newPasswordContinuation.getCurrentUserAttributes(),
+//                provider.getAppHelper().setUserAttributeForDisplayFirstLogIn(newPasswordContinuation.getCurrentUserAttributes(),
 //                        newPasswordContinuation.getRequiredAttributes());
                 closeWaitDialog();
 //                firstTimeSignIn();

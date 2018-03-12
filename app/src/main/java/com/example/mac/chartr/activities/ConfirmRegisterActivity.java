@@ -163,7 +163,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
             return;
         }
 
-        AppHelper.getPool().getUser(userName).confirmSignUpInBackground(confirmCode, true, confHandler);
+        provider.getAppHelper().getPool().getUser(userName).confirmSignUpInBackground(confirmCode, true, confHandler);
     }
 
     /**
@@ -183,7 +183,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
             setConfirmCodeMessage(username);
             return;
         }
-        AppHelper.getPool().getUser(userName).resendConfirmationCodeInBackground(resendConfCodeHandler);
+        provider.getAppHelper().getPool().getUser(userName).resendConfirmationCodeInBackground(resendConfCodeHandler);
 
     }
 
@@ -203,7 +203,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
             label.setText("Confirmation failed!");
             confCode.setBackground(getDrawable(R.drawable.text_border_error));
 
-            showDialogMessage("Confirmation failed", AppHelper.formatException(exception), false);
+            showDialogMessage("Confirmation failed", provider.getAppHelper().formatException(exception), false);
         }
     };
 
@@ -222,7 +222,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
             TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
             label.setText("Confirmation code resend failed");
             username.setBackground(getDrawable(R.drawable.text_border_error));
-            showDialogMessage("Confirmation code request has failed", AppHelper.formatException(exception), false);
+            showDialogMessage("Confirmation code request has failed", provider.getAppHelper().formatException(exception), false);
         }
     };
 

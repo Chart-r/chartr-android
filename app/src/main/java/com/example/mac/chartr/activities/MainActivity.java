@@ -24,6 +24,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.example.mac.chartr.AppHelper;
+import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.fragments.NearbyFragment;
 import com.example.mac.chartr.fragments.ProfileFragment;
@@ -40,9 +41,12 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog userDialog;
     private ProgressDialog waitDialog;
 
+    private CommonDependencyProvider provider;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setCommonDependencyProvider(new CommonDependencyProvider());
         setContentView(R.layout.activity_main);
 
         if (findViewById(R.id.content) != null) {
@@ -61,9 +65,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Get the user name
         Bundle extras = getIntent().getExtras();
-        username = AppHelper.getCurrUser();
-        user = AppHelper.getPool().getUser(username);
+        username = provider.getAppHelper().getCurrUser();
+        user = provider.getAppHelper().getPool().getUser(username);
         getDetails();
+    }
+
+    public void setCommonDependencyProvider(CommonDependencyProvider provider) {
+        this.provider = provider;
     }
 
     public void signOut() {
@@ -73,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Get user details from CIP service
     private void getDetails() {
-        AppHelper.getPool().getUser(username).getDetailsInBackground(detailsHandler);
+        provider.getAppHelper().getPool().getUser(username).getDetailsInBackground(detailsHandler);
     }
 
     GetDetailsHandler detailsHandler = new GetDetailsHandler() {
@@ -81,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         public void onSuccess(CognitoUserDetails cognitoUserDetails) {
             closeWaitDialog();
             // Store details in the AppHandler
-            AppHelper.setUserDetails(cognitoUserDetails);
+            provider.getAppHelper().setUserDetails(cognitoUserDetails);
             // Trusted devices?
             handleTrustedDevice();
         }
@@ -89,14 +97,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onFailure(Exception exception) {
             closeWaitDialog();
-            showDialogMessage("Could not fetch user details!", AppHelper.formatException(exception), true);
+            showDialogMessage("Could not fetch user details!", provider.getAppHelper().formatException(exception), true);
         }
     };
 
     private void handleTrustedDevice() {
-        CognitoDevice newDevice = AppHelper.getNewDevice();
+        CognitoDevice newDevice = provider.getAppHelper().getNewDevice();
         if (newDevice != null) {
-            AppHelper.newDevice(null);
+            provider.getAppHelper().newDevice(null);
             trustedDeviceDialog(newDevice);
         }
     }
@@ -154,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onFailure(Exception exception) {
             closeWaitDialog();
-            showDialogMessage("Failed to update device status", AppHelper.formatException(exception), true);
+            showDialogMessage("Failed to update device status", provider.getAppHelper().formatException(exception), true);
         }
     };
 

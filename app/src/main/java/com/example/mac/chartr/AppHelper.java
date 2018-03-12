@@ -37,207 +37,175 @@ import java.util.Map;
 import java.util.Set;
 
 public class AppHelper {
-    private static final String TAG = "AppHelper";
+    private final String TAG = "AppHelper";
     // App settings
-
-    private static List<String> attributeDisplaySeq;
-    private static Map<String, String> signUpFieldsC2O;
-    private static Map<String, String> signUpFieldsO2C;
-
-    private static AppHelper appHelper;
-    private static CognitoUserPool userPool;
-    private static String user;
-    private static CognitoDevice newDevice;
-
-    private static CognitoUserAttributes attributesChanged;
-    private static List<AttributeType> attributesToDelete;
-
-    //private static List<ItemToDisplay> currDisplayedItems;
-    private static  int itemCount;
-
-    //private static List<ItemToDisplay> trustedDevices;
-    private static int trustedDevicesCount;
-    private static List<CognitoDevice> deviceDetails;
-    private static CognitoDevice thisDevice;
-    private static boolean thisDeviceTrustState;
-
-    //private static List<ItemToDisplay> firstTimeLogInDetails;
-    private static Map<String, String> firstTimeLogInUserAttributes;
-    private static List<String> firstTimeLogInRequiredAttributes;
-    private static int firstTimeLogInItemsCount;
-    private static Map<String, String> firstTimeLogInUpDatedAttributes;
-    private static String firstTimeLoginNewPassword;
-
-    //private static List<ItemToDisplay> mfaOptions;
-    private static List<String> mfaAllOptionsCode;
-
-    // Change the next three lines of code to run this demo on your user pool
+    private List<String> attributeDisplaySeq;
+    private Map<String, String> signUpFieldsC2O;
+    private Map<String, String> signUpFieldsO2C;
+    private CognitoUserPool userPool;
+    private String user;
+    private CognitoDevice newDevice;
+    private CognitoUserAttributes attributesChanged;
+    private List<AttributeType> attributesToDelete;
+    private  int itemCount;
+    private int trustedDevicesCount;
+    private List<CognitoDevice> deviceDetails;
+    private CognitoDevice thisDevice;
+    private boolean thisDeviceTrustState;
+    private Map<String, String> firstTimeLogInUserAttributes;
+    private List<String> firstTimeLogInRequiredAttributes;
+    private int firstTimeLogInItemsCount;
+    private Map<String, String> firstTimeLogInUpDatedAttributes;
+    private String firstTimeLoginNewPassword;
+    private List<String> mfaAllOptionsCode;
 
     /**
      * Add your pool id here
      */
-    private static final String userPoolId = "us-east-2_OHZrHKLGQ";
+    private final String userPoolId = "us-east-2_OHZrHKLGQ";
 
     /**
      * Add you app id
      */
-    private static final String clientId = "20d0tqg8ulln6v52hau17ttsc2";
+    private final String clientId = "20d0tqg8ulln6v52hau17ttsc2";
 
     /**
      * App secret associated with your app id - if the App id does not have an associated App secret,
      * set the App secret to null.
      * e.g. clientSecret = null;
      */
-    private static final String clientSecret = "1iskopdp36s0eponkvduvfmqh0cj6aol31e74pan4bkjbn3722d1";
+    private final String clientSecret = "1iskopdp36s0eponkvduvfmqh0cj6aol31e74pan4bkjbn3722d1";
 
     /**
      * Set Your User Pools region.
      * e.g. if your user pools are in US East (N Virginia) then set cognitoRegion = Regions.US_EAST_1.
      */
-    private static final Regions cognitoRegion = Regions.US_EAST_2;
+    private final Regions cognitoRegion = Regions.US_EAST_2;
 
     // User details from the service
-    private static CognitoUserSession currSession;
-    private static CognitoUserDetails userDetails;
+    private CognitoUserSession currSession;
+    private CognitoUserDetails userDetails;
 
     // User details to display - they are the current values, including any local modification
-    private static boolean phoneVerified;
-    private static boolean emailVerified;
+    private boolean phoneVerified;
+    private boolean emailVerified;
 
-    private static boolean phoneAvailable;
-    private static boolean emailAvailable;
+    private boolean phoneAvailable;
+    private boolean emailAvailable;
 
-    private static Set<String> currUserAttributes;
+    private Set<String> currUserAttributes;
 
-    private static User loggedInUser;
+    private User loggedInUser;
 
-    public static void init(Context context) {
+    public AppHelper(Context context) {
+        init(context);
+    }
+
+    public void init(Context context) {
         setData();
 
-        if (appHelper != null && userPool != null) {
+        if (userPool != null) {
             return;
         }
 
-        if (appHelper == null) {
-            appHelper = new AppHelper();
-        }
-
-        if (userPool == null) {
-
-            // Create a user pool with default ClientConfiguration
-            userPool = new CognitoUserPool(context, userPoolId, clientId, clientSecret, cognitoRegion);
-
-            // This will also work
-            /*
-            ClientConfiguration clientConfiguration = new ClientConfiguration();
-            AmazonCognitoIdentityProvider cipClient = new AmazonCognitoIdentityProviderClient(new AnonymousAWSCredentials(), clientConfiguration);
-            cipClient.setRegion(Region.getRegion(cognitoRegion));
-            userPool = new CognitoUserPool(context, userPoolId, clientId, clientSecret, cipClient);
-            */
-
-
-        }
+        // Create a user pool with default ClientConfiguration
+        userPool = new CognitoUserPool(context, userPoolId, clientId, clientSecret, cognitoRegion);
 
         phoneVerified = false;
         phoneAvailable = false;
         emailVerified = false;
         emailAvailable = false;
 
-        currUserAttributes = new HashSet<String>();
-        //currDisplayedItems = new ArrayList<ItemToDisplay>();
-        //trustedDevices = new ArrayList<ItemToDisplay>();
-        //firstTimeLogInDetails = new ArrayList<ItemToDisplay>();
-        firstTimeLogInUpDatedAttributes= new HashMap<String, String>();
+        currUserAttributes = new HashSet<>();
+        firstTimeLogInUpDatedAttributes= new HashMap<>();
 
         newDevice = null;
         thisDevice = null;
         thisDeviceTrustState = false;
-
-        //mfaOptions = new ArrayList<ItemToDisplay>();
     }
 
-    public static CognitoUserPool getPool() {
+    public CognitoUserPool getPool() {
         return userPool;
     }
 
-    public static Map<String, String> getSignUpFieldsC2O() {
+    public Map<String, String> getSignUpFieldsC2O() {
         return signUpFieldsC2O;
     }
 
-    public static Map<String, String> getSignUpFieldsO2C() {
+    public Map<String, String> getSignUpFieldsO2C() {
         return signUpFieldsO2C;
     }
 
-    public static List<String> getAttributeDisplaySeq() {
+    public List<String> getAttributeDisplaySeq() {
         return attributeDisplaySeq;
     }
 
-    public static void setCurrSession(CognitoUserSession session) {
+    public void setCurrSession(CognitoUserSession session) {
         currSession = session;
     }
 
-    public static CognitoUserSession getCurrSession() {
+    public CognitoUserSession getCurrSession() {
         return currSession;
     }
 
-    public static void setUserDetails(CognitoUserDetails details) {
+    public void setUserDetails(CognitoUserDetails details) {
         userDetails = details;
         refreshWithSync();
     }
 
-    public static CognitoUserDetails getUserDetails() {
+    public CognitoUserDetails getUserDetails() {
         return userDetails;
     }
 
-    public static String getCurrUser() {
+    public String getCurrUser() {
         return user;
     }
 
-    public static void setUser(String newUser) {
+    public void setUser(String newUser) {
         user = newUser;
     }
 
-    public static boolean isPhoneVerified() {
+    public boolean isPhoneVerified() {
         return phoneVerified;
     }
 
-    public static boolean isEmailVerified() {
+    public boolean isEmailVerified() {
         return emailVerified;
     }
 
-    public static boolean isPhoneAvailable() {
+    public boolean isPhoneAvailable() {
         return phoneAvailable;
     }
 
-    public static boolean isEmailAvailable() {
+    public boolean isEmailAvailable() {
         return emailAvailable;
     }
 
-    public static void setPhoneVerified(boolean phoneVerif) {
+    public void setPhoneVerified(boolean phoneVerif) {
         phoneVerified = phoneVerif;
     }
 
-    public static void setEmailVerified(boolean emailVerif) {
+    public void setEmailVerified(boolean emailVerif) {
         emailVerified = emailVerif;
     }
 
-    public static void setPhoneAvailable(boolean phoneAvail) {
+    public void setPhoneAvailable(boolean phoneAvail) {
         phoneAvailable = phoneAvail;
     }
 
-    public static void setEmailAvailable(boolean emailAvail) {
+    public void setEmailAvailable(boolean emailAvail) {
         emailAvailable = emailAvail;
     }
 
-    public static void clearCurrUserAttributes() {
+    public void clearCurrUserAttributes() {
         currUserAttributes.clear();
     }
 
-    public static void addCurrUserattribute(String attribute) {
+    public void addCurrUserattribute(String attribute) {
         currUserAttributes.add(attribute);
     }
 
-    public static List<String> getNewAvailableOptions() {
+    public List<String> getNewAvailableOptions() {
         List<String> newOption = new ArrayList<String>();
         for(String attribute : attributeDisplaySeq) {
             if(!(currUserAttributes.contains(attribute))) {
@@ -247,7 +215,7 @@ public class AppHelper {
         return  newOption;
     }
 
-    public static String formatException(Exception exception) {
+    public String formatException(Exception exception) {
         String formattedString = "Internal Error";
         Log.e(TAG, " -- Error: "+exception.toString());
         Log.getStackTraceString(exception);
@@ -264,110 +232,35 @@ public class AppHelper {
         return  formattedString;
     }
 
-    public  static  int getItemCount() {
+    public   int getItemCount() {
         return itemCount;
     }
 
-    public static int getDevicesCount() {
+    public int getDevicesCount() {
         return trustedDevicesCount;
     }
 
-    public static int getFirstTimeLogInItemsCount() {
+    public int getFirstTimeLogInItemsCount() {
         return  firstTimeLogInItemsCount;
     }
 
-//    public  static ItemToDisplay getItemForDisplay(int position) {
-//        return  currDisplayedItems.get(position);
-//    }
-//
-//    public static ItemToDisplay getDeviceForDisplay(int position) {
-//        if (position >= trustedDevices.size()) {
-//            return new ItemToDisplay(" ", " ", " ", Color.BLACK, Color.DKGRAY, Color.parseColor("#37A51C"), 0, null);
-//        }
-//        return trustedDevices.get(position);
-//    }
-//
-//    public static ItemToDisplay getUserAttributeForFirstLogInCheck(int position) {
-//        return firstTimeLogInDetails.get(position);
-//    }
-
-//    public static void setUserAttributeForDisplayFirstLogIn(Map<String, String> currAttributes, List<String> requiredAttributes) {
-//        firstTimeLogInUserAttributes = currAttributes;
-//        firstTimeLogInRequiredAttributes = requiredAttributes;
-//        firstTimeLogInUpDatedAttributes = new HashMap<String, String>();
-//        refreshDisplayItemsForFirstTimeLogin();
-//    }
-//
-//    public static void setUserAttributeForFirstTimeLogin(String attributeName, String attributeValue) {
-//        if (firstTimeLogInUserAttributes ==  null) {
-//            firstTimeLogInUserAttributes = new HashMap<String, String>();
-//        }
-//        firstTimeLogInUserAttributes.put(attributeName, attributeValue);
-//        firstTimeLogInUpDatedAttributes.put(attributeName, attributeValue);
-//        refreshDisplayItemsForFirstTimeLogin();
-//    }
-
-    public static Map<String, String> getUserAttributesForFirstTimeLogin() {
+    public Map<String, String> getUserAttributesForFirstTimeLogin() {
         return firstTimeLogInUpDatedAttributes;
     }
 
-    public static void setPasswordForFirstTimeLogin(String password) {
+    public void setPasswordForFirstTimeLogin(String password) {
         firstTimeLoginNewPassword = password;
     }
 
-    public static String getPasswordForFirstTimeLogin() {
+    public String getPasswordForFirstTimeLogin() {
         return firstTimeLoginNewPassword;
     }
 
-//    private static void refreshDisplayItemsForFirstTimeLogin() {
-//        firstTimeLogInItemsCount = 0;
-//        firstTimeLogInDetails = new ArrayList<ItemToDisplay>();
-//
-//        for(Map.Entry<String, String> attr: firstTimeLogInUserAttributes.entrySet()) {
-//            if ("phone_number_verified".equals(attr.getKey()) || "email_verified".equals(attr.getKey())) {
-//                continue;
-//            }
-//            String message = "";
-//            if ((firstTimeLogInRequiredAttributes != null) && (firstTimeLogInRequiredAttributes.contains(attr.getKey()))) {
-//                message = "Required";
-//            }
-//            ItemToDisplay item = new ItemToDisplay(attr.getKey(), attr.getValue(), message, Color.BLACK, Color.DKGRAY, Color.parseColor("#329AD6"), 0, null);
-//            firstTimeLogInDetails.add(item);
-//            firstTimeLogInRequiredAttributes.size();
-//            firstTimeLogInItemsCount++;
-//        }
-//
-//        for (String attr: firstTimeLogInRequiredAttributes) {
-//            if (!firstTimeLogInUserAttributes.containsKey(attr)) {
-//                ItemToDisplay item = new ItemToDisplay(attr, "", "Required", Color.BLACK, Color.DKGRAY, Color.parseColor("#329AD6"), 0, null);
-//                firstTimeLogInDetails.add(item);
-//                firstTimeLogInItemsCount++;
-//            }
-//        }
-//    }
-
-    public static void newDevice(CognitoDevice device) {
+    public void newDevice(CognitoDevice device) {
         newDevice = device;
     }
 
-//    public static void setDevicesForDisplay(List<CognitoDevice> devicesList) {
-//        trustedDevicesCount = 0;
-//        thisDeviceTrustState = false;
-//        deviceDetails = devicesList;
-//        trustedDevices = new ArrayList<ItemToDisplay>();
-//        for(CognitoDevice device: devicesList) {
-//            if (thisDevice != null && thisDevice.getDeviceKey().equals(device.getDeviceKey())) {
-//                thisDeviceTrustState = true;
-//            } else {
-//                ItemToDisplay item = new ItemToDisplay("", device.getDeviceName(), device.getCreateDate().toString(), Color.BLACK, Color.DKGRAY, Color.parseColor("#329AD6"), 0, null);
-//                item.setDataDrawable("checked");
-//                trustedDevices.add(item);
-//                trustedDevicesCount++;
-//            }
-//        }
-//    }
-
-    public static CognitoDevice getDeviceDetail(int position) {
+    public CognitoDevice getDeviceDetail(int position) {
         if (position <= trustedDevicesCount) {
             return deviceDetails.get(position);
         } else {
@@ -375,66 +268,31 @@ public class AppHelper {
         }
     }
 
-//    public static void setMfaOptionsForDisplay(List<String> options, Map<String, String> parameters) {
-//        mfaAllOptionsCode = options;
-//        mfaOptions = new ArrayList<ItemToDisplay>();
-//        String textToDisplay = "";
-//        for (String option: options) {
-//            if ("SMS_MFA".equals(option)) {
-//                textToDisplay = "Send SMS";
-//                if (parameters.containsKey("CODE_DELIVERY_DESTINATION")) {
-//                    textToDisplay = textToDisplay + " to "+ parameters.get("CODE_DELIVERY_DESTINATION");
-//                }
-//            } else if ("SOFTWARE_TOKEN_MFA".equals(option)) {
-//                textToDisplay = "Use TOTP";
-//                if (parameters.containsKey("FRIENDLY_DEVICE_NAME")) {
-//                    textToDisplay = textToDisplay + ": " + parameters.get("FRIENDLY_DEVICE_NAME");
-//                }
-//            }
-//            ItemToDisplay item = new ItemToDisplay("", textToDisplay, "", Color.BLACK, Color.DKGRAY, Color.parseColor("#329AD6"), 0, null);
-//            mfaOptions.add(item);
-//            textToDisplay = "Unsupported MFA";
-//        }
-//    }
-
-    public static List<String> getAllMfaOptions() {
+    public List<String> getAllMfaOptions() {
         return mfaAllOptionsCode;
     }
 
-    public static String getMfaOptionCode(int position) {
+    public String getMfaOptionCode(int position) {
         return mfaAllOptionsCode.get(position);
     }
 
-//    public static ItemToDisplay getMfaOptionForDisplay(int position) {
-//        if (position >= mfaOptions.size()) {
-//            return new ItemToDisplay(" ", " ", " ", Color.BLACK, Color.DKGRAY, Color.parseColor("#37A51C"), 0, null);
-//        }
-//        return mfaOptions.get(position);
-//    }
-
-//    public static int getMfaOptionsCount() {
-//        return mfaOptions.size();
-//    }
-
-    //public static
-
-    public static CognitoDevice getNewDevice() {
+    public CognitoDevice getNewDevice() {
         return newDevice;
     }
 
-    public static CognitoDevice getThisDevice() {
+    public CognitoDevice getThisDevice() {
         return thisDevice;
     }
 
-    public static void setThisDevice(CognitoDevice device) {
+    public void setThisDevice(CognitoDevice device) {
         thisDevice = device;
     }
 
-    public static boolean getThisDeviceTrustState() {
+    public boolean getThisDeviceTrustState() {
         return thisDeviceTrustState;
     }
 
-    private static void setData() {
+    private void setData() {
         // Set attribute display sequence
         attributeDisplaySeq = new ArrayList<String>();
         attributeDisplaySeq.add("name");
@@ -468,7 +326,7 @@ public class AppHelper {
 
     }
 
-    private static void refreshWithSync() {
+    private void refreshWithSync() {
         // This will refresh the current items to display list with the attributes fetched from service
         List<String> tempKeys = new ArrayList<>();
         List<String> tempValues = new ArrayList<>();
@@ -502,63 +360,14 @@ public class AppHelper {
                 phoneAvailable = true;
             }
         }
-
-//        // Arrange the input attributes per the display sequence
-//        Set<String> keySet = new HashSet<>(tempKeys);
-//        for(String det: attributeDisplaySeq) {
-//            if(keySet.contains(det)) {
-//                // Adding items to display list in the required sequence
-//
-//                ItemToDisplay item = new ItemToDisplay(signUpFieldsO2C.get(det), tempValues.get(tempKeys.indexOf(det)), "",
-//                        Color.BLACK, Color.DKGRAY, Color.parseColor("#37A51C"),
-//                        0, null);
-//
-//                if(det.contains("email")) {
-//                    if(emailVerified) {
-//                        item.setDataDrawable("checked");
-//                        item.setMessageText("Email verified");
-//                    }
-//                    else {
-//                        item.setDataDrawable("not_checked");
-//                        item.setMessageText("Email not verified");
-//                        item.setMessageColor(Color.parseColor("#E94700"));
-//                    }
-//                }
-//
-//                if(det.contains("phone_number")) {
-//                    if(phoneVerified) {
-//                        item.setDataDrawable("checked");
-//                        item.setMessageText("Phone number verified");
-//                    }
-//                    else {
-//                        item.setDataDrawable("not_checked");
-//                        item.setMessageText("Phone number not verified");
-//                        item.setMessageColor(Color.parseColor("#E94700"));
-//                    }
-//                }
-//
-//                currDisplayedItems.add(item);
-//                currUserAttributes.add(det);
-//                itemCount++;
-//            }
-//        }
     }
 
-    private static void modifyAttribute(String attributeName, String newValue) {
-        //
-
-    }
-
-    private static void deleteAttribute(String attributeName) {
-
-    }
-
-    public static User getLoggedInUser() {
+    public User getLoggedInUser() {
         return loggedInUser;
     }
 
-    public static void setLoggedInUser(User loggedInUser) {
-        AppHelper.loggedInUser = loggedInUser;
+    public void setLoggedInUser(User loggedInUser) {
+        this.loggedInUser = loggedInUser;
     }
 }
 
