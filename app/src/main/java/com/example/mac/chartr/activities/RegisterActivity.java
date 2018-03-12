@@ -21,6 +21,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttribu
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
 import com.example.mac.chartr.AppHelper;
+import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -38,9 +39,12 @@ public class RegisterActivity extends AppCompatActivity {
     private String emailInput;
     private String userPasswd;
 
+    private CommonDependencyProvider provider;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setCommonDependencyProvider(new CommonDependencyProvider());
         setContentView(R.layout.activity_register);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -56,6 +60,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         init();
     }
+
+    public void setCommonDependencyProvider(CommonDependencyProvider provider) {
+        this.provider = provider;
+    }
+
 
     private void init() {
         email = (EditText) findViewById(R.id.editTextRegEmail);
@@ -208,7 +217,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 String userpasswordInput = password.getText().toString();
                 userPasswd = userpasswordInput;
-                if (userpasswordInput == null || userpasswordInput.isEmpty()) {
+                if (userpasswordInput.isEmpty()) {
                     TextView view = (TextView) findViewById(R.id.textViewUserRegPasswordMessage);
                     view.setText(password.getHint() + " cannot be empty");
                     password.setBackground(getDrawable(R.drawable.text_border_error));
@@ -216,36 +225,28 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 String userInput = givenName.getText().toString();
-                if (userInput != null) {
-                    if (userInput.length() > 0) {
-                        userAttributes.addAttribute(AppHelper.getSignUpFieldsC2O().get(givenName.getHint()).toString(), userInput);
-                    }
+                if (userInput.length() > 0) {
+                    userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O().get(givenName.getHint()), userInput);
                 }
 
                 userInput = email.getText().toString();
-                if (userInput != null) {
-                    if (userInput.length() > 0) {
-                        userAttributes.addAttribute(AppHelper.getSignUpFieldsC2O().get(email.getHint()).toString(), userInput);
-                    }
+                if (userInput.length() > 0) {
+                    userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O().get(email.getHint()), userInput);
                 }
 
                 userInput = birthday.getText().toString();
-                if (userInput != null) {
-                    if (userInput.length() > 0) {
-                        userAttributes.addAttribute(AppHelper.getSignUpFieldsC2O().get(birthday.getHint()).toString(), userInput);
-                    }
+                if (userInput.length() > 0) {
+                    userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O().get(birthday.getHint()), userInput);
                 }
 
                 userInput = phone.getText().toString();
-                if (userInput != null) {
-                    if (userInput.length() > 0) {
-                        userAttributes.addAttribute(AppHelper.getSignUpFieldsC2O().get(phone.getHint()).toString(), userInput);
-                    }
+                if (userInput.length() > 0) {
+                    userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O().get(phone.getHint()), userInput);
                 }
 
                 showWaitDialog("Signing up...");
 
-                AppHelper.getPool().signUpInBackground(emailInput, userpasswordInput, userAttributes, null, signUpHandler);
+                provider.getAppHelper().getPool().signUpInBackground(emailInput, userpasswordInput, userAttributes, null, signUpHandler);
 
             }
         });
@@ -274,7 +275,7 @@ public class RegisterActivity extends AppCompatActivity {
             TextView label = (TextView) findViewById(R.id.textViewRegEmailMessage);
             label.setText("Sign up failed");
             email.setBackground(getDrawable(R.drawable.text_border_error));
-            showDialogMessage("Sign up failed",AppHelper.formatException(exception),false);
+            showDialogMessage("Sign up failed", provider.getAppHelper().formatException(exception),false);
         }
     };
 
