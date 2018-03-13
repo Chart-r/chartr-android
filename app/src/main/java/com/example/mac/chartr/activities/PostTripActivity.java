@@ -8,17 +8,15 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.android.volley.Response;
 import com.example.mac.chartr.R;
 
 import java.sql.Time;
 import java.util.Date;
 
-import com.example.mac.chartr.R;
-import com.example.mac.chartr.objects.TripInvoker;
-import com.example.mac.chartr.utils.VolleyCallback;
+import com.example.mac.chartr.objects.User;
+import com.example.mac.chartr.objects.UserInvoker;
+import com.example.mac.chartr.utils.ObjectCallback;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -72,5 +70,12 @@ public class PostTripActivity extends AppCompatActivity {
 
     public void postTrip(View view) {
         // TODO: implement
+        User testUser = new User("test@email.com", "Test Name", 0.0f);
+        UserInvoker.create(this, testUser, new ObjectCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                Log.d(TAG, response.toString());
+            }
+        });
     }
 }

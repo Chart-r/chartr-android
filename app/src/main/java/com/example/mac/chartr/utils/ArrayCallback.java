@@ -6,7 +6,7 @@ import org.json.JSONArray;
  * Interface for callbacks when using JsonArrayRequest from the volley library.
  */
 
-public interface VolleyCallback {
+public interface ArrayCallback {
     void onSuccess(JSONArray result);
 
 }

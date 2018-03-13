@@ -9,24 +9,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.mac.chartr.utils.VolleyCallback;
+import com.example.mac.chartr.utils.ArrayCallback;
 
 import org.json.JSONArray;
 
 /**
- * Class for making trip related API calls, result of API calls is stored in the output variable
+ * Class for making trip related API calls.
  */
 
 public class TripInvoker {
     private static final String TAG = TripInvoker.class.getSimpleName();
-
 
     /**
      * Gets trips for a given driver username.
      * @param context The context of the calling activity
      * @param username The username of the trip driver
      */
-    public static void get(Context context, String username, VolleyCallback callback) {
+    public static void get(Context context, String username, ArrayCallback callback) {
         callURL(context, "https://99sepehum8.execute-api.us-east-2.amazonaws.com/prod/trip/*?" + username, null, callback);
     }
 
@@ -42,8 +41,33 @@ public class TripInvoker {
 
     }
 
-    private static void callURL(Context context, String url) {
+    /**
+     * Makes api call to url with provided parameters without a callback.
+     * @param context The context of the calling activity.
+     * @param url The api url.
+     */
+    private static void callURL(Context context, String url, JSONArray params) {
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(context);
 
+        // Request a string response from the provided URL.
+        JsonArrayRequest stringRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                params,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, "Response is: " + response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, error.getMessage());
+            }
+        });
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 
     /**
@@ -53,7 +77,7 @@ public class TripInvoker {
      * @param params The parameters to pass to the api.
      * @param callback The callback that should receive the result.
      */
-    private static void callURL(Context context, String url, JSONArray params, final VolleyCallback callback) {
+    private static void callURL(Context context, String url, JSONArray params, final ArrayCallback callback) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(context);
 
