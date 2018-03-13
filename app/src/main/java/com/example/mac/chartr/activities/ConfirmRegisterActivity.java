@@ -170,7 +170,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
      * Set the text for the field textViewConfirmCodeMessage in the ConfirmRegister Layout
      * @param et is and EditText
      */
-    private void setConfirmCodeMessage(EditText et) {
+    protected void setConfirmCodeMessage(EditText et) {
         TextView label = (TextView) findViewById(R.id.textViewConfirmCodeMessage);
         label.setText(et.getHint()+" cannot be empty");
         et.setBackground(getDrawable(R.drawable.text_border_error));

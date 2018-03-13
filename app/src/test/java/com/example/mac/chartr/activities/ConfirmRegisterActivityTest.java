@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
@@ -56,5 +57,16 @@ public class ConfirmRegisterActivityTest {
         verify(dialog, times(1)).show();
     }
 
+    @Test
+    public void setConfirmCodeMessageTest(){
+        ConfirmRegisterActivity activity = Robolectric.setupActivity(ConfirmRegisterActivity.class);
+        EditText username = (EditText) activity.findViewById(R.id.editTextConfirmUserId);
+        activity.setConfirmCodeMessage(username);
+
+
+        TextView label = (TextView) activity.findViewById(R.id.textViewConfirmCodeMessage);
+        String str = label.getText().toString();
+        Assert.assertEquals("Username cannot be empty", str);
+    }
 
 }
