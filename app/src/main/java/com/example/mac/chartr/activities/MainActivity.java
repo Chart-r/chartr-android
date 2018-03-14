@@ -1,6 +1,7 @@
 package com.example.mac.chartr.activities;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,15 +18,15 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
-import com.example.mac.chartr.AppHelper;
+import com.android.volley.RequestQueue;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.fragments.NearbyFragment;
@@ -33,12 +35,11 @@ import com.example.mac.chartr.fragments.RequestsFragment;
 import com.example.mac.chartr.fragments.trips.TripsFragment;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-
 
     private String username;
     private CognitoUser user;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupTopToolbar();
         setupBottomNavigation();
+        setupToolbarListener();
 
         // Get the user name
         Bundle extras = getIntent().getExtras();
@@ -91,6 +93,35 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * Listener for changing the toolbar title and go to add trip button.
+     */
+    private void setupToolbarListener() {
+        final Activity activity = this;
+        getSupportFragmentManager().addOnBackStackChangedListener(
+                new FragmentManager.OnBackStackChangedListener() {
+                    @Override
+                    public void onBackStackChanged() {
+                        int topOfBackstack = getSupportFragmentManager().getBackStackEntryCount()-1;
+
+                        // Set top toolbar title
+                        String title = "Trips";
+                        if(topOfBackstack >= 0) {
+                            title = getSupportFragmentManager().getBackStackEntryAt(topOfBackstack).getName();
+
+                        }
+                        getSupportActionBar().setTitle(title);
+
+                        // Show or hide plus button
+                        if(title == "Trips") {
+                            findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
+                        } else {
+                            findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                        }
+                    }
+                });
     }
 
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
@@ -291,6 +322,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed(){
         if(getSupportFragmentManager().getBackStackEntryCount() != 0){
             super.onBackPressed();
+
         }
 }
 }

@@ -175,15 +175,4 @@ public class PostTripActivity extends AppCompatActivity {
             }
         });
     }
-<<<<<<< HEAD
-
-
-=======
-    @Override
-    public void onBackPressed(){
-        if(getSupportFragmentManager().getBackStackEntryCount() != 0){
-            super.onBackPressed();
-        }
-    }
->>>>>>> skeleton
 }

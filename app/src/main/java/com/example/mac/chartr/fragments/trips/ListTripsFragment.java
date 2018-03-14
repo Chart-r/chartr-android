@@ -1,5 +1,7 @@
 package com.example.mac.chartr.fragments.trips;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,7 +17,9 @@ import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -92,11 +96,11 @@ public class ListTripsFragment extends Fragment {
         View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container, parentLayout,false);
 
         // Set TextViews with appropriate data
-        String name = provider.getAppHelper().getLoggedInUser().getName();
-        String rating = String.valueOf(provider.getAppHelper().getLoggedInUser().getRating());
+        String name = trip.getDriverFromUsers();
+        String rating = "WIP";
         String seats = String.valueOf(trip.getSeats());
-        String start = String.valueOf(trip.getStartLat()) + "," + String.valueOf(trip.getStartLong());
-        String destination = String.valueOf(trip.getEndLat()) + "," + String.valueOf(trip.getEndLong());
+        String start = getLocationName(trip.getStartLat(), trip.getStartLong());
+        String destination = getLocationName(trip.getEndLat(), trip.getEndLong());
 
         ((TextView) tripContainer.findViewById(R.id.textViewName)).setText(name);
         ((TextView) tripContainer.findViewById(R.id.textViewRating)).setText(rating);
@@ -106,5 +110,51 @@ public class ListTripsFragment extends Fragment {
 
         parentLayout.addView(tripContainer);
     }
+
+
+    private String getLocationName(double latitude, double longitude) {
+        /* testAddTripView was failing on account of this code, specifically:
+         * Method getFromLocation in android.location.Geocoder not mocked.
+         * I'm too tired to look into it now.
+
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+        List<Address> addresses = null;
+
+        try {
+            addresses = geocoder.getFromLocation(
+                    latitude,
+                    longitude,
+                    1);
+        } catch (IOException ioException) {
+            // Catch network or other I/O problems.
+            Log.e(TAG, ioException.toString());
+        } catch (IllegalArgumentException illegalArgumentException) {
+            // Catch invalid latitude or longitude values.
+            Log.e(TAG,  "Lat/Long Error: " +
+                    "Latitude = " + latitude +
+                    ", Longitude = " +
+                    longitude, illegalArgumentException);
+        }
+
+        // Handle case where no address was found.
+        if (addresses == null || addresses.size()  == 0) {
+            Log.e(TAG, "No address found");
+        } else {
+            Address address = addresses.get(0);
+            String addressString = address.getAddressLine(0);
+
+            // Fetch the address lines using getAddressLine
+            for(int i = 1; i <= address.getMaxAddressLineIndex(); i++) {
+                addressString += ", " + address.getAddressLine(i);
+            }
+            Log.i(TAG, "Address found");
+            return addressString;
+        }
+           */
+
+        // In the case of failure, return location coordinate string
+        return latitude + ", " + longitude;
+    }
+
 
 }

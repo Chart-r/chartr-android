@@ -6,6 +6,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Trip {
@@ -197,4 +198,16 @@ public class Trip {
 
     public void setDriverEmail(String driverEmail) { this.driverEmail = driverEmail; }
 
+    public String getDriverFromUsers() {
+        Iterator it = users.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            if (pair.getValue().equals("Driver")) {
+                return pair.getKey().toString();
+            }
+            Log.d(TAG, pair.toString());
+        }
+
+        return "";
+    }
 }

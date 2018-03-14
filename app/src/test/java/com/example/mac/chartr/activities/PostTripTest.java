@@ -73,7 +73,7 @@ public class PostTripTest {
     public void decrementSeatsTest() {
         PostTripActivity activity = Robolectric.setupActivity(PostTripActivity.class);
 
-        TextView results = (TextView) activity.findViewById(R.id.seatValue);
+        TextView results = (TextView) activity.findViewById(R.id.textViewSeatValue);
 
         activity.decrementSeats(null);
         String str = results.getText().toString();
@@ -89,7 +89,7 @@ public class PostTripTest {
     public void incrementSeatsTest(){
         PostTripActivity activity = Robolectric.setupActivity(PostTripActivity.class);
 
-        TextView results = (TextView) activity.findViewById(R.id.seatValue);
+        TextView results = (TextView) activity.findViewById(R.id.textViewSeatValue);
 
         activity.incrementSeats(null);
         String str = results.getText().toString();

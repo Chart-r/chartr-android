@@ -15,6 +15,9 @@ import com.example.mac.chartr.objects.User;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
@@ -54,9 +57,12 @@ public class ListTripsFragmentTest {
         float end = (float)10.2;
         float price = (float)50;
 
-        long startTime =1000;
-        long endTime =2000;
-        Trip trip = new Trip(startTime, endTime, true, false, start, end, start, end, 5, price, "1", null);
+        long startTime = 1000;
+        long endTime = 2000;
+
+        Map<String, String> users = new HashMap<>();
+        users.put("test@email.com", "Driver");
+        Trip trip = new Trip(startTime, endTime, true, false, start, end, start, end, 5, price, "1", users);
 
         when(fragment.getLayoutInflater()).thenReturn(inflater);
         when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class))).thenReturn(view);

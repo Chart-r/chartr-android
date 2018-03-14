@@ -26,4 +26,5 @@
     <dimen name="location_icon_small">16dp</dimen>
     <dimen name="post_trip_text_size">15sp</dimen>
     <dimen name="zero_spacing">0sp</dimen>
+    <dimen name="text_view_medium_height">26dp</dimen>
 </resources>
