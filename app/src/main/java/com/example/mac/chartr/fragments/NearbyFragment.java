@@ -2,18 +2,11 @@ package com.example.mac.chartr.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.example.mac.chartr.AppHelper;
 import com.example.mac.chartr.R;
-import com.example.mac.chartr.objects.Trip;
-import com.example.mac.chartr.objects.User;
 
 public class NearbyFragment extends Fragment {
     public static final String TAG = NearbyFragment.class.getSimpleName();

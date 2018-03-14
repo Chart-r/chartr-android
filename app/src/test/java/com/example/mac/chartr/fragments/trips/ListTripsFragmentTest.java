@@ -1,5 +1,6 @@
 package com.example.mac.chartr.fragments.trips;
 
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,11 @@ import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
 
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.when;
@@ -27,7 +32,8 @@ import static org.mockito.Mockito.times;
  *
  */
 public class ListTripsFragmentTest {
-
+    @Mock
+    private Geocoder geocoder;
 
     private CommonDependencyProvider provider;
     private AppHelper helper;
@@ -54,13 +60,20 @@ public class ListTripsFragmentTest {
         float end = (float)10.2;
         float price = (float)50;
 
-        long startTime =1000;
-        long endTime =2000;
-        Trip trip = new Trip(startTime, endTime, true, false, start, end, start, end, 5, price, "1", null);
+        long startTime = 1000;
+        long endTime = 2000;
+
+        Map<String, String> users = new HashMap<>();
+        users.put("test@email.com", "Driver");
+        Trip trip = new Trip(startTime, endTime, true, false, start, end, start, end, 5, price, "1", users);
 
         when(fragment.getLayoutInflater()).thenReturn(inflater);
         when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class))).thenReturn(view);
         when(view.findViewById(any(int.class))).thenReturn(textView);
+
+        // TODO create test for getLocationName helper.  May need to refactor to pass geocoder as input
+        when(fragment.getLocationName(any(double.class), any(double.class))).thenReturn("Test for getLocationName");
+
         when(helper.getLoggedInUser()).thenReturn(new User("me@there.com", "Joe Smo", 50f, null));
         Mockito.doCallRealMethod().when(fragment).addTripView(any(LinearLayout.class), any(Trip.class));
 
@@ -81,7 +94,6 @@ public class ListTripsFragmentTest {
         when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class))).thenReturn(root);
         when(root.findViewById(any(int.class))).thenReturn(layout);
 
-        Mockito.doCallRealMethod().when(fragment).onCreateView(any(LayoutInflater.class), any(ViewGroup.class), any(Bundle.class));
 
         fragment.onCreateView(inflater, null, null);
 

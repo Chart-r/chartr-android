@@ -238,7 +238,6 @@
         android:layout_below="@+id/textViewTripPreferences"
         android:text="No Smoking"
         android:theme="@style/SCBSwitch"/>
-
     <Switch
         android:id="@+id/switchQuite"
         android:layout_width="match_parent"

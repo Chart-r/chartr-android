@@ -1,17 +1,13 @@
 package com.example.mac.chartr.fragments.trips;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.mac.chartr.R;
-import com.example.mac.chartr.activities.PostTripActivity;
 
 public class TripsFragment extends Fragment {
     public static final String TAG = TripsFragment.class.getSimpleName();

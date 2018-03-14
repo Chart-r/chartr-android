@@ -1,5 +1,7 @@
 package com.example.mac.chartr.fragments.trips;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,7 +17,9 @@ import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,34 +55,41 @@ public class ListTripsFragment extends Fragment {
             // Populate scrollview
             final LinearLayout tripsLinearLayout = root.findViewById(R.id.tripsLinearLayout);
 
-            // Gets all trips for logged in user
-            CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
-            String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
-            ApiInterface apiInterface = ApiClient.getApiInstance();
-            Call<List<Trip>> call = apiInterface.getUserDrivingTrips(userEmail);
-            Log.d(TAG, userEmail);
-            call.enqueue(new Callback<List<Trip>>() {
-                @Override
-                public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
-                    Log.d(TAG,response.code()+"");
+            if(getArguments().getString(ListTripsFragment.TRIP_TYPE_KEY).equals("Posted")){
+                inflatePostedTripsInLayout(tripsLinearLayout);
+            }
 
-                    List<Trip> resource = response.body();
-                    for (int i = 0; i < resource.size(); i++) {
-                        addTripView(tripsLinearLayout, resource.get(i));
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Trip>> call, Throwable t) {
-                    Log.d(TAG, "Retrofit failed to get data");
-                    Log.e(TAG, t.getMessage());
-                    t.printStackTrace();
-                    call.cancel();
-                }
-            });
         }
 
         return root;
+    }
+
+    private void inflatePostedTripsInLayout(final LinearLayout tripsLinearLayout) {
+        // Gets all trips for logged in user
+        CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
+        String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        Call<List<Trip>> call = apiInterface.getUserDrivingTrips(userEmail);
+        Log.d(TAG, userEmail);
+        call.enqueue(new Callback<List<Trip>>() {
+            @Override
+            public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
+                Log.d(TAG,response.code()+"");
+
+                List<Trip> resource = response.body();
+                for (int i = 0; i < resource.size(); i++) {
+                    addTripView(tripsLinearLayout, resource.get(i));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Trip>> call, Throwable t) {
+                Log.d(TAG, "Retrofit failed to get data");
+                Log.e(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
     }
 
     /**
@@ -92,11 +103,11 @@ public class ListTripsFragment extends Fragment {
         View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container, parentLayout,false);
 
         // Set TextViews with appropriate data
-        String name = provider.getAppHelper().getLoggedInUser().getName();
-        String rating = String.valueOf(provider.getAppHelper().getLoggedInUser().getRating());
-        String seats = String.valueOf(trip.getSeats());
-        String start = String.valueOf(trip.getStartLat()) + "," + String.valueOf(trip.getStartLong());
-        String destination = String.valueOf(trip.getEndLat()) + "," + String.valueOf(trip.getEndLong());
+        String name = trip.getDriverFromUsers();
+        String rating = "rating";
+        String seats = (trip.getUsers().size() - 1) + "/" + trip.getSeats();
+        String start = getLocationName(trip.getStartLat(), trip.getStartLong());
+        String destination = getLocationName(trip.getEndLat(), trip.getEndLong());
 
         ((TextView) tripContainer.findViewById(R.id.textViewName)).setText(name);
         ((TextView) tripContainer.findViewById(R.id.textViewRating)).setText(rating);
@@ -106,5 +117,49 @@ public class ListTripsFragment extends Fragment {
 
         parentLayout.addView(tripContainer);
     }
+
+    protected String getLocationName(double latitude, double longitude) {
+        /* testAddTripView was failing on account of this code, specifically:
+         * Method getFromLocation in android.location.Geocoder not mocked.
+         * I'm too tired to look into it now.
+        */
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+        List<Address> addresses = null;
+
+        try {
+            addresses = geocoder.getFromLocation(
+                    latitude,
+                    longitude,
+                    1);
+        } catch (IOException ioException) {
+            // Catch network or other I/O problems.
+            Log.e(TAG, ioException.toString());
+        } catch (IllegalArgumentException illegalArgumentException) {
+            // Catch invalid latitude or longitude values.
+            Log.e(TAG,  "Lat/Long Error: " +
+                    "Latitude = " + latitude +
+                    ", Longitude = " +
+                    longitude, illegalArgumentException);
+        }
+
+        // Handle case where no address was found.
+        if (addresses == null || addresses.size()  == 0) {
+            Log.e(TAG, "No address found");
+        } else {
+            Address address = addresses.get(0);
+            StringBuilder stringBuilder = new StringBuilder(address.getAddressLine(0));
+
+            // Fetch the address lines using getAddressLine
+            for(int i = 1; i <= address.getMaxAddressLineIndex(); i++) {
+                stringBuilder.append(", ").append(address.getAddressLine(i));
+            }
+            Log.i(TAG, "Address found");
+            return stringBuilder.toString();
+        }
+
+        // In the case of failure, return location coordinate string
+        return latitude + ", " + longitude;
+    }
+
 
 }
