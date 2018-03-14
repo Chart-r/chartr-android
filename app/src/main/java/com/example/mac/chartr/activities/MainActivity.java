@@ -58,9 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.content, initialFragment).commit();
         }
 
-        toolbar = (Toolbar) findViewById(R.id.topToolBar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
+        setupTopToolbar();
         setupBottomNavigation();
 
         // Get the user name
@@ -68,6 +66,21 @@ public class MainActivity extends AppCompatActivity {
         username = provider.getAppHelper().getCurrUser();
         user = provider.getAppHelper().getPool().getUser(username);
         getDetails();
+    }
+
+    private void setupTopToolbar() {
+        final Context context = this;
+        toolbar = (Toolbar) findViewById(R.id.topToolBar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
+        Button goToCreateTrip = findViewById(R.id.buttonAddTrip);
+        goToCreateTrip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, PostTripActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
@@ -192,14 +205,7 @@ public class MainActivity extends AppCompatActivity {
                                         .addToBackStack("Trips").commit();
                                 getSupportActionBar().setTitle("Trips");
                                 findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-                                Button goToCreateTrip = findViewById(R.id.buttonAddTrip);
-                                goToCreateTrip.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent intent = new Intent(context, PostTripActivity.class);
-                                        startActivity(intent);
-                                    }
-                                });
+
                                 break;
                             case R.id.ic_requests:
                                 getSupportFragmentManager().beginTransaction()
