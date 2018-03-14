@@ -28,17 +28,6 @@ public class TripsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Trips");
-        ((AppCompatActivity) getActivity()).findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-        Button goToCreateTrip = (Button) ((AppCompatActivity) getActivity()).findViewById(R.id.buttonAddTrip);
-        goToCreateTrip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), PostTripActivity.class);
-                startActivity(intent);
-            }
-        });
-
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_trips, container, false);
         FragmentTabHost tabHost = (FragmentTabHost) root.findViewById(android.R.id.tabhost);

@@ -2,23 +2,38 @@ package com.example.mac.chartr.fragments.trips;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.mac.chartr.AppHelper;
+import com.example.mac.chartr.ApiClient;
+import com.example.mac.chartr.ApiInterface;
+import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
-import com.example.mac.chartr.objects.User;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ListTripsFragment extends Fragment {
     private static final String TAG = ListTripsFragment.class.getSimpleName();
     public static final String TRIP_TYPE_KEY = "TripTypeKey";
 
+    private CommonDependencyProvider provider;
+
     public ListTripsFragment() {
         // Required empty public constructor
+        setCommonDependencyProvider(new CommonDependencyProvider());
+    }
+
+    public void setCommonDependencyProvider(CommonDependencyProvider provider) {
+        this.provider = provider;
     }
 
     @Override
@@ -34,19 +49,33 @@ public class ListTripsFragment extends Fragment {
         if (getArguments() != null) {
 
             // Populate scrollview
-            LinearLayout tripsLinearLayout = root.findViewById(R.id.tripsLinearLayout);
-            // TODO: implement api call for get trip, store formatted result in trips variable
-            // Test data to show that functionality is working
-            Trip [] trips = {
-                    new Trip("10:30pm", "11:30pm", false, true, 30, 30, 40, 40, 4, (float) 10.20, "id", new User[]{AppHelper.getLoggedInUser()}),
-                    new Trip("12:30pm", "4:30pm", false, true, 40, 40, 30, 30, 4, (float) 20.0, "id", new User[]{AppHelper.getLoggedInUser()}),
-                    new Trip("2:30pm", "3:30pm", false, true, 50, 50, 20, 20, 4, (float) 23.0, "id", new User[]{AppHelper.getLoggedInUser()}),
-                    new Trip("1:30pm", "5:30pm", false, true, 60, 60, 10, 10, 4, (float)15.60, "id", new User[] {AppHelper.getLoggedInUser()})
-            };
+            final LinearLayout tripsLinearLayout = root.findViewById(R.id.tripsLinearLayout);
 
-            for (Trip trip : trips) {
-                addTripView(tripsLinearLayout, trip);
-            }
+            // Gets all trips for logged in user
+            CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
+            String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
+            ApiInterface apiInterface = ApiClient.getApiInstance();
+            Call<List<Trip>> call = apiInterface.getUserDrivingTrips(userEmail);
+            Log.d(TAG, userEmail);
+            call.enqueue(new Callback<List<Trip>>() {
+                @Override
+                public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
+                    Log.d(TAG,response.code()+"");
+
+                    List<Trip> resource = response.body();
+                    for (int i = 0; i < resource.size(); i++) {
+                        addTripView(tripsLinearLayout, resource.get(i));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Trip>> call, Throwable t) {
+                    Log.d(TAG, "Retrofit failed to get data");
+                    Log.e(TAG, t.getMessage());
+                    t.printStackTrace();
+                    call.cancel();
+                }
+            });
         }
 
         return root;
@@ -55,14 +84,16 @@ public class ListTripsFragment extends Fragment {
     /**
      * Adds an individual trip view to the linear layout passed in.
      *
+     * @param parentLayout The layout to which a trip view is to be added
+     * @param trip The trip details to be added
      */
-    private void addTripView(LinearLayout parentLayout, Trip trip) {
+    protected void addTripView(LinearLayout parentLayout, Trip trip) {
         //create a view to inflate the layout_item (the xml with the textView created before)
         View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container, parentLayout,false);
 
         // Set TextViews with appropriate data
-        String name = AppHelper.getLoggedInUser().getName();
-        String rating = String.valueOf(AppHelper.getLoggedInUser().getRating());
+        String name = provider.getAppHelper().getLoggedInUser().getName();
+        String rating = String.valueOf(provider.getAppHelper().getLoggedInUser().getRating());
         String seats = String.valueOf(trip.getSeats());
         String start = String.valueOf(trip.getStartLat()) + "," + String.valueOf(trip.getStartLong());
         String destination = String.valueOf(trip.getEndLat()) + "," + String.valueOf(trip.getEndLong());

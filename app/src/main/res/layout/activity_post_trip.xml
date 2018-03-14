@@ -18,12 +18,13 @@
         android:textColor="@color/grey_700"
         android:textSize="@dimen/post_trip_text_size"
         android:text="@string/title_logistics" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:paddingLeft="@dimen/activity_text_padding"
         android:paddingRight="@dimen/activity_text_padding"
-        android:id="@+id/startLocation"
+        android:id="@+id/editTextStartLocation"
         android:layout_below="@+id/textViewLogistics"
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
@@ -37,26 +38,28 @@
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:paddingLeft="@dimen/activity_text_padding"
         android:paddingRight="@dimen/activity_text_padding"
-        android:id="@+id/destination"
-        android:layout_below="@+id/startLocation"
+        android:id="@+id/editTextEndLocation"
+        android:layout_below="@+id/editTextStartLocation"
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
         android:hint="End Location"
         android:textStyle="italic"
         android:textSize="@dimen/post_trip_text_size"
         android:inputType="text"/>
+
     <Space
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_inter_group_separation"
-        android:layout_below="@+id/destination"
+        android:layout_below="@+id/editTextEndLocation"
         android:layout_centerHorizontal="true"
         android:id="@+id/space1" />
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:weightSum="2"
         android:layout_below="@id/space1"
-        android:id="@+id/departureTimeLayout"
+        android:id="@+id/linearLayoutDepartureTime"
         android:orientation="horizontal">
         <EditText
             android:layout_width="0dp"
@@ -64,7 +67,7 @@
             android:layout_height="@dimen/activity_text_height_post_trip"
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
-            android:id="@+id/departureDate"
+            android:id="@+id/editTextDepartureDate"
 
             android:background="@drawable/text_border_selector"
             android:hint="Departure Date"
@@ -77,28 +80,32 @@
             android:layout_height="@dimen/activity_text_height_post_trip"
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
-            android:id="@+id/departureTime"
+            android:id="@+id/editTextDepartureTime"
             android:background="@drawable/text_border_selector"
             android:hint="Departure Time"
             android:textStyle="italic"
             android:textSize="@dimen/post_trip_text_size"
-            android:inputType="date"/>
+            android:inputType="time"/>
     </LinearLayout>
 
     <Switch
-        android:id="@+id/returnSwitch"
+        android:id="@+id/switchReturn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:layout_alignParentEnd="true"
+<<<<<<< HEAD
         android:layout_below="@+id/departureTimeLayout"
         android:theme="@style/SCBSwitch"
+=======
+        android:layout_below="@+id/linearLayoutDepartureTime"
+>>>>>>> dev
         android:text="Return?" />
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:weightSum="2"
-        android:layout_below="@id/returnSwitch"
-        android:id="@+id/returnTimeLayout"
+        android:layout_below="@id/switchReturn"
+        android:id="@+id/linearLayoutReturnTime"
         android:orientation="horizontal">
         <EditText
             android:layout_width="0dp"
@@ -106,7 +113,7 @@
             android:layout_height="@dimen/activity_text_height_post_trip"
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
-            android:id="@+id/returnDate"
+            android:id="@+id/editTextReturnDate"
 
             android:background="@drawable/text_border_selector"
             android:hint="Return Date"
@@ -119,18 +126,18 @@
             android:layout_height="@dimen/activity_text_height_post_trip"
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
-            android:id="@+id/returnTime"
+            android:id="@+id/editTextReturnTime"
             android:background="@drawable/text_border_selector"
             android:hint="Return Time"
             android:textStyle="italic"
             android:textSize="@dimen/post_trip_text_size"
-            android:inputType="date"/>
+            android:inputType="time"/>
     </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_inter_group_separation"
-        android:layout_below="@+id/returnTimeLayout"
+        android:layout_below="@+id/linearLayoutReturnTime"
         android:layout_centerHorizontal="true"
         android:id="@+id/space3" />
 
@@ -155,10 +162,10 @@
         android:layout_height="wrap_content"
         android:weightSum="8"
         android:layout_below="@id/space4"
-        android:id="@+id/seatLayout"
+        android:id="@+id/linearLayoutSeating"
         android:orientation="horizontal">
         <TextView
-            android:id="@+id/seating"
+            android:id="@+id/textViewSeating"
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="@dimen/activity_text_height_post_trip"
@@ -170,7 +177,7 @@
             android:textSize="@dimen/post_trip_text_size"
             android:text="Seating" />
         <Button
-            android:id="@+id/seatsDecrement"
+            android:id="@+id/buttonDecrementSeats"
             android:layout_width="0dp"
             android:layout_height="@dimen/activity_text_height_post_trip"
             android:layout_weight="1"
@@ -189,12 +196,12 @@
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
             android:layout_gravity="center_vertical"
-            android:id="@+id/seatValue"
+            android:id="@+id/textViewSeatValue"
             android:gravity="center"
             android:background="@drawable/text_border_selector"
             android:text="1"/>
         <Button
-            android:id="@+id/seatsIncrement"
+            android:id="@+id/buttonIncrementSeats"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="@dimen/activity_text_height_post_trip"
@@ -212,12 +219,12 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_inter_group_separation"
-        android:layout_below="@+id/seatLayout"
+        android:layout_below="@+id/linearLayoutSeating"
         android:layout_centerHorizontal="true"
         android:id="@+id/space5" />
 
     <TextView
-        android:id="@+id/tripPreferences"
+        android:id="@+id/textViewTripPreferences"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -232,9 +239,14 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:layout_alignParentEnd="true"
+<<<<<<< HEAD
         android:layout_below="@+id/tripPreferences"
         android:text="No Smoking"
         android:theme="@style/SCBSwitch"/>
+=======
+        android:layout_below="@+id/textViewTripPreferences"
+        android:text="No Smoking" />
+>>>>>>> dev
     <Switch
         android:id="@+id/switchQuite"
         android:layout_width="match_parent"
