@@ -1,24 +1,43 @@
 package com.example.mac.chartr.fragments.trips;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.mac.chartr.AppHelper;
+import com.example.mac.chartr.ApiClient;
+import com.example.mac.chartr.ApiInterface;
+import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
-import com.example.mac.chartr.objects.User;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ListTripsFragment extends Fragment {
     private static final String TAG = ListTripsFragment.class.getSimpleName();
     public static final String TRIP_TYPE_KEY = "TripTypeKey";
 
+    private CommonDependencyProvider provider;
+
     public ListTripsFragment() {
         // Required empty public constructor
+        setCommonDependencyProvider(new CommonDependencyProvider());
+    }
+
+    public void setCommonDependencyProvider(CommonDependencyProvider provider) {
+        this.provider = provider;
     }
 
     @Override
@@ -34,38 +53,61 @@ public class ListTripsFragment extends Fragment {
         if (getArguments() != null) {
 
             // Populate scrollview
-            LinearLayout tripsLinearLayout = root.findViewById(R.id.tripsLinearLayout);
-            // TODO: implement api call for get trip, store formatted result in trips variable
-            // Test data to show that functionality is working
-            Trip [] trips = {
-                    new Trip("10:30pm", "11:30pm", false, true, 30, 30, 40, 40, 4, (float) 10.20, "id", new User[]{AppHelper.getLoggedInUser()}),
-                    new Trip("12:30pm", "4:30pm", false, true, 40, 40, 30, 30, 4, (float) 20.0, "id", new User[]{AppHelper.getLoggedInUser()}),
-                    new Trip("2:30pm", "3:30pm", false, true, 50, 50, 20, 20, 4, (float) 23.0, "id", new User[]{AppHelper.getLoggedInUser()}),
-                    new Trip("1:30pm", "5:30pm", false, true, 60, 60, 10, 10, 4, (float)15.60, "id", new User[] {AppHelper.getLoggedInUser()})
-            };
+            final LinearLayout tripsLinearLayout = root.findViewById(R.id.tripsLinearLayout);
 
-            for (Trip trip : trips) {
-                addTripView(tripsLinearLayout, trip);
+            if(getArguments().getString(ListTripsFragment.TRIP_TYPE_KEY).equals("Posted")){
+                inflatePostedTripsInLayout(tripsLinearLayout);
             }
+
         }
 
         return root;
     }
 
+    private void inflatePostedTripsInLayout(final LinearLayout tripsLinearLayout) {
+        // Gets all trips for logged in user
+        CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
+        String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        Call<List<Trip>> call = apiInterface.getUserDrivingTrips(userEmail);
+        Log.d(TAG, userEmail);
+        call.enqueue(new Callback<List<Trip>>() {
+            @Override
+            public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
+                Log.d(TAG,response.code()+"");
+
+                List<Trip> resource = response.body();
+                for (int i = 0; i < resource.size(); i++) {
+                    addTripView(tripsLinearLayout, resource.get(i));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Trip>> call, Throwable t) {
+                Log.d(TAG, "Retrofit failed to get data");
+                Log.e(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
+    }
+
     /**
      * Adds an individual trip view to the linear layout passed in.
      *
+     * @param parentLayout The layout to which a trip view is to be added
+     * @param trip The trip details to be added
      */
-    private void addTripView(LinearLayout parentLayout, Trip trip) {
+    protected void addTripView(LinearLayout parentLayout, Trip trip) {
         //create a view to inflate the layout_item (the xml with the textView created before)
         View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container, parentLayout,false);
 
         // Set TextViews with appropriate data
-        String name = AppHelper.getLoggedInUser().getName();
-        String rating = String.valueOf(AppHelper.getLoggedInUser().getRating());
-        String seats = String.valueOf(trip.getSeats());
-        String start = String.valueOf(trip.getStartLat()) + "," + String.valueOf(trip.getStartLong());
-        String destination = String.valueOf(trip.getEndLat()) + "," + String.valueOf(trip.getEndLong());
+        String name = trip.getDriverFromUsers();
+        String rating = "rating";
+        String seats = (trip.getUsers().size() - 1) + "/" + trip.getSeats();
+        String start = getLocationName(trip.getStartLat(), trip.getStartLong());
+        String destination = getLocationName(trip.getEndLat(), trip.getEndLong());
 
         ((TextView) tripContainer.findViewById(R.id.textViewName)).setText(name);
         ((TextView) tripContainer.findViewById(R.id.textViewRating)).setText(rating);
@@ -75,4 +117,49 @@ public class ListTripsFragment extends Fragment {
 
         parentLayout.addView(tripContainer);
     }
+
+    protected String getLocationName(double latitude, double longitude) {
+        /* testAddTripView was failing on account of this code, specifically:
+         * Method getFromLocation in android.location.Geocoder not mocked.
+         * I'm too tired to look into it now.
+        */
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+        List<Address> addresses = null;
+
+        try {
+            addresses = geocoder.getFromLocation(
+                    latitude,
+                    longitude,
+                    1);
+        } catch (IOException ioException) {
+            // Catch network or other I/O problems.
+            Log.e(TAG, ioException.toString());
+        } catch (IllegalArgumentException illegalArgumentException) {
+            // Catch invalid latitude or longitude values.
+            Log.e(TAG,  "Lat/Long Error: " +
+                    "Latitude = " + latitude +
+                    ", Longitude = " +
+                    longitude, illegalArgumentException);
+        }
+
+        // Handle case where no address was found.
+        if (addresses == null || addresses.size()  == 0) {
+            Log.e(TAG, "No address found");
+        } else {
+            Address address = addresses.get(0);
+            StringBuilder stringBuilder = new StringBuilder(address.getAddressLine(0));
+
+            // Fetch the address lines using getAddressLine
+            for(int i = 1; i <= address.getMaxAddressLineIndex(); i++) {
+                stringBuilder.append(", ").append(address.getAddressLine(i));
+            }
+            Log.i(TAG, "Address found");
+            return stringBuilder.toString();
+        }
+
+        // In the case of failure, return location coordinate string
+        return latitude + ", " + longitude;
+    }
+
+
 }

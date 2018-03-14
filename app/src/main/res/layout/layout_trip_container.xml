@@ -78,7 +78,7 @@
         android:layout_alignStart="@+id/textViewName"
         android:layout_below="@+id/textViewRating"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/text_view_medium_height"
         android:layout_marginTop="@dimen/activity_separator_small" />
 
     <ImageView
@@ -99,6 +99,6 @@
         android:layout_alignStart="@+id/textViewStart"
         android:layout_below="@+id/textViewStart"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="@dimen/text_view_medium_height" />
 
 </RelativeLayout>
