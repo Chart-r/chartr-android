@@ -54,7 +54,9 @@ public class ListTripsFragmentTest {
         float end = (float)10.2;
         float price = (float)50;
 
-        Trip trip = new Trip("Now", "Later", true, false, start, end, start, end, 5, price, "1", null);
+        long startTime =1000;
+        long endTime =2000;
+        Trip trip = new Trip(startTime, endTime, true, false, start, end, start, end, 5, price, "1", null);
 
         when(fragment.getLayoutInflater()).thenReturn(inflater);
         when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class))).thenReturn(view);

@@ -1,12 +1,24 @@
 package com.example.mac.chartr.objects;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class User {
+    @SerializedName("email")
+    @Expose
     private String email;
+
+    @SerializedName("name")
+    @Expose
     private String name;
+
     private float rating;
+
+    @SerializedName("trips")
+    @Expose
     private Map<String, String> trips;
 
     public User() {

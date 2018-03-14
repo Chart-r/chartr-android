@@ -1,29 +1,72 @@
 package com.example.mac.chartr.objects;
 
+import android.util.Log;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Trip {
-    private String startTime;
-    private String endTime;
-    private Boolean quiet;
-    private Boolean smoking;
-    private float endLat;
-    private float endLong;
-    private float startLat;
-    private float startLong;
-    private int seats;
-    private float price;
+    private static final String TAG = Trip.class.getSimpleName();
+
+    @SerializedName("email")
+    @Expose
+    private String driverEmail;
+
+    @SerializedName("id")
+    @Expose
     private String id;
-    private User[] users;
+
+    @SerializedName("start_time")
+    @Expose
+    private long startTime;
+
+    @SerializedName("end_time")
+    @Expose
+    private long endTime;
+
+    @SerializedName("smoking")
+    @Expose
+    private Boolean smoking;
+
+    @SerializedName("start_lat")
+    @Expose
+    private double startLat;
+
+    @SerializedName("end_lat")
+    @Expose
+    private double endLat;
+
+    @SerializedName("end_lng")
+    @Expose
+    private double endLong;
+
+    @SerializedName("start_lng")
+    @Expose
+    private double startLong;
+
+    @SerializedName("seats")
+    @Expose
+    private int seats;
+
+    @SerializedName("price")
+    @Expose
+    private double price;
+
+    @SerializedName("users")
+    @Expose
+    private Map<String, String> users;
+
+
+    private boolean quiet;
 
     public Trip() {
+        users = new HashMap<>();
     }
 
-    // TODO implement api response based Trip constructor
-    public Trip(String apiResponse) {
-
-    }
-
-    public Trip(String startTime, String endTime, Boolean quiet, Boolean smoking, float endLat, float endLong, float startLat, float startLong, int seats, float price, String id, User[] users) {
+    public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, float endLat, float endLong, float startLat, float startLong, int seats, float price, String id, Map<String, String> users) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.quiet = quiet;
@@ -38,19 +81,33 @@ public class Trip {
         this.users = users;
     }
 
-    public String getStartTime() {
+    public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, double endLat, double endLong, double startLat, double startLong, int seats, double price, String email) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.quiet = quiet;
+        this.smoking = smoking;
+        this.endLat = endLat;
+        this.endLong = endLong;
+        this.startLat = startLat;
+        this.startLong = startLong;
+        this.seats = seats;
+        this.price = price;
+        this.driverEmail = email;
+    }
+
+    public long getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    public long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
 
@@ -70,35 +127,35 @@ public class Trip {
         this.smoking = smoking;
     }
 
-    public float getEndLat() {
+    public double getEndLat() {
         return endLat;
     }
 
-    public void setEndLat(float endLat) {
+    public void setEndLat(double endLat) {
         this.endLat = endLat;
     }
 
-    public float getEndLong() {
+    public double getEndLong() {
         return endLong;
     }
 
-    public void setEndLong(float endLong) {
+    public void setEndLong(double endLong) {
         this.endLong = endLong;
     }
 
-    public float getStartLat() {
+    public double getStartLat() {
         return startLat;
     }
 
-    public void setStartLat(float startLat) {
+    public void setStartLat(double startLat) {
         this.startLat = startLat;
     }
 
-    public float getStartLong() {
+    public double getStartLong() {
         return startLong;
     }
 
-    public void setStartLong(float startLong) {
+    public void setStartLong(double startLong) {
         this.startLong = startLong;
     }
 
@@ -110,11 +167,11 @@ public class Trip {
         this.seats = seats;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -126,11 +183,18 @@ public class Trip {
         this.id = id;
     }
 
-    public User[] getUsers() {
+    public Map<String, String> getUsers() {
         return users;
     }
 
-    public void setUsers(User[] users) {
+    public void setUsers(Map<String, String> users) {
         this.users = users;
     }
+
+    public void addUser(String email, String role) { users.put(email, role); }
+
+    public String getDriverEmail() { return driverEmail; }
+
+    public void setDriverEmail(String driverEmail) { this.driverEmail = driverEmail; }
+
 }

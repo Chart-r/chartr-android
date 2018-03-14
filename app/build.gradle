@@ -39,7 +39,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:support-annotations:22.2.0'
+    compile 'com.android.support:support-annotations:27.1.0'
 
     compile 'com.android.support:appcompat-v7:27.1.0'
     compile 'com.android.support:design:27.1.0'
@@ -54,7 +54,7 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.6.15'
 
 
-    testCompile "org.mockito:mockito-core:2.7.22"
+    testCompile "org.mockito:mockito-core:2.8.9"
     testCompile "org.robolectric:shadows-support-v4:3.3.2"
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '1.7.3'
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.7.3'
@@ -66,6 +66,7 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:1.0.1'
 
     compile 'com.android.volley:volley:1.0.0'
-
-    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.google.code.gson:gson:2.8.0'
 }
