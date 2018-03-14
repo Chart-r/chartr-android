@@ -2,6 +2,7 @@ package com.example.mac.chartr.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,8 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.mac.chartr.AppHelper;
 import com.example.mac.chartr.R;
+import com.example.mac.chartr.activities.LoginActivity;
 import com.example.mac.chartr.activities.MainActivity;
+import com.example.mac.chartr.activities.PostTripActivity;
+import com.example.mac.chartr.activities.RegisterActivity;
 
 public class ProfileFragment extends Fragment {
     public static final String TAG = ProfileFragment.class.getSimpleName();
@@ -35,15 +40,24 @@ public class ProfileFragment extends Fragment {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+<<<<<<< HEAD
                 Activity parent = getActivity();
 
                 if (parent instanceof MainActivity) {
                     ((MainActivity) parent).signOut();
                 }
+=======
+                logout(v);
+>>>>>>> skeleton
             }
         });
 
         return root;
     }
+
+    public void logout(View view){
+        Intent intent = new Intent(this.getActivity().getApplicationContext(), LoginActivity.class);
+        ((MainActivity) getActivity()).signOut();
+        startActivity(intent); }
 
 }
