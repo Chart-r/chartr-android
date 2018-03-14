@@ -31,7 +31,6 @@ public interface ApiInterface {
     @GET("prod/trip/pending?")
     Call<List<Trip>> getUserPendingTrips(@Query("email") String email);
 
-    @Headers("Access-Control-Allow-Origin: *")
     @POST("prod/trip/*?")
     Call<Trip> postUserDrivingTrip(@Body Trip trip);
 

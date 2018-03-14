@@ -75,28 +75,34 @@ public class PostTripActivity extends AppCompatActivity {
 
         String startLocation = inStartLocation.getText().toString();
         String endLocation = inEndLocation.getText().toString();
-
-        DateFormat dfDate = new SimpleDateFormat("MM/dd/yyyyhh:mm");
-        Date startTime;
-        Date returnTime;
-        try {
-            startTime = dfDate.parse(
-                    inDepartureDate.getText().toString() +
-                            inDepartureTime.getText().toString());
-            returnTime = dfDate.parse(
-                    inReturnDate.getText().toString() +
-                            inReturnTime.getText().toString());
-            Log.d(TAG, startTime.toString() + " " + returnTime.toString());
-        } catch (ParseException error) {
-            Log.e(TAG, "Error Parsing date/time.");
-            return;
-        }
-
         boolean canPickUp = inCanPickUp.isChecked();
         int numSeats = Integer.valueOf(inNumSeats.getText().toString());
         boolean noSmoking = inNoSmoking.isChecked();
         boolean isQuiet = inIsQuiet.isChecked();
         boolean  willReturn = inWillReturn.isChecked();
+
+        DateFormat dfDate = new SimpleDateFormat("MM/dd/yyyyhh:mm");
+        Date startTime;
+        Date returnTime = new Date(0);
+        try {
+            startTime = dfDate.parse(
+                    inDepartureDate.getText().toString() +
+                            inDepartureTime.getText().toString());
+        } catch (ParseException error) {
+            Log.e(TAG, "Error Parsing date/time.");
+            return;
+        }
+
+        if(willReturn) {
+            try {
+                returnTime = dfDate.parse(
+                        inReturnDate.getText().toString() +
+                                inReturnTime.getText().toString());
+            } catch (ParseException error) {
+                Log.e(TAG, "Error Parsing date/time.");
+                return;
+            }
+        }
 
         double startLat;
         double startLng;
@@ -130,7 +136,6 @@ public class PostTripActivity extends AppCompatActivity {
         String email = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
 
         Trip trip = new Trip(startTime.getTime(), startTime.getTime(), isQuiet, (! noSmoking), endLat, endLng, startLat, startLng, numSeats, 5.0, email);
-        trip.logTrip();
 
         ApiInterface apiInterface = ApiClient.getApiInstance();
         callApi(apiInterface, trip);

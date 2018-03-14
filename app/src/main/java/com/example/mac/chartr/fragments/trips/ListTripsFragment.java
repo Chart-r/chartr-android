@@ -53,9 +53,10 @@ public class ListTripsFragment extends Fragment {
 
             // Gets all trips for logged in user
             CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
-            String userEmail = commonDependencyProvider.getAppHelper().getCurrUser();
+            String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
             ApiInterface apiInterface = ApiClient.getApiInstance();
-            Call<List<Trip>> call = apiInterface.getAllUserTrips(userEmail);
+            Call<List<Trip>> call = apiInterface.getUserDrivingTrips(userEmail);
+            Log.d(TAG, userEmail);
             call.enqueue(new Callback<List<Trip>>() {
                 @Override
                 public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {

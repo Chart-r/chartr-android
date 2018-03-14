@@ -197,24 +197,4 @@ public class Trip {
 
     public void setDriverEmail(String driverEmail) { this.driverEmail = driverEmail; }
 
-    public void logTrip() {
-        if(id != null) {
-            Log.d(TAG, id);
-        } else {
-            Log.d(TAG, "No id");
-        }
-        Log.d(TAG, Long.toString(startTime));
-        Log.d(TAG, Long.toString(endTime));
-
-        Log.d(TAG, Double.toString(endLat));
-        Log.d(TAG, Double.toString(endLong));
-        Log.d(TAG, Double.toString(startLat));
-        Log.d(TAG, Double.toString(startLong));
-        Log.d(TAG, Double.toString(price));
-
-        Log.d(TAG, Integer.toString(seats));
-
-        Log.d(TAG, Boolean.toString(quiet));
-        Log.d(TAG, Boolean.toString(smoking));
-    }
 }
