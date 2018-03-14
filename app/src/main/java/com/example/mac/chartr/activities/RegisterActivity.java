@@ -33,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText birthday;
     private EditText phone;
 
+
     private Button signUp;
     private AlertDialog userDialog;
     private ProgressDialog waitDialog;
@@ -302,8 +303,8 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void showDialogMessage(String title, String body, final boolean exit) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    protected void showDialogMessage(String title, String body, final boolean exit) {
+        final AlertDialog.Builder builder = provider.getAlertDialogBuilder(this);
         builder.setTitle(title).setMessage(body).setNeutralButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

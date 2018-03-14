@@ -8,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import static junit.framework.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -48,8 +51,8 @@ public class ProfileFragmentTest {
         when(view.findViewById(any(int.class))).thenReturn(button);
         when(victim.onCreateView(inflater, viewGroup, bundle)).thenCallRealMethod();
 
-        victim.onCreateView(inflater, viewGroup, bundle);
+        View root = victim.onCreateView(inflater, viewGroup, bundle);
 
-        verify(actionBar, times(1)).setTitle("Profile");
+        assertNotNull(root);
     }
 }

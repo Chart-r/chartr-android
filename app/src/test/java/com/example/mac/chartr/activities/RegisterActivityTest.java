@@ -1,15 +1,12 @@
 package com.example.mac.chartr.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.mac.chartr.CommonDependencyProvider;
-import com.example.mac.chartr.R;
 
 import junit.framework.Assert;
 
@@ -19,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
-import static android.app.Activity.RESULT_OK;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -27,10 +23,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by Michael Rush on 3/8/2018.
+ * Created by Michael Rush on 3/13/2018.
  */
+
 @RunWith(RobolectricTestRunner.class)
-public class ConfirmRegisterActivityTest {
+public class RegisterActivityTest {
     private CommonDependencyProvider provider;
 
     @Before
@@ -40,7 +37,7 @@ public class ConfirmRegisterActivityTest {
 
     @Test
     public void testShowDialogMessage() {
-        ConfirmRegisterActivity activity = Robolectric.setupActivity(ConfirmRegisterActivity.class);
+        RegisterActivity activity = Robolectric.setupActivity(RegisterActivity.class);
         activity.setCommonDependencyProvider(provider);
 
         AlertDialog.Builder builder = mock(AlertDialog.Builder.class);
@@ -59,31 +56,14 @@ public class ConfirmRegisterActivityTest {
     }
 
     @Test
-    public void setConfirmCodeMessageTest(){
-        ConfirmRegisterActivity activity = Robolectric.setupActivity(ConfirmRegisterActivity.class);
-        EditText username = (EditText) activity.findViewById(R.id.editTextConfirmUserId);
-        activity.setConfirmCodeMessage(username);
+    public void onActivityResultTest(){
+        RegisterActivity activity = Robolectric.setupActivity(RegisterActivity.class);
+        Intent intent = mock(Intent.class);
+        when(intent.getStringExtra("name")).thenReturn("iLove2");
 
-
-        TextView label = (TextView) activity.findViewById(R.id.textViewConfirmCodeMessage);
-        String str = label.getText().toString();
-        Assert.assertEquals("Username cannot be empty", str);
-    }
-
-    @Test
-    public void extractFromExtrasTest(){
-        ConfirmRegisterActivity activity = Robolectric.setupActivity(ConfirmRegisterActivity.class);
-
-        Bundle extras = new Bundle();
-        extras.putString("name", "Michael");
-        extras.putString("destination","Chicago");
-        extras.putString("deliveryMed","dest");
-        activity.extractFromExtras(extras);
-        EditText username = (EditText) activity.findViewById(R.id.editTextConfirmUserId);
-        Assert.assertEquals("Michael", username.getText().toString());
-        TextView screenSubtext = (TextView) activity.findViewById(R.id.textViewConfirmSubtext_1);
-        Assert.assertEquals("A confirmation code was sent to Chicago via dest", screenSubtext.getText().toString());
+        activity.onActivityResult(10, Activity.RESULT_OK,intent);
+        Assert.assertTrue(activity.isFinishing());
 
     }
-
 }
+

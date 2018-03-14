@@ -26,6 +26,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
@@ -67,30 +68,38 @@ public class PostTripTest {
         provider = mock(CommonDependencyProvider.class);
     }
 
+
     @Test
-    public void stub() {
-        Assert.assertTrue(true);
+    public void decrementSeatsTest() {
+        PostTripActivity activity = Robolectric.setupActivity(PostTripActivity.class);
+
+        TextView results = (TextView) activity.findViewById(R.id.seatValue);
+
+        activity.decrementSeats(null);
+        String str = results.getText().toString();
+        Assert.assertEquals("1", str);
+
+        results.setText("3");
+        activity.decrementSeats(null);
+        str = results.getText().toString();
+        Assert.assertEquals("2", str);
     }
 
-    /*@Rule
-    public ActivityTestRule<PostTripActivity> mActivityRule = new ActivityTestRule(PostTripActivity.class);
-
     @Test
-    public void decrementSeatsButtonTest() {
-//        mActivityRule.getActivity().findViewById()
-        Espresso.onView(ViewMatchers.withId(R.id.seatsDecrement))        // withId(R.id.my_view) is a ViewMatcher
-                .perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withId(R.id.seatValue)).check(ViewAssertions.matches(ViewMatchers.withText("1")));
+    public void incrementSeatsTest(){
+        PostTripActivity activity = Robolectric.setupActivity(PostTripActivity.class);
+
+        TextView results = (TextView) activity.findViewById(R.id.seatValue);
+
+        activity.incrementSeats(null);
+        String str = results.getText().toString();
+        Assert.assertEquals("2", str);
+
+        results.setText("4");
+        activity.incrementSeats(null);
+        str = results.getText().toString();
+        Assert.assertEquals("4", str);
     }
-
-    @Test
-    public void incrementSeatsButtonTest() {
-//        mActivityRule.getActivity().findViewById()
-        Espresso.onView(ViewMatchers.withId(R.id.seatsIncrement))        // withId(R.id.my_view) is a ViewMatcher
-                .perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withId(R.id.seatValue)).check(ViewAssertions.matches(ViewMatchers.withText("2")));
-    }*/
-
 }
 
 

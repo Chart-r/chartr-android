@@ -49,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
         setCommonDependencyProvider(new CommonDependencyProvider());
         setContentView(R.layout.activity_main);
 
+        if (provider.getAppHelper() == null) {
+            provider.getAppHelper(this);
+        }
+
         if (findViewById(R.id.content) != null) {
             if (savedInstanceState != null) {
                 return;
@@ -182,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
                         int itemId = item.getItemId();
                         switch (itemId) {
                             case R.id.ic_nearby:
+                                getSupportActionBar().setTitle("Nearby");
+                                findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                                 getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.content, new NearbyFragment())
                                         .addToBackStack("Nearby").commit();
@@ -202,11 +208,15 @@ public class MainActivity extends AppCompatActivity {
                                 });
                                 break;
                             case R.id.ic_requests:
+                                getSupportActionBar().setTitle("Requests");
+                                findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                                 getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.content, new RequestsFragment())
                                         .addToBackStack("Requests").commit();
                                 break;
                             case R.id.ic_profile:
+                                getSupportActionBar().setTitle("Profile");
+                                findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                                 getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.content, new ProfileFragment())
                                         .addToBackStack("Profile").commit();

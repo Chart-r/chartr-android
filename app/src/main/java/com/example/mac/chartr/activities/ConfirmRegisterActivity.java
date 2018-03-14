@@ -44,36 +44,17 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         init();
     }
 
-    private void init() {
+    protected void init() {
 
         Bundle extras = getIntent().getExtras();
         if (extras !=null) {
             if(extras.containsKey("name")) {
-                userName = extras.getString("name");
-                username = (EditText) findViewById(R.id.editTextConfirmUserId);
-                username.setText(userName);
-
-                confCode = (EditText) findViewById(R.id.editTextConfirmCode);
-                confCode.requestFocus();
-
-                if(extras.containsKey("destination")) {
-                    String dest = extras.getString("destination");
-                    String delMed = extras.getString("deliveryMed");
-
-                    TextView screenSubtext = (TextView) findViewById(R.id.textViewConfirmSubtext_1);
-                    if(dest != null && delMed != null && dest.length() > 0 && delMed.length() > 0) {
-                        screenSubtext.setText("A confirmation code was sent to "+dest+" via "+delMed);
-                    }
-                    else {
-                        screenSubtext.setText("A confirmation code was sent");
-                    }
-                }
+                extractFromExtras(extras);
             }
             else {
                 TextView screenSubtext = (TextView) findViewById(R.id.textViewConfirmSubtext_1);
                 screenSubtext.setText("Request for a confirmation code or confirm with the code you already have.");
             }
-
         }
 
         username = (EditText) findViewById(R.id.editTextConfirmUserId);
@@ -145,6 +126,31 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         });
     }
 
+    protected void extractFromExtras(Bundle extras) {
+            userName = extras.getString("name");
+            username = (EditText) findViewById(R.id.editTextConfirmUserId);
+            username.setText(userName);
+
+            confCode = (EditText) findViewById(R.id.editTextConfirmCode);
+            confCode.requestFocus();
+
+            if(extras.containsKey("destination")) {
+                String dest = extras.getString("destination");
+                String delMed = extras.getString("deliveryMed");
+
+                TextView screenSubtext = (TextView) findViewById(R.id.textViewConfirmSubtext_1);
+                if(dest != null && delMed != null && dest.length() > 0 && delMed.length() > 0) {
+                    screenSubtext.setText("A confirmation code was sent to "+dest+" via "+delMed);
+                }
+                else {
+                    screenSubtext.setText("A confirmation code was sent");
+                }
+            }
+
+
+
+    }
+
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
     }
@@ -170,7 +176,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
      * Set the text for the field textViewConfirmCodeMessage in the ConfirmRegister Layout
      * @param et is and EditText
      */
-    private void setConfirmCodeMessage(EditText et) {
+    protected void setConfirmCodeMessage(EditText et) {
         TextView label = (TextView) findViewById(R.id.textViewConfirmCodeMessage);
         label.setText(et.getHint()+" cannot be empty");
         et.setBackground(getDrawable(R.drawable.text_border_error));

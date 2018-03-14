@@ -29,6 +29,12 @@ public class MainActivityTest {
         provider = mock(CommonDependencyProvider.class);
     }
 
+    /**
+     * PENDING ACTIVATION:  Currently, Mocking the main activity without a prior login
+     *                      breaks assumptions about the precondition to the MainActivity.
+     *                      We will update this method as we find solutions to that problem.
+     */
+
     @Test
     public void stub() {
         Assert.assertTrue(true);
