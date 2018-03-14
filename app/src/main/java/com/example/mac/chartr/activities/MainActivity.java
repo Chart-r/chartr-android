@@ -1,7 +1,6 @@
 package com.example.mac.chartr.activities;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,7 +17,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
@@ -26,7 +24,6 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
-import com.android.volley.RequestQueue;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.fragments.NearbyFragment;
@@ -34,8 +31,6 @@ import com.example.mac.chartr.fragments.ProfileFragment;
 import com.example.mac.chartr.fragments.RequestsFragment;
 import com.example.mac.chartr.fragments.trips.TripsFragment;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 

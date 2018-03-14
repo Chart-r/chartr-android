@@ -3,7 +3,6 @@ package com.example.mac.chartr.fragments.trips;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -148,16 +147,15 @@ public class ListTripsFragment extends Fragment {
             Log.e(TAG, "No address found");
         } else {
             Address address = addresses.get(0);
-            String addressString = address.getAddressLine(0);
+            StringBuilder stringBuilder = new StringBuilder(address.getAddressLine(0));
 
             // Fetch the address lines using getAddressLine
             for(int i = 1; i <= address.getMaxAddressLineIndex(); i++) {
-                addressString += ", " + address.getAddressLine(i);
+                stringBuilder.append(", ").append(address.getAddressLine(i));
             }
             Log.i(TAG, "Address found");
-            return addressString;
+            return stringBuilder.toString();
         }
-
 
         // In the case of failure, return location coordinate string
         return latitude + ", " + longitude;

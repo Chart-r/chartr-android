@@ -26,7 +26,6 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Mult
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.NewPasswordContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.ForgotPasswordHandler;
-import com.example.mac.chartr.AppHelper;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.User;
