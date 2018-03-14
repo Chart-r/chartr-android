@@ -199,6 +199,11 @@ public class Trip {
     public void setDriverEmail(String driverEmail) { this.driverEmail = driverEmail; }
 
     public String getDriverFromUsers() {
+        // No user map
+        if (users == null) {
+            return "";
+        }
+
         Iterator it = users.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
@@ -208,6 +213,7 @@ public class Trip {
             Log.d(TAG, pair.toString());
         }
 
+        // No driver in list
         return "";
     }
 }

@@ -3,6 +3,7 @@ package com.example.mac.chartr.fragments.trips;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,34 +56,41 @@ public class ListTripsFragment extends Fragment {
             // Populate scrollview
             final LinearLayout tripsLinearLayout = root.findViewById(R.id.tripsLinearLayout);
 
-            // Gets all trips for logged in user
-            CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
-            String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
-            ApiInterface apiInterface = ApiClient.getApiInstance();
-            Call<List<Trip>> call = apiInterface.getUserDrivingTrips(userEmail);
-            Log.d(TAG, userEmail);
-            call.enqueue(new Callback<List<Trip>>() {
-                @Override
-                public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
-                    Log.d(TAG,response.code()+"");
+            if(getArguments().getString(ListTripsFragment.TRIP_TYPE_KEY).equals("Posted")){
+                inflatePostedTripsInLayout(tripsLinearLayout);
+            }
 
-                    List<Trip> resource = response.body();
-                    for (int i = 0; i < resource.size(); i++) {
-                        addTripView(tripsLinearLayout, resource.get(i));
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Trip>> call, Throwable t) {
-                    Log.d(TAG, "Retrofit failed to get data");
-                    Log.e(TAG, t.getMessage());
-                    t.printStackTrace();
-                    call.cancel();
-                }
-            });
         }
 
         return root;
+    }
+
+    private void inflatePostedTripsInLayout(final LinearLayout tripsLinearLayout) {
+        // Gets all trips for logged in user
+        CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
+        String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        Call<List<Trip>> call = apiInterface.getUserDrivingTrips(userEmail);
+        Log.d(TAG, userEmail);
+        call.enqueue(new Callback<List<Trip>>() {
+            @Override
+            public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
+                Log.d(TAG,response.code()+"");
+
+                List<Trip> resource = response.body();
+                for (int i = 0; i < resource.size(); i++) {
+                    addTripView(tripsLinearLayout, resource.get(i));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Trip>> call, Throwable t) {
+                Log.d(TAG, "Retrofit failed to get data");
+                Log.e(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
     }
 
     /**
@@ -97,8 +105,8 @@ public class ListTripsFragment extends Fragment {
 
         // Set TextViews with appropriate data
         String name = trip.getDriverFromUsers();
-        String rating = "WIP";
-        String seats = String.valueOf(trip.getSeats());
+        String rating = "rating";
+        String seats = (trip.getUsers().size() - 1) + "/" + trip.getSeats();
         String start = getLocationName(trip.getStartLat(), trip.getStartLong());
         String destination = getLocationName(trip.getEndLat(), trip.getEndLong());
 
@@ -111,12 +119,11 @@ public class ListTripsFragment extends Fragment {
         parentLayout.addView(tripContainer);
     }
 
-
-    private String getLocationName(double latitude, double longitude) {
+    protected String getLocationName(double latitude, double longitude) {
         /* testAddTripView was failing on account of this code, specifically:
          * Method getFromLocation in android.location.Geocoder not mocked.
          * I'm too tired to look into it now.
-
+        */
         Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
         List<Address> addresses = null;
 
@@ -150,7 +157,7 @@ public class ListTripsFragment extends Fragment {
             Log.i(TAG, "Address found");
             return addressString;
         }
-           */
+
 
         // In the case of failure, return location coordinate string
         return latitude + ", " + longitude;
