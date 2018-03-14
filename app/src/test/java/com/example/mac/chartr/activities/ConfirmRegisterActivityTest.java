@@ -3,6 +3,7 @@ package com.example.mac.chartr.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -67,6 +68,22 @@ public class ConfirmRegisterActivityTest {
         TextView label = (TextView) activity.findViewById(R.id.textViewConfirmCodeMessage);
         String str = label.getText().toString();
         Assert.assertEquals("Username cannot be empty", str);
+    }
+
+    @Test
+    public void extractFromExtrasTest(){
+        ConfirmRegisterActivity activity = Robolectric.setupActivity(ConfirmRegisterActivity.class);
+
+        Bundle extras = new Bundle();
+        extras.putString("name", "Michael");
+        extras.putString("destination","Chicago");
+        extras.putString("deliveryMed","dest");
+        activity.extractFromExtras(extras);
+        EditText username = (EditText) activity.findViewById(R.id.editTextConfirmUserId);
+        Assert.assertEquals("Michael", username.getText().toString());
+        TextView screenSubtext = (TextView) activity.findViewById(R.id.textViewConfirmSubtext_1);
+        Assert.assertEquals("A confirmation code was sent to Chicago via dest", screenSubtext.getText().toString());
+
     }
 
 }
