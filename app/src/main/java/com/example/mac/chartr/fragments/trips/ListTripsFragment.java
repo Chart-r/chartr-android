@@ -91,14 +91,14 @@ public class ListTripsFragment extends Fragment {
         View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container, parentLayout,false);
 
         // Set TextViews with appropriate data
-        String name = provider.getAppHelper().getCurrUser();
-        //String rating = String.valueOf(provider.getAppHelper().getLoggedInUser().getRating());
+        String name = provider.getAppHelper().getLoggedInUser().getName();
+        String rating = String.valueOf(provider.getAppHelper().getLoggedInUser().getRating());
         String seats = String.valueOf(trip.getSeats());
         String start = String.valueOf(trip.getStartLat()) + "," + String.valueOf(trip.getStartLong());
         String destination = String.valueOf(trip.getEndLat()) + "," + String.valueOf(trip.getEndLong());
 
         ((TextView) tripContainer.findViewById(R.id.textViewName)).setText(name);
-        //((TextView) tripContainer.findViewById(R.id.textViewRating)).setText(rating);
+        ((TextView) tripContainer.findViewById(R.id.textViewRating)).setText(rating);
         ((TextView) tripContainer.findViewById(R.id.textViewSeats)).setText(seats);
         ((TextView) tripContainer.findViewById(R.id.textViewStart)).setText(start);
         ((TextView) tripContainer.findViewById(R.id.textViewDestination)).setText(destination);
