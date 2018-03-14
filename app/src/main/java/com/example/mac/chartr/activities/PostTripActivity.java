@@ -175,6 +175,4 @@ public class PostTripActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

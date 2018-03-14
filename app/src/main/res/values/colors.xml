@@ -22,4 +22,8 @@
     <color name="grey_500">#404142</color>
     <color name="grey_600">#303232</color>
     <color name="grey_700">#1D1E1E</color>
+
+    <color name="disable_forground_grey">#99eeff</color>
+    <color name="disable_thumb_grey">#8D9496</color>
+    <color name="enumble_thumb_blue">#329AD6</color>
 </resources>
