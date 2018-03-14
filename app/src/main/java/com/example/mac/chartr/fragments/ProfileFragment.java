@@ -33,12 +33,15 @@ public class ProfileFragment extends Fragment {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+<<<<<<< HEAD
 
 //                Activity parent = getActivity();
 //
 //                if (parent instanceof MainActivity) {
 //                    ((MainActivity) parent).signOut();
 //                }
+=======
+>>>>>>> dev
                 logout(v);
             }
         });
