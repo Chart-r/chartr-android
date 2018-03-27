@@ -56,12 +56,12 @@ public class RegisterActivityTest {
     }
 
     @Test
-    public void onActivityResultTest(){
+    public void onActivityResultTest() {
         RegisterActivity activity = Robolectric.setupActivity(RegisterActivity.class);
         Intent intent = mock(Intent.class);
         when(intent.getStringExtra("name")).thenReturn("iLove2");
 
-        activity.onActivityResult(10, Activity.RESULT_OK,intent);
+        activity.onActivityResult(10, Activity.RESULT_OK, intent);
         Assert.assertTrue(activity.isFinishing());
 
     }

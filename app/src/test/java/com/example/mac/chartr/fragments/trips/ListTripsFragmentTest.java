@@ -1,7 +1,6 @@
 package com.example.mac.chartr.fragments.trips;
 
 import android.location.Geocoder;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,16 +19,15 @@ import org.mockito.Mockito;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by cygnus on 3/7/18.
- *
  */
 public class ListTripsFragmentTest {
     @Mock
@@ -56,9 +54,9 @@ public class ListTripsFragmentTest {
         TextView textView = mock(TextView.class);
 
 
-        float start = (float)10.1;
-        float end = (float)10.2;
-        float price = (float)50;
+        float start = (float) 10.1;
+        float end = (float) 10.2;
+        float price = (float) 50;
 
         long startTime = 1000;
         long endTime = 2000;
@@ -79,7 +77,7 @@ public class ListTripsFragmentTest {
 
         fragment.addTripView(layout, trip);
 
-        verify(view,times(5)).findViewById(any(int.class));
+        verify(view, times(5)).findViewById(any(int.class));
         verify(layout, times(1)).addView(any(View.class));
     }
 

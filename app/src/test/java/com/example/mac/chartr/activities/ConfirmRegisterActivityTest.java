@@ -2,7 +2,6 @@ package com.example.mac.chartr.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.widget.EditText;
@@ -19,7 +18,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
-import static android.app.Activity.RESULT_OK;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -59,7 +57,7 @@ public class ConfirmRegisterActivityTest {
     }
 
     @Test
-    public void setConfirmCodeMessageTest(){
+    public void setConfirmCodeMessageTest() {
         ConfirmRegisterActivity activity = Robolectric.setupActivity(ConfirmRegisterActivity.class);
         EditText username = (EditText) activity.findViewById(R.id.editTextConfirmUserId);
         activity.setConfirmCodeMessage(username);
@@ -71,13 +69,13 @@ public class ConfirmRegisterActivityTest {
     }
 
     @Test
-    public void extractFromExtrasTest(){
+    public void extractFromExtrasTest() {
         ConfirmRegisterActivity activity = Robolectric.setupActivity(ConfirmRegisterActivity.class);
 
         Bundle extras = new Bundle();
         extras.putString("name", "Michael");
-        extras.putString("destination","Chicago");
-        extras.putString("deliveryMed","dest");
+        extras.putString("destination", "Chicago");
+        extras.putString("deliveryMed", "dest");
         activity.extractFromExtras(extras);
         EditText username = (EditText) activity.findViewById(R.id.editTextConfirmUserId);
         Assert.assertEquals("Michael", username.getText().toString());

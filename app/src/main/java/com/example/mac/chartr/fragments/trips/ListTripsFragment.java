@@ -26,9 +26,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ListTripsFragment extends Fragment {
-    private static final String TAG = ListTripsFragment.class.getSimpleName();
     public static final String TRIP_TYPE_KEY = "TripTypeKey";
-
+    private static final String TAG = ListTripsFragment.class.getSimpleName();
     private CommonDependencyProvider provider;
 
     public ListTripsFragment() {
@@ -55,7 +54,7 @@ public class ListTripsFragment extends Fragment {
             // Populate scrollview
             final LinearLayout tripsLinearLayout = root.findViewById(R.id.tripsLinearLayout);
 
-            if(getArguments().getString(ListTripsFragment.TRIP_TYPE_KEY).equals("Posted")){
+            if (getArguments().getString(ListTripsFragment.TRIP_TYPE_KEY).equals("Posted")) {
                 inflatePostedTripsInLayout(tripsLinearLayout);
             }
 
@@ -74,7 +73,7 @@ public class ListTripsFragment extends Fragment {
         call.enqueue(new Callback<List<Trip>>() {
             @Override
             public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
-                Log.d(TAG,response.code()+"");
+                Log.d(TAG, response.code() + "");
 
                 List<Trip> resource = response.body();
                 for (int i = 0; i < resource.size(); i++) {
@@ -96,11 +95,11 @@ public class ListTripsFragment extends Fragment {
      * Adds an individual trip view to the linear layout passed in.
      *
      * @param parentLayout The layout to which a trip view is to be added
-     * @param trip The trip details to be added
+     * @param trip         The trip details to be added
      */
     protected void addTripView(LinearLayout parentLayout, Trip trip) {
         //create a view to inflate the layout_item (the xml with the textView created before)
-        View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container, parentLayout,false);
+        View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container, parentLayout, false);
 
         // Set TextViews with appropriate data
         String name = trip.getDriverFromUsers();
@@ -136,21 +135,21 @@ public class ListTripsFragment extends Fragment {
             Log.e(TAG, ioException.toString());
         } catch (IllegalArgumentException illegalArgumentException) {
             // Catch invalid latitude or longitude values.
-            Log.e(TAG,  "Lat/Long Error: " +
+            Log.e(TAG, "Lat/Long Error: " +
                     "Latitude = " + latitude +
                     ", Longitude = " +
                     longitude, illegalArgumentException);
         }
 
         // Handle case where no address was found.
-        if (addresses == null || addresses.size()  == 0) {
+        if (addresses == null || addresses.size() == 0) {
             Log.e(TAG, "No address found");
         } else {
             Address address = addresses.get(0);
             StringBuilder stringBuilder = new StringBuilder(address.getAddressLine(0));
 
             // Fetch the address lines using getAddressLine
-            for(int i = 1; i <= address.getMaxAddressLineIndex(); i++) {
+            for (int i = 1; i <= address.getMaxAddressLineIndex(); i++) {
                 stringBuilder.append(", ").append(address.getAddressLine(i));
             }
             Log.i(TAG, "Address found");

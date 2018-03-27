@@ -3,9 +3,9 @@ package com.example.mac.chartr.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -31,7 +31,43 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
     private TextView reqCode;
     private String userName;
     private AlertDialog userDialog;
+    GenericHandler confHandler = new GenericHandler() {
+        @Override
+        public void onSuccess() {
+            showDialogMessage("Success!", userName + " has been confirmed!", true);
+        }
 
+        @Override
+        public void onFailure(Exception exception) {
+            TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
+            label.setText("Confirmation failed!");
+            username.setBackground(getDrawable(R.drawable.text_border_error));
+
+            label = (TextView) findViewById(R.id.textViewConfirmCodeMessage);
+            label.setText("Confirmation failed!");
+            confCode.setBackground(getDrawable(R.drawable.text_border_error));
+
+            showDialogMessage("Confirmation failed", provider.getAppHelper().formatException(exception), false);
+        }
+    };
+    VerificationHandler resendConfCodeHandler = new VerificationHandler() {
+        @Override
+        public void onSuccess(CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
+            TextView mainTitle = (TextView) findViewById(R.id.textViewConfirmTitle);
+            mainTitle.setText("Confirm your account");
+            confCode = (EditText) findViewById(R.id.editTextConfirmCode);
+            confCode.requestFocus();
+            showDialogMessage("Confirmation code sent.", "Code sent to " + cognitoUserCodeDeliveryDetails.getDestination() + " via " + cognitoUserCodeDeliveryDetails.getDeliveryMedium() + ".", false);
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+            TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
+            label.setText("Confirmation code resend failed");
+            username.setBackground(getDrawable(R.drawable.text_border_error));
+            showDialogMessage("Confirmation code request has failed", provider.getAppHelper().formatException(exception), false);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +81,10 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
     protected void init() {
 
         Bundle extras = getIntent().getExtras();
-        if (extras !=null) {
-            if(extras.containsKey("name")) {
+        if (extras != null) {
+            if (extras.containsKey("name")) {
                 extractFromExtras(extras);
-            }
-            else {
+            } else {
                 TextView screenSubtext = (TextView) findViewById(R.id.textViewConfirmSubtext_1);
                 screenSubtext.setText("Request for a confirmation code or confirm with the code you already have.");
             }
@@ -59,7 +94,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         username.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if(s.length() == 0) {
+                if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdLabel);
                     label.setText(username.getHint());
                     username.setBackground(getDrawable(R.drawable.text_border_selector));
@@ -74,7 +109,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length() == 0) {
+                if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdLabel);
                     label.setText("");
                 }
@@ -85,7 +120,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         confCode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if(s.length() == 0) {
+                if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewConfirmCodeLabel);
                     label.setText(confCode.getHint());
                     confCode.setBackground(getDrawable(R.drawable.text_border_selector));
@@ -100,7 +135,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length() == 0) {
+                if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewConfirmCodeLabel);
                     label.setText("");
                 }
@@ -125,26 +160,24 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
     }
 
     protected void extractFromExtras(Bundle extras) {
-            userName = extras.getString("name");
-            username = (EditText) findViewById(R.id.editTextConfirmUserId);
-            username.setText(userName);
+        userName = extras.getString("name");
+        username = (EditText) findViewById(R.id.editTextConfirmUserId);
+        username.setText(userName);
 
-            confCode = (EditText) findViewById(R.id.editTextConfirmCode);
-            confCode.requestFocus();
+        confCode = (EditText) findViewById(R.id.editTextConfirmCode);
+        confCode.requestFocus();
 
-            if(extras.containsKey("destination")) {
-                String dest = extras.getString("destination");
-                String delMed = extras.getString("deliveryMed");
+        if (extras.containsKey("destination")) {
+            String dest = extras.getString("destination");
+            String delMed = extras.getString("deliveryMed");
 
-                TextView screenSubtext = (TextView) findViewById(R.id.textViewConfirmSubtext_1);
-                if(dest != null && delMed != null && dest.length() > 0 && delMed.length() > 0) {
-                    screenSubtext.setText("A confirmation code was sent to "+dest+" via "+delMed);
-                }
-                else {
-                    screenSubtext.setText("A confirmation code was sent");
-                }
+            TextView screenSubtext = (TextView) findViewById(R.id.textViewConfirmSubtext_1);
+            if (dest != null && delMed != null && dest.length() > 0 && delMed.length() > 0) {
+                screenSubtext.setText("A confirmation code was sent to " + dest + " via " + delMed);
+            } else {
+                screenSubtext.setText("A confirmation code was sent");
             }
-
+        }
 
 
     }
@@ -157,12 +190,12 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         userName = username.getText().toString();
         String confirmCode = confCode.getText().toString();
 
-        if(userName == null || userName.length() < 1) {
+        if (userName == null || userName.length() < 1) {
             setConfirmCodeMessage(username);
             return;
         }
 
-        if(confirmCode == null || confirmCode.length() < 1) {
+        if (confirmCode == null || confirmCode.length() < 1) {
             setConfirmCodeMessage(confCode);
             return;
         }
@@ -172,63 +205,25 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
 
     /**
      * Set the text for the field textViewConfirmCodeMessage in the ConfirmRegister Layout
+     *
      * @param et is and EditText
      */
     protected void setConfirmCodeMessage(EditText et) {
         TextView label = (TextView) findViewById(R.id.textViewConfirmCodeMessage);
-        label.setText(et.getHint()+" cannot be empty");
+        label.setText(et.getHint() + " cannot be empty");
         et.setBackground(getDrawable(R.drawable.text_border_error));
         return;
     }
 
     private void reqConfCode() {
         userName = username.getText().toString();
-        if(userName == null || userName.length() < 1) {
+        if (userName == null || userName.length() < 1) {
             setConfirmCodeMessage(username);
             return;
         }
         provider.getAppHelper().getPool().getUser(userName).resendConfirmationCodeInBackground(resendConfCodeHandler);
 
     }
-
-    GenericHandler confHandler = new GenericHandler() {
-        @Override
-        public void onSuccess() {
-            showDialogMessage("Success!",userName+" has been confirmed!", true);
-        }
-
-        @Override
-        public void onFailure(Exception exception) {
-            TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
-            label.setText("Confirmation failed!");
-            username.setBackground(getDrawable(R.drawable.text_border_error));
-
-            label = (TextView) findViewById(R.id.textViewConfirmCodeMessage);
-            label.setText("Confirmation failed!");
-            confCode.setBackground(getDrawable(R.drawable.text_border_error));
-
-            showDialogMessage("Confirmation failed", provider.getAppHelper().formatException(exception), false);
-        }
-    };
-
-    VerificationHandler resendConfCodeHandler = new VerificationHandler() {
-        @Override
-        public void onSuccess(CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
-            TextView mainTitle = (TextView) findViewById(R.id.textViewConfirmTitle);
-            mainTitle.setText("Confirm your account");
-            confCode = (EditText) findViewById(R.id.editTextConfirmCode);
-            confCode.requestFocus();
-            showDialogMessage("Confirmation code sent.","Code sent to "+cognitoUserCodeDeliveryDetails.getDestination()+" via "+cognitoUserCodeDeliveryDetails.getDeliveryMedium()+".", false);
-        }
-
-        @Override
-        public void onFailure(Exception exception) {
-            TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
-            label.setText("Confirmation code resend failed");
-            username.setBackground(getDrawable(R.drawable.text_border_error));
-            showDialogMessage("Confirmation code request has failed", provider.getAppHelper().formatException(exception), false);
-        }
-    };
 
     protected void showDialogMessage(String title, String body, final boolean exitActivity) {
         final AlertDialog.Builder builder = provider.getAlertDialogBuilder(this);
@@ -237,7 +232,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     userDialog.dismiss();
-                    if(exitActivity) {
+                    if (exitActivity) {
                         exit();
                     }
                 } catch (Exception e) {
@@ -251,9 +246,9 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
 
     private void exit() {
         Intent intent = new Intent();
-        if(userName == null)
+        if (userName == null)
             userName = "";
-        intent.putExtra("name",userName);
+        intent.putExtra("name", userName);
         setResult(RESULT_OK, intent);
         finish();
     }

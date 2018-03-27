@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
@@ -19,13 +17,11 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import static junit.framework.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 
 /**
  * Created by cygnus on 3/7/18.
- *
+ * <p>
  * Used to test the ProfileFragment
  */
 

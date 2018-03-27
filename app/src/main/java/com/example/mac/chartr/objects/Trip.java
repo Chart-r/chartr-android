@@ -192,11 +192,17 @@ public class Trip {
         this.users = users;
     }
 
-    public void addUser(String email, String role) { users.put(email, role); }
+    public void addUser(String email, String role) {
+        users.put(email, role);
+    }
 
-    public String getDriverEmail() { return driverEmail; }
+    public String getDriverEmail() {
+        return driverEmail;
+    }
 
-    public void setDriverEmail(String driverEmail) { this.driverEmail = driverEmail; }
+    public void setDriverEmail(String driverEmail) {
+        this.driverEmail = driverEmail;
+    }
 
     public String getDriverFromUsers() {
         // No user map
@@ -206,7 +212,7 @@ public class Trip {
 
         Iterator it = users.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
+            Map.Entry pair = (Map.Entry) it.next();
             if (pair.getValue().equals("Driver")) {
                 return pair.getKey().toString();
             }

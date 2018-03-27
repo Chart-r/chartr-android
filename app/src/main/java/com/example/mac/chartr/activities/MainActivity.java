@@ -6,12 +6,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -35,14 +35,42 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-
+    Toolbar toolbar;
     private String username;
     private CognitoUser user;
-    Toolbar toolbar;
     private AlertDialog userDialog;
     private ProgressDialog waitDialog;
 
     private CommonDependencyProvider provider;
+    GenericHandler trustedDeviceHandler = new GenericHandler() {
+        @Override
+        public void onSuccess() {
+            // Close wait dialog
+            closeWaitDialog();
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+            closeWaitDialog();
+            showDialogMessage("Failed to update device status", provider.getAppHelper().formatException(exception), true);
+        }
+    };
+    GetDetailsHandler detailsHandler = new GetDetailsHandler() {
+        @Override
+        public void onSuccess(CognitoUserDetails cognitoUserDetails) {
+            closeWaitDialog();
+            // Store details in the AppHandler
+            provider.getAppHelper().setUserDetails(cognitoUserDetails);
+            // Trusted devices?
+            handleTrustedDevice();
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+            closeWaitDialog();
+            showDialogMessage("Could not fetch user details!", provider.getAppHelper().formatException(exception), true);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,18 +127,18 @@ public class MainActivity extends AppCompatActivity {
                 new FragmentManager.OnBackStackChangedListener() {
                     @Override
                     public void onBackStackChanged() {
-                        int topOfBackstack = getSupportFragmentManager().getBackStackEntryCount()-1;
+                        int topOfBackstack = getSupportFragmentManager().getBackStackEntryCount() - 1;
 
                         // Set top toolbar title
                         String title = "Trips";
-                        if(topOfBackstack >= 0) {
+                        if (topOfBackstack >= 0) {
                             title = getSupportFragmentManager().getBackStackEntryAt(topOfBackstack).getName();
 
                         }
                         getSupportActionBar().setTitle(title);
 
                         // Show or hide plus button
-                        if(title == "Trips") {
+                        if (title == "Trips") {
                             findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
                         } else {
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
@@ -132,23 +160,6 @@ public class MainActivity extends AppCompatActivity {
     private void getDetails() {
         provider.getAppHelper().getPool().getUser(username).getDetailsInBackground(detailsHandler);
     }
-
-    GetDetailsHandler detailsHandler = new GetDetailsHandler() {
-        @Override
-        public void onSuccess(CognitoUserDetails cognitoUserDetails) {
-            closeWaitDialog();
-            // Store details in the AppHandler
-            provider.getAppHelper().setUserDetails(cognitoUserDetails);
-            // Trusted devices?
-            handleTrustedDevice();
-        }
-
-        @Override
-        public void onFailure(Exception exception) {
-            closeWaitDialog();
-            showDialogMessage("Could not fetch user details!", provider.getAppHelper().formatException(exception), true);
-        }
-    };
 
     private void handleTrustedDevice() {
         CognitoDevice newDevice = provider.getAppHelper().getNewDevice();
@@ -200,20 +211,6 @@ public class MainActivity extends AppCompatActivity {
     private void updateDeviceStatus(CognitoDevice device) {
         device.rememberThisDeviceInBackground(trustedDeviceHandler);
     }
-
-    GenericHandler trustedDeviceHandler = new GenericHandler() {
-        @Override
-        public void onSuccess() {
-            // Close wait dialog
-            closeWaitDialog();
-        }
-
-        @Override
-        public void onFailure(Exception exception) {
-            closeWaitDialog();
-            showDialogMessage("Failed to update device status", provider.getAppHelper().formatException(exception), true);
-        }
-    };
 
     private void setupBottomNavigation() {
         Log.d(TAG, "Setting up Bottom Navigation");
@@ -279,13 +276,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     userDialog.dismiss();
-                    if(exit) {
+                    if (exit) {
                         exit();
                     }
                 } catch (Exception e) {
                     // Log failure
-                    Log.e(TAG," -- Dialog dismiss failed");
-                    if(exit) {
+                    Log.e(TAG, " -- Dialog dismiss failed");
+                    if (exit) {
                         exit();
                     }
                 }
@@ -298,26 +295,25 @@ public class MainActivity extends AppCompatActivity {
     private void closeWaitDialog() {
         try {
             waitDialog.dismiss();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             //
         }
     }
 
-    private void exit () {
+    private void exit() {
         Intent intent = new Intent();
-        if(username == null)
+        if (username == null)
             username = "";
-        intent.putExtra("name",username);
+        intent.putExtra("name", username);
         setResult(RESULT_OK, intent);
         finish();
     }
 
-@Override
-    public void onBackPressed(){
-        if(getSupportFragmentManager().getBackStackEntryCount() != 0){
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             super.onBackPressed();
 
         }
-}
+    }
 }
