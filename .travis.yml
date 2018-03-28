@@ -43,7 +43,7 @@ after_failure:
 
 env:
 - ANDROID_HOME=$HOME/android-sdk
-script: "./gradlew --no-daemon --parallel lintDebug testDebug"
+script: "./gradlew --no-daemon --parallel lintDebug testDebug && ./gradlew build"
 notifications:
   slack:
     secure: Z3cHzrBwz/LX9UnBdhJWLSPHixZd6vWuSRKB4OLAAyI5zSRGlke7i5F54OnGQIc2W5KJnFoAAMrs5qS4sN3ZagkRatQTA3SCO9ai9PUZPpOwa8kTMyOlmeYHHabXxgqwoMeSupzxkrmyqbx0N93+sQgtJSLufxwwD9rIEISD5m+vuEbnXJjuCD2kmq58QtSDLwY/j4XuQCjIQS8MmkxgELE8wHCAGcnPdPssfGw9KfQ2Ex+I02z/Ct0Mo0V0UdggQrctsuIIl77aiWvKq8SorPTmtxoCAGWh1Plfh0oj5P0LmwD21z4Fx2xq7vJGst49O3oxbLQx2ZHZ6jdRr6t+VddPtQl1lBVQFdtksPez9ER6ROy8rjailsdFEm9zDZu7ruiu2CxNrI6BVkS1VbwUdVYepbaZlsjYdc3l43Ry8bhXztqlsWj5yfO892LhswNmKWQeNqiEy0f6ifbi3UUVBtzhXiwAl98WlAJnaVbQRjwdyfRU0lsd9fzj+jSCB7hwIh+89rvoErsgxrEH4iH2Qk+f1jLljeJ/P/8hygFxyZ2z6/Uy8p4jpxoTryfRBQSV7hfPCGQ5IeQvsEUKptG5FJNOH4ELJhVe164wHW3CKW4Deol4umKGEPOEAZ+MtU0Gtndj5VKUKLRwy6+8sfYkddakGmJAubI+9BAsbrX7UFE=
