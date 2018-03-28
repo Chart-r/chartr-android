@@ -99,7 +99,8 @@ public class ListTripsFragment extends Fragment {
      */
     protected void addTripView(LinearLayout parentLayout, Trip trip) {
         //create a view to inflate the layout_item (the xml with the textView created before)
-        View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container, parentLayout, false);
+        View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container,
+                parentLayout, false);
 
         // Set TextViews with appropriate data
         String name = trip.getDriverFromUsers();
@@ -135,10 +136,10 @@ public class ListTripsFragment extends Fragment {
             Log.e(TAG, ioException.toString());
         } catch (IllegalArgumentException illegalArgumentException) {
             // Catch invalid latitude or longitude values.
-            Log.e(TAG, "Lat/Long Error: " +
-                    "Latitude = " + latitude +
-                    ", Longitude = " +
-                    longitude, illegalArgumentException);
+            Log.e(TAG, "Lat/Long Error: "
+                    + "Latitude = " + latitude
+                    + ", Longitude = "
+                    + longitude, illegalArgumentException);
         }
 
         // Handle case where no address was found.

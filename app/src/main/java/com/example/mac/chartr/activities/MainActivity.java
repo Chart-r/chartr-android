@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onFailure(Exception exception) {
             closeWaitDialog();
-            showDialogMessage("Failed to update device status", provider.getAppHelper().formatException(exception), true);
+            showDialogMessage("Failed to update device status",
+                    provider.getAppHelper().formatException(exception), true);
         }
     };
     GetDetailsHandler detailsHandler = new GetDetailsHandler() {
@@ -68,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onFailure(Exception exception) {
             closeWaitDialog();
-            showDialogMessage("Could not fetch user details!", provider.getAppHelper().formatException(exception), true);
+            showDialogMessage("Could not fetch user details!",
+                    provider.getAppHelper().formatException(exception), true);
         }
     };
 
@@ -127,12 +129,14 @@ public class MainActivity extends AppCompatActivity {
                 new FragmentManager.OnBackStackChangedListener() {
                     @Override
                     public void onBackStackChanged() {
-                        int topOfBackstack = getSupportFragmentManager().getBackStackEntryCount() - 1;
+                        int topOfBackstack = getSupportFragmentManager()
+                                .getBackStackEntryCount() - 1;
 
                         // Set top toolbar title
                         String title = "Trips";
                         if (topOfBackstack >= 0) {
-                            title = getSupportFragmentManager().getBackStackEntryAt(topOfBackstack).getName();
+                            title = getSupportFragmentManager()
+                                    .getBackStackEntryAt(topOfBackstack).getName();
 
                         }
                         getSupportActionBar().setTitle(title);
@@ -271,23 +275,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void showDialogMessage(String title, String body, final boolean exit) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(title).setMessage(body).setNeutralButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    userDialog.dismiss();
-                    if (exit) {
-                        exit();
+        builder.setTitle(title).setMessage(body).setNeutralButton("OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            userDialog.dismiss();
+                            if (exit) {
+                                exit();
+                            }
+                        } catch (Exception e) {
+                            // Log failure
+                            Log.e(TAG, " -- Dialog dismiss failed");
+                            if (exit) {
+                                exit();
+                            }
+                        }
                     }
-                } catch (Exception e) {
-                    // Log failure
-                    Log.e(TAG, " -- Dialog dismiss failed");
-                    if (exit) {
-                        exit();
-                    }
-                }
-            }
-        });
+                });
         userDialog = builder.create();
         userDialog.show();
     }
@@ -302,8 +307,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void exit() {
         Intent intent = new Intent();
-        if (username == null)
+        if (username == null) {
             username = "";
+        }
         intent.putExtra("name", username);
         setResult(RESULT_OK, intent);
         finish();

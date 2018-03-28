@@ -3,8 +3,8 @@
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#AAAAAA</color>
-    <color name="white"> #FFFFFF </color>
-    <color name="green"> #007500 </color>
+    <color name="white">#FFFFFF</color>
+    <color name="green">#007500</color>
 
     <color name="toolbar_background">#404142</color>
     <color name="toolbar_items">#CBCBCB</color>

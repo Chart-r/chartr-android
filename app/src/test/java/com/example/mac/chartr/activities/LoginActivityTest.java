@@ -50,7 +50,8 @@ public class LoginActivityTest {
         when(builder.create()).thenReturn(dialog);
         when(builder.setTitle(any(String.class))).thenReturn(builder);
         when(builder.setMessage(any(String.class))).thenReturn(builder);
-        when(builder.setNeutralButton(any(String.class), any(DialogInterface.OnClickListener.class))).thenReturn(builder);
+        when(builder.setNeutralButton(any(String.class),
+                any(DialogInterface.OnClickListener.class))).thenReturn(builder);
 
 
         activity.showDialogMessage("This is a test", "Body body body");

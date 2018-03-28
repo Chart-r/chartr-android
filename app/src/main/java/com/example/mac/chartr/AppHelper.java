@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class AppHelper {
-    private final String TAG = "AppHelper";
+    private static final String TAG = "AppHelper";
     /**
      * Add your pool id here
      */
@@ -47,14 +47,16 @@ public class AppHelper {
      */
     private final String clientId = "20d0tqg8ulln6v52hau17ttsc2";
     /**
-     * App secret associated with your app id - if the App id does not have an associated App secret,
+     * App secret associated with your app id - if the App id does
+     * not have an associated App secret,
      * set the App secret to null.
      * e.g. clientSecret = null;
      */
     private final String clientSecret = "1iskopdp36s0eponkvduvfmqh0cj6aol31e74pan4bkjbn3722d1";
     /**
      * Set Your User Pools region.
-     * e.g. if your user pools are in US East (N Virginia) then set cognitoRegion = Regions.US_EAST_1.
+     * e.g. if your user pools are in US East (N Virginia) then set
+     * cognitoRegion = Regions.US_EAST_1.
      */
     private final Regions cognitoRegion = Regions.US_EAST_2;
     // App settings
@@ -322,7 +324,8 @@ public class AppHelper {
     }
 
     private void refreshWithSync() {
-        // This will refresh the current items to display list with the attributes fetched from service
+        // This will refresh the current items to display list with the attributes fetched
+        // from service
         List<String> tempKeys = new ArrayList<>();
         List<String> tempValues = new ArrayList<>();
 
@@ -336,7 +339,8 @@ public class AppHelper {
         currUserAttributes.clear();
         itemCount = 0;
 
-        for (Map.Entry<String, String> attr : userDetails.getAttributes().getAttributes().entrySet()) {
+        for (Map.Entry<String, String> attr : userDetails.getAttributes()
+                .getAttributes().entrySet()) {
 
             tempKeys.add(attr.getKey());
             tempValues.add(attr.getValue());

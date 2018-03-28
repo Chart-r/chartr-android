@@ -23,7 +23,7 @@
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.ConfirmRegisterActivity" />
-        <activity android:name=".activities.PostTripActivity"/>
+        <activity android:name=".activities.PostTripActivity" />
     </application>
 
 </manifest>

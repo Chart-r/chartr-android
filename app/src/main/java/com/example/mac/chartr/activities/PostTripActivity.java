@@ -87,8 +87,8 @@ public class PostTripActivity extends AppCompatActivity {
         Date returnTime = new Date(0);
         try {
             startTime = dfDate.parse(
-                    inDepartureDate.getText().toString() +
-                            inDepartureTime.getText().toString());
+                    inDepartureDate.getText().toString()
+                            + inDepartureTime.getText().toString());
         } catch (ParseException error) {
             Log.e(TAG, "Error Parsing date/time.");
             return;
@@ -97,8 +97,8 @@ public class PostTripActivity extends AppCompatActivity {
         if (willReturn) {
             try {
                 returnTime = dfDate.parse(
-                        inReturnDate.getText().toString() +
-                                inReturnTime.getText().toString());
+                        inReturnDate.getText().toString()
+                                + inReturnTime.getText().toString());
             } catch (ParseException error) {
                 Log.e(TAG, "Error Parsing date/time.");
                 return;
@@ -136,13 +136,15 @@ public class PostTripActivity extends AppCompatActivity {
         CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
         String email = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
 
-        Trip trip = new Trip(startTime.getTime(), startTime.getTime(), isQuiet, (!noSmoking), endLat, endLng, startLat, startLng, numSeats, 5.0, email);
+        Trip trip = new Trip(startTime.getTime(), startTime.getTime(), isQuiet, (!noSmoking),
+                endLat, endLng, startLat, startLng, numSeats, 5.0, email);
 
         ApiInterface apiInterface = ApiClient.getApiInstance();
         callApi(apiInterface, trip);
 
         if (willReturn) {
-            Trip returnTrip = new Trip(returnTime.getTime(), returnTime.getTime(), isQuiet, (!noSmoking), startLat, startLng, endLat, endLng, numSeats, 5.0, email);
+            Trip returnTrip = new Trip(returnTime.getTime(), returnTime.getTime(), isQuiet,
+                    (!noSmoking), startLat, startLng, endLat, endLng, numSeats, 5.0, email);
             callApi(apiInterface, returnTrip);
         }
 
@@ -164,7 +166,8 @@ public class PostTripActivity extends AppCompatActivity {
                 if (code == 200) {
                     Log.d(TAG, "Trip posted successfully.");
                 } else {
-                    Log.d(TAG, "Retrofit failed to post trip, response code: " + response.code());
+                    Log.d(TAG, "Retrofit failed to post trip, response code: "
+                            + response.code());
                 }
             }
 

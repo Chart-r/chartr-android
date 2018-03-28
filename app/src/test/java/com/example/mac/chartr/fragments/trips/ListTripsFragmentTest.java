@@ -42,7 +42,8 @@ public class ListTripsFragmentTest {
         helper = mock(AppHelper.class);
 
         ListTripsFragment fragment = mock(ListTripsFragment.class);
-        Mockito.doCallRealMethod().when(fragment).setCommonDependencyProvider(any(CommonDependencyProvider.class));
+        Mockito.doCallRealMethod().when(fragment)
+                .setCommonDependencyProvider(any(CommonDependencyProvider.class));
         fragment.setCommonDependencyProvider(provider);
 
         when(provider.getAppHelper()).thenReturn(helper);
@@ -63,17 +64,23 @@ public class ListTripsFragmentTest {
 
         Map<String, String> users = new HashMap<>();
         users.put("test@email.com", "Driver");
-        Trip trip = new Trip(startTime, endTime, true, false, start, end, start, end, 5, price, "1", users);
+        Trip trip = new Trip(startTime, endTime, true, false,
+                start, end, start, end, 5, price, "1", users);
 
         when(fragment.getLayoutInflater()).thenReturn(inflater);
-        when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class))).thenReturn(view);
+        when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class)))
+                .thenReturn(view);
         when(view.findViewById(any(int.class))).thenReturn(textView);
 
-        // TODO create test for getLocationName helper.  May need to refactor to pass geocoder as input
-        when(fragment.getLocationName(any(double.class), any(double.class))).thenReturn("Test for getLocationName");
+        // SHOULD create test for getLocationName helper.
+        // SHOULD May need to refactor to pass geocoder as input
+        when(fragment.getLocationName(any(double.class), any(double.class)))
+                .thenReturn("Test for getLocationName");
 
-        when(helper.getLoggedInUser()).thenReturn(new User("me@there.com", "Joe Smo", 50f, null));
-        Mockito.doCallRealMethod().when(fragment).addTripView(any(LinearLayout.class), any(Trip.class));
+        when(helper.getLoggedInUser()).thenReturn(new User("me@there.com", "Joe Smo",
+                50f, null));
+        Mockito.doCallRealMethod().when(fragment)
+                .addTripView(any(LinearLayout.class), any(Trip.class));
 
         fragment.addTripView(layout, trip);
 
@@ -89,12 +96,14 @@ public class ListTripsFragmentTest {
         View root = mock(View.class);
         LinearLayout layout = mock(LinearLayout.class);
 
-        when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class))).thenReturn(root);
+        when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class)))
+                .thenReturn(root);
         when(root.findViewById(any(int.class))).thenReturn(layout);
 
 
         fragment.onCreateView(inflater, null, null);
 
-        verify(fragment, atLeast(0)).addTripView(Mockito.eq(layout), any(Trip.class));
+        verify(fragment, atLeast(0))
+                .addTripView(Mockito.eq(layout), any(Trip.class));
     }
 }

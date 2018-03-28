@@ -59,7 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onFailure(Exception e) {
             closeWaitDialog();
-            showDialogMessage("Forgot password failed", provider.getAppHelper().formatException(e));
+            showDialogMessage("Forgot password failed", provider.getAppHelper().
+                    formatException(e));
         }
     };
     //Continuations
@@ -83,14 +84,15 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String username) {
+        public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation,
+                                             String username) {
             closeWaitDialog();
             Locale.setDefault(Locale.US);
             getUserAuthentication(authenticationContinuation, username);
         }
 
         @Override
-        public void getMFACode(MultiFactorAuthenticationContinuation multiFactorAuthenticationContinuation) {
+        public void getMFACode(MultiFactorAuthenticationContinuation mfaContinuation) {
         }
 
         @Override
@@ -110,16 +112,14 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void authenticationChallenge(ChallengeContinuation continuation) {
             /**
-             * For Custom authentication challenge, implement your logic to present challenge to the
+             * For Custom authentication challenge, implement your logic
+             * to present challenge to the
              * user and pass the user's responses to the continuation.
              */
             if ("NEW_PASSWORD_REQUIRED".equals(continuation.getChallengeName())) {
                 // This is the first sign-in attempt for an admin created user
                 newPasswordContinuation = (NewPasswordContinuation) continuation;
-//                provider.getAppHelper().setUserAttributeForDisplayFirstLogIn(newPasswordContinuation.getCurrentUserAttributes(),
-//                        newPasswordContinuation.getRequiredAttributes());
                 closeWaitDialog();
-//                firstTimeSignIn();
             }
         }
     };
@@ -221,7 +221,8 @@ public class LoginActivity extends AppCompatActivity {
                 // We have the user details, so sign in!
                 username = name;
                 password = userPasswd;
-                provider.getAppHelper().getPool().getUser(username).getSessionInBackground(authenticationHandler);
+                provider.getAppHelper().getPool().getUser(username)
+                        .getSessionInBackground(authenticationHandler);
             }
         }
     }
@@ -254,7 +255,8 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         showWaitDialog("Signing in...");
-        provider.getAppHelper().getPool().getUser(username).getSessionInBackground(authenticationHandler);
+        provider.getAppHelper().getPool().getUser(username)
+                .getSessionInBackground(authenticationHandler);
     }
 
     // Forgot password processing
@@ -307,7 +309,8 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
         }
-        AuthenticationDetails authenticationDetails = new AuthenticationDetails(this.username, password, null);
+        AuthenticationDetails authenticationDetails = new AuthenticationDetails(this.username,
+                password, null);
         continuation.setAuthenticationDetails(authenticationDetails);
         continuation.continueTask();
     }
@@ -392,16 +395,17 @@ public class LoginActivity extends AppCompatActivity {
 
     protected void showDialogMessage(String title, String body) {
         final AlertDialog.Builder builder = provider.getAlertDialogBuilder(this);
-        builder.setTitle(title).setMessage(body).setNeutralButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    userDialog.dismiss();
-                } catch (Exception e) {
-                    //
-                }
-            }
-        });
+        builder.setTitle(title).setMessage(body).setNeutralButton("OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            userDialog.dismiss();
+                        } catch (Exception e) {
+                            //
+                        }
+                    }
+                });
         userDialog = builder.create();
         userDialog.show();
     }

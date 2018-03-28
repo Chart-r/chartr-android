@@ -47,7 +47,8 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
             label.setText("Confirmation failed!");
             confCode.setBackground(getDrawable(R.drawable.text_border_error));
 
-            showDialogMessage("Confirmation failed", provider.getAppHelper().formatException(exception), false);
+            showDialogMessage("Confirmation failed",
+                    provider.getAppHelper().formatException(exception), false);
         }
     };
     VerificationHandler resendConfCodeHandler = new VerificationHandler() {
@@ -57,7 +58,9 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
             mainTitle.setText("Confirm your account");
             confCode = (EditText) findViewById(R.id.editTextConfirmCode);
             confCode.requestFocus();
-            showDialogMessage("Confirmation code sent.", "Code sent to " + cognitoUserCodeDeliveryDetails.getDestination() + " via " + cognitoUserCodeDeliveryDetails.getDeliveryMedium() + ".", false);
+            showDialogMessage("Confirmation code sent.", "Code sent to "
+                    + cognitoUserCodeDeliveryDetails.getDestination() + " via "
+                    + cognitoUserCodeDeliveryDetails.getDeliveryMedium() + ".", false);
         }
 
         @Override
@@ -65,7 +68,8 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
             TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
             label.setText("Confirmation code resend failed");
             username.setBackground(getDrawable(R.drawable.text_border_error));
-            showDialogMessage("Confirmation code request has failed", provider.getAppHelper().formatException(exception), false);
+            showDialogMessage("Confirmation code request has failed",
+                    provider.getAppHelper().formatException(exception), false);
         }
     };
 
@@ -86,7 +90,8 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
                 extractFromExtras(extras);
             } else {
                 TextView screenSubtext = (TextView) findViewById(R.id.textViewConfirmSubtext_1);
-                screenSubtext.setText("Request for a confirmation code or confirm with the code you already have.");
+                screenSubtext.setText("Request for a confirmation code or confirm"
+                        + " with the code you already have.");
             }
         }
 
@@ -200,7 +205,8 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
             return;
         }
 
-        provider.getAppHelper().getPool().getUser(userName).confirmSignUpInBackground(confirmCode, true, confHandler);
+        provider.getAppHelper().getPool().getUser(userName).confirmSignUpInBackground(confirmCode,
+                true, confHandler);
     }
 
     /**
@@ -221,33 +227,36 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
             setConfirmCodeMessage(username);
             return;
         }
-        provider.getAppHelper().getPool().getUser(userName).resendConfirmationCodeInBackground(resendConfCodeHandler);
+        provider.getAppHelper().getPool().getUser(userName)
+                .resendConfirmationCodeInBackground(resendConfCodeHandler);
 
     }
 
     protected void showDialogMessage(String title, String body, final boolean exitActivity) {
         final AlertDialog.Builder builder = provider.getAlertDialogBuilder(this);
-        builder.setTitle(title).setMessage(body).setNeutralButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    userDialog.dismiss();
-                    if (exitActivity) {
-                        exit();
+        builder.setTitle(title).setMessage(body).setNeutralButton("OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            userDialog.dismiss();
+                            if (exitActivity) {
+                                exit();
+                            }
+                        } catch (Exception e) {
+                            exit();
+                        }
                     }
-                } catch (Exception e) {
-                    exit();
-                }
-            }
-        });
+                });
         userDialog = builder.create();
         userDialog.show();
     }
 
     private void exit() {
         Intent intent = new Intent();
-        if (userName == null)
+        if (userName == null) {
             userName = "";
+        }
         intent.putExtra("name", userName);
         setResult(RESULT_OK, intent);
         finish();

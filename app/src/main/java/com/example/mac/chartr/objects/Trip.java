@@ -67,7 +67,9 @@ public class Trip {
         users = new HashMap<>();
     }
 
-    public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, float endLat, float endLong, float startLat, float startLong, int seats, float price, String id, Map<String, String> users) {
+    public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, float endLat,
+                float endLong, float startLat, float startLong, int seats, float price,
+                String id, Map<String, String> users) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.quiet = quiet;
@@ -82,7 +84,9 @@ public class Trip {
         this.users = users;
     }
 
-    public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, double endLat, double endLong, double startLat, double startLong, int seats, double price, String email) {
+    public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, double endLat,
+                double endLong, double startLat, double startLong, int seats, double price,
+                String email) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.quiet = quiet;

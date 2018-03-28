@@ -43,7 +43,8 @@ public class ProfileFragmentTest {
         PowerMockito.when(victim.getActivity()).thenReturn(appCompatActivity);
         when(appCompatActivity.getSupportActionBar()).thenReturn(actionBar);
         when(appCompatActivity.findViewById(any(int.class))).thenReturn(button);
-        when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class))).thenReturn(view);
+        when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class)))
+                .thenReturn(view);
         when(view.findViewById(any(int.class))).thenReturn(button);
         when(victim.onCreateView(inflater, viewGroup, bundle)).thenCallRealMethod();
 

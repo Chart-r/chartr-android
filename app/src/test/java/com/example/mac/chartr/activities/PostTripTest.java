@@ -23,7 +23,7 @@ import static org.mockito.Mockito.mock;
 
 @RunWith(RobolectricTestRunner.class)
 public class PostTripTest {
-    final String TAG = "PostTripTest";
+    private static final String TAG = "PostTripTest";
     private CommonDependencyProvider provider;
 
     @Before

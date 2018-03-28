@@ -48,7 +48,8 @@ public class ConfirmRegisterActivityTest {
         when(builder.create()).thenReturn(dialog);
         when(builder.setTitle(any(String.class))).thenReturn(builder);
         when(builder.setMessage(any(String.class))).thenReturn(builder);
-        when(builder.setNeutralButton(any(String.class), any(DialogInterface.OnClickListener.class))).thenReturn(builder);
+        when(builder.setNeutralButton(any(String.class),
+                any(DialogInterface.OnClickListener.class))).thenReturn(builder);
 
 
         activity.showDialogMessage("This is a test", "Body body body", false);
@@ -80,7 +81,8 @@ public class ConfirmRegisterActivityTest {
         EditText username = (EditText) activity.findViewById(R.id.editTextConfirmUserId);
         Assert.assertEquals("Michael", username.getText().toString());
         TextView screenSubtext = (TextView) activity.findViewById(R.id.textViewConfirmSubtext_1);
-        Assert.assertEquals("A confirmation code was sent to Chicago via dest", screenSubtext.getText().toString());
+        Assert.assertEquals("A confirmation code was sent to Chicago via dest",
+                screenSubtext.getText().toString());
 
     }
 
