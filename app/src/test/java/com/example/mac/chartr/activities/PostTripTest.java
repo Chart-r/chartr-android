@@ -3,6 +3,9 @@ package com.example.mac.chartr.activities;
 import android.widget.TextView;
 
 import com.example.mac.chartr.CommonDependencyProvider;
+import com.example.mac.chartr.R;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,10 +13,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
-import static org.mockito.Mockito.*;
-import com.example.mac.chartr.R;
-
-import junit.framework.Assert;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by Michael Rush on 3/3/2018.
@@ -23,7 +23,7 @@ import junit.framework.Assert;
 
 @RunWith(RobolectricTestRunner.class)
 public class PostTripTest {
-    final String TAG = "PostTripTest";
+    private static final String TAG = "PostTripTest";
     private CommonDependencyProvider provider;
 
     @Before
@@ -49,7 +49,7 @@ public class PostTripTest {
     }
 
     @Test
-    public void incrementSeatsTest(){
+    public void incrementSeatsTest() {
         PostTripActivity activity = Robolectric.setupActivity(PostTripActivity.class);
 
         TextView results = (TextView) activity.findViewById(R.id.textViewSeatValue);

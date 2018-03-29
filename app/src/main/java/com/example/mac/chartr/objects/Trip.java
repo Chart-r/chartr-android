@@ -67,7 +67,9 @@ public class Trip {
         users = new HashMap<>();
     }
 
-    public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, float endLat, float endLong, float startLat, float startLong, int seats, float price, String id, Map<String, String> users) {
+    public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, float endLat,
+                float endLong, float startLat, float startLong, int seats, float price,
+                String id, Map<String, String> users) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.quiet = quiet;
@@ -82,7 +84,9 @@ public class Trip {
         this.users = users;
     }
 
-    public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, double endLat, double endLong, double startLat, double startLong, int seats, double price, String email) {
+    public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, double endLat,
+                double endLong, double startLat, double startLong, int seats, double price,
+                String email) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.quiet = quiet;
@@ -192,11 +196,17 @@ public class Trip {
         this.users = users;
     }
 
-    public void addUser(String email, String role) { users.put(email, role); }
+    public void addUser(String email, String role) {
+        users.put(email, role);
+    }
 
-    public String getDriverEmail() { return driverEmail; }
+    public String getDriverEmail() {
+        return driverEmail;
+    }
 
-    public void setDriverEmail(String driverEmail) { this.driverEmail = driverEmail; }
+    public void setDriverEmail(String driverEmail) {
+        this.driverEmail = driverEmail;
+    }
 
     public String getDriverFromUsers() {
         // No user map
@@ -206,7 +216,7 @@ public class Trip {
 
         Iterator it = users.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
+            Map.Entry pair = (Map.Entry) it.next();
             if (pair.getValue().equals("Driver")) {
                 return pair.getKey().toString();
             }

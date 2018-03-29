@@ -12,17 +12,15 @@ import static junit.framework.Assert.assertNotNull;
 
 /**
  * Created by cygnus on 3/13/18.
- *
  */
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
 public class RequestsFragmentTest {
     @Test
-    public void shouldNotBeNull() throws Exception
-    {
+    public void shouldNotBeNull() throws Exception {
         RequestsFragment fragment = new RequestsFragment();
         SupportFragmentTestUtil.startFragment(fragment);
-        assertNotNull( fragment );
+        assertNotNull(fragment);
     }
 }

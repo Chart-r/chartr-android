@@ -58,16 +58,16 @@ public class User {
         return trips;
     }
 
+    public void setTrips(Map<String, String> trips) {
+        this.trips = trips;
+    }
+
     public float getRating() {
         return rating;
     }
 
     public void setRating(float rating) {
         this.rating = rating;
-    }
-
-    public void setTrips(Map<String, String> trips) {
-        this.trips = trips;
     }
 
     public void addTrip(String tripID, String role) {

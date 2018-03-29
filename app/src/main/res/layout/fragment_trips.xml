@@ -19,15 +19,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:orientation="horizontal"
-                android:backgroundTint="@color/colorPrimaryDark"/>
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:orientation="horizontal" />
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="@color/colorPrimaryDark"/>
+                android:backgroundTint="@color/colorPrimaryDark" />
 
         </LinearLayout>
 

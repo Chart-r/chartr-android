@@ -2,22 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/ic_nearby"
-        android:title="Nearby">
-    </item>
+        android:title="Nearby"></item>
 
     <item
         android:id="@+id/ic_trips"
-        android:title="Trips">
-    </item>
+        android:title="Trips"></item>
 
     <item
         android:id="@+id/ic_requests"
-        android:title="Requests">
-    </item>
+        android:title="Requests"></item>
 
     <item
         android:id="@+id/ic_profile"
-        android:title="Profile">
-    </item>
+        android:title="Profile"></item>
 
 </menu>
