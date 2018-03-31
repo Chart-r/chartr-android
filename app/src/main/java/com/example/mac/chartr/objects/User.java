@@ -15,11 +15,19 @@ public class User {
     @Expose
     private String name;
 
-    private float rating;
+    @SerializedName("birthdate")
+    @Expose
+    private String birthdate;
+
+    @SerializedName("phone")
+    @Expose
+    private String phone;
 
     @SerializedName("trips")
     @Expose
     private Map<String, String> trips;
+
+    private float rating;
 
     public User() {
         this.trips = new HashMap<String, String>();
@@ -53,6 +61,14 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getBirthdate() { return birthdate; }
+
+    public void setBirthdate(String birthdate) { this.birthdate = birthdate; }
+
+    public String getPhone() { return phone; }
+
+    public void setPhone(String phone) { this.phone = phone; }
 
     public Map<String, String> getTrips() {
         return trips;

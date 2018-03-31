@@ -16,6 +16,7 @@ import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
+import com.example.mac.chartr.objects.User;
 
 import java.io.IOException;
 import java.util.List;
@@ -69,7 +70,7 @@ public class ListTripsFragment extends Fragment {
         String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
         ApiInterface apiInterface = ApiClient.getApiInstance();
         Call<List<Trip>> call = apiInterface.getUserDrivingTrips(userEmail);
-        Log.d(TAG, userEmail);
+        Log.d(TAG, "Logged in user: " + userEmail);
         call.enqueue(new Callback<List<Trip>>() {
             @Override
             public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
@@ -84,7 +85,7 @@ public class ListTripsFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Trip>> call, Throwable t) {
                 Log.d(TAG, "Retrofit failed to get data");
-                Log.e(TAG, t.getMessage());
+                Log.d(TAG, t.getMessage());
                 t.printStackTrace();
                 call.cancel();
             }
@@ -109,6 +110,13 @@ public class ListTripsFragment extends Fragment {
         String start = getLocationName(trip.getStartLat(), trip.getStartLong());
         String destination = getLocationName(trip.getEndLat(), trip.getEndLong());
 
+        if (name.equals(getLoggedInUser().getEmail())) {
+            name = getLoggedInUser().getName();
+        }
+        else {
+            Log.e(TAG, "Username " + name + " does not match logged in user: " + getLoggedInUser().getName());
+        }
+
         ((TextView) tripContainer.findViewById(R.id.textViewName)).setText(name);
         ((TextView) tripContainer.findViewById(R.id.textViewRating)).setText(rating);
         ((TextView) tripContainer.findViewById(R.id.textViewSeats)).setText(seats);
@@ -121,7 +129,8 @@ public class ListTripsFragment extends Fragment {
     protected String getLocationName(double latitude, double longitude) {
         /* testAddTripView was failing on account of this code, specifically:
          * Method getFromLocation in android.location.Geocoder not mocked.
-         * I'm too tired to look into it now.
+         * Geocoder functionality needs to be extracted to a separate function which
+         * receives a geocoder argument that can be mocked and passed in for testing.
         */
         Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
         List<Address> addresses = null;
@@ -161,5 +170,11 @@ public class ListTripsFragment extends Fragment {
         return latitude + ", " + longitude;
     }
 
-
+    /**
+     * Gets the logged in user from the provider
+     * @return logged in user
+     */
+    private User getLoggedInUser() {
+        return provider.getAppHelper().getLoggedInUser();
+    }
 }
