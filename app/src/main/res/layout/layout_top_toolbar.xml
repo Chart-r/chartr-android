@@ -23,7 +23,7 @@
             android:fontFamily="serif"
             android:text="+"
             android:textColor="@color/grey_100"
-            android:textSize="50dp" />
+            android:textSize="50sp" />
 
     </RelativeLayout>
 </merge>

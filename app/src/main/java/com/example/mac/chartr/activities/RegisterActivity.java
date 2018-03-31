@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,8 +19,15 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
+import com.example.mac.chartr.ApiClient;
+import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
+import com.example.mac.chartr.objects.User;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
@@ -30,28 +38,35 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText birthday;
     private EditText phone;
 
-
     private Button signUp;
     private AlertDialog userDialog;
     private ProgressDialog waitDialog;
     private String emailInput;
     private String userPasswd;
+    private User user;
 
     private CommonDependencyProvider provider;
+
     SignUpHandler signUpHandler = new SignUpHandler() {
         @Override
-        public void onSuccess(CognitoUser user, boolean signUpConfirmationState,
+        public void onSuccess(CognitoUser cognitoUser, boolean signUpConfirmationState,
                               CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
-            // Check signUpConfirmationState to see if the user is already confirmed
+            // Add user to DynamoDB
+            ApiInterface apiInterface = ApiClient.getApiInstance();
+            callPostUserApi(apiInterface, user);
+
             closeWaitDialog();
-            Boolean regState = signUpConfirmationState;
+
+            // Check signUpConfirmationState to see if the user is already confirmed
             if (signUpConfirmationState) {
                 // User is already confirmed
                 showDialogMessage("Sign up successful!", emailInput
                         + " has been Confirmed", true);
             } else {
                 // User is not confirmed
-                confirmSignUp(cognitoUserCodeDeliveryDetails);
+                showDialogMessage("Confirm Account",
+                        "An email with a confirmation link has been sent to " + emailInput,
+                        true);
             }
         }
 
@@ -86,6 +101,37 @@ public class RegisterActivity extends AppCompatActivity {
         init();
     }
 
+    /**
+     * Calls api to post a user.
+     *
+     * @param apiInterface Contains api calls
+     * @param user the user to be posted, should contain email, name, birth date, and phone number
+     */
+    private void callPostUserApi(ApiInterface apiInterface, User user) {
+        Call<Void> call;
+        call = apiInterface.postUser(user);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                int code = response.code();
+                if (code == 200) {
+                    Log.d(TAG, "User posted successfully.");
+                } else {
+                    Log.d(TAG, "Retrofit failed to post user, response code: "
+                            + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d(TAG, "Retrofit failed to post user, no response.");
+                Log.e(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
+    }
+
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
     }
@@ -105,6 +151,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initSignup() {
+        user = new User();
+
         signUp = (Button) findViewById(R.id.signUp);
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
                     email.setBackground(getDrawable(R.drawable.text_border_error));
                     return;
                 }
+                user.setEmail(emailInput);
 
                 String userpasswordInput = password.getText().toString();
                 userPasswd = userpasswordInput;
@@ -134,6 +183,7 @@ public class RegisterActivity extends AppCompatActivity {
                     userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
                             .get(givenName.getHint()), userInput);
                 }
+                user.setName(userInput);
 
                 userInput = email.getText().toString();
                 if (userInput.length() > 0) {
@@ -146,12 +196,14 @@ public class RegisterActivity extends AppCompatActivity {
                     userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
                             .get(birthday.getHint()), userInput);
                 }
+                user.setBirthdate(userInput);
 
                 userInput = phone.getText().toString();
                 if (userInput.length() > 0) {
                     userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
                             .get(phone.getHint()), userInput);
                 }
+                user.setPhone(userInput);
 
                 showWaitDialog("Signing up...");
 
