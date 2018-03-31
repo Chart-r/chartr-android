@@ -25,13 +25,20 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
+import com.example.mac.chartr.ApiClient;
+import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.fragments.SearchFragment;
 import com.example.mac.chartr.fragments.ProfileFragment;
 import com.example.mac.chartr.fragments.RequestsFragment;
 import com.example.mac.chartr.fragments.trips.TripsFragment;
+import com.example.mac.chartr.objects.User;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -171,9 +178,46 @@ public class MainActivity extends AppCompatActivity {
         exit();
     }
 
-    // Get user details from CIP service
+    /**
+     * Get user details from CIP service and from the API Gateway.
+     */
     private void getDetails() {
         provider.getAppHelper().getPool().getUser(username).getDetailsInBackground(detailsHandler);
+
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        callGetUserApi(apiInterface, username);
+    }
+
+    /**
+     * Calls api to get a user with given username.
+     *
+     * @param apiInterface Contains api calls
+     * @param username the username (email) of the user
+     */
+    private void callGetUserApi(ApiInterface apiInterface, String username) {
+        Call<User> call;
+        call = apiInterface.getUser(username);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                int code = response.code();
+                if (code == 200) {
+                    Log.d(TAG, "User gotten successfully.");
+                    provider.getAppHelper().setLoggedInUser(response.body());
+                } else {
+                    Log.d(TAG, "Retrofit failed to get user, response code: "
+                            + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d(TAG, "Retrofit failed to get user.");
+                Log.e(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
     }
 
     private void handleTrustedDevice() {

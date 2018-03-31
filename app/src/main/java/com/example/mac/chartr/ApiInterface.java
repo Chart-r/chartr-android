@@ -1,6 +1,7 @@
 package com.example.mac.chartr;
 
 import com.example.mac.chartr.objects.Trip;
+import com.example.mac.chartr.objects.User;
 
 import java.util.List;
 
@@ -17,7 +18,14 @@ import retrofit2.http.Query;
  */
 
 public interface ApiInterface {
+    // User API calls
+    @GET("/prod/user/*?")
+    Call<User> getUser(@Query("email") String email);
 
+    @POST("/prod/user/*")
+    Call<Void> postUser(@Body User user);
+
+    // Trip API calls
     @GET("/prod/trip/*?")
     Call<List<Trip>> getAllUserTrips(@Query("email") String email);
 
