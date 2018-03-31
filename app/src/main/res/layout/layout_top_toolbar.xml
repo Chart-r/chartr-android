@@ -25,5 +25,18 @@
             android:textColor="@color/grey_100"
             android:textSize="50dp" />
 
+        <Button
+            android:id="@+id/buttonSearchRequest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:width="@dimen/activity_button_search"
+            android:onClick="search"
+            android:text="@string/Button_search" />
+
+
+
     </RelativeLayout>
+
 </merge>

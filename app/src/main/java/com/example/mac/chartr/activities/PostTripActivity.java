@@ -26,6 +26,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.content.Intent;
 
 
 public class PostTripActivity extends AppCompatActivity {
@@ -148,6 +149,8 @@ public class PostTripActivity extends AppCompatActivity {
             callApi(apiInterface, returnTrip);
         }
 
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     /**

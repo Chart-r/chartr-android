@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
@@ -26,7 +27,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHa
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
-import com.example.mac.chartr.fragments.NearbyFragment;
+import com.example.mac.chartr.fragments.SearchFragment;
 import com.example.mac.chartr.fragments.ProfileFragment;
 import com.example.mac.chartr.fragments.RequestsFragment;
 import com.example.mac.chartr.fragments.trips.TripsFragment;
@@ -94,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        //Setting visibility of buttons when first logged in
+        findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
+        findViewById(R.id.buttonSearchRequest).setVisibility(View.GONE);
+
         setupTopToolbar();
         setupBottomNavigation();
         setupToolbarListener();
@@ -141,11 +146,17 @@ public class MainActivity extends AppCompatActivity {
                         }
                         getSupportActionBar().setTitle(title);
 
-                        // Show or hide plus button
-                        if (title == "Trips") {
+                        // Show or hide plus or search button
+                        if(title == "Trips") {
                             findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-                        } else {
+                            findViewById(R.id.buttonSearchRequest).setVisibility(View.GONE);
+                        }else if(title == "") {
+                            findViewById(R.id.buttonSearchRequest).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                        }else
+                        {
+                            findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                            findViewById(R.id.buttonSearchRequest).setVisibility(View.GONE);
                         }
                     }
                 });
@@ -231,12 +242,12 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         int itemId = item.getItemId();
                         switch (itemId) {
-                            case R.id.ic_nearby:
-                                getSupportActionBar().setTitle("Nearby");
+                            case R.id.ic_search:
+                                getSupportActionBar().setTitle("Search");
                                 findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                                 getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.content, new NearbyFragment())
-                                        .addToBackStack("Nearby").commit();
+                                        .replace(R.id.content, new SearchFragment())
+                                        .addToBackStack("").commit();
                                 break;
                             case R.id.ic_trips:
                                 getSupportFragmentManager().beginTransaction()
@@ -321,5 +332,16 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
 
         }
-    }
 }
+
+
+    public void search(View view) {
+        RelativeLayout r = findViewById(R.id.search_relative_layout);
+
+        if (r.getVisibility() == View.VISIBLE) {
+            r.setVisibility(View.GONE);
+        }else if (r.getVisibility() == View.GONE) {
+            r.setVisibility(View.VISIBLE);
+        }
+    }
+    }

@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mac.chartr.fragments.SearchFragment">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="3"
+        android:id="@+id/search_relative_layout"
+        android:orientation="vertical">
+        <EditText
+            android:layout_width="@dimen/activity_button_search"
+            android:layout_weight="1"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:id="@+id/searchEditTextStartLocation"
+
+            android:background="@drawable/text_border_selector"
+            android:hint="Start Location"
+            android:textStyle="italic"
+            android:textSize="@dimen/post_trip_text_size" />
+        <EditText
+            android:layout_width="@dimen/activity_button_search"
+            android:layout_weight="1"
+            android:layout_below="@+id/searchEditTextStartLocation"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:id="@+id/SearchEditTextEndLocation"
+            android:background="@drawable/text_border_selector"
+            android:hint="End Location"
+            android:textStyle="italic"
+            android:textSize="@dimen/post_trip_text_size" />
+
+        <Button
+            android:id="@+id/buttonSearch"
+            android:layout_weight="1"
+            android:layout_below="@+id/SearchEditTextEndLocation"
+            android:layout_width="100dp"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/button_selector"
+            android:text="Search"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/grey_700"
+            android:textSize="@dimen/activity_button_text_size" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

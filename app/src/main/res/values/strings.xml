@@ -32,5 +32,6 @@
     <string name="start_placeholder">Start</string>
     <string name="destination_placeholder">Destination</string>
     <string name="user_profile_icon">A user uploaded profile image.</string>
+    <string name="Button_search">Search</string>
     <string name="title_logistics">Logistics</string>
 </resources>

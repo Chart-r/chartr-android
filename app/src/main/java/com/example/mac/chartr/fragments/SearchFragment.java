@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 
 import com.example.mac.chartr.R;
 
-public class NearbyFragment extends Fragment {
-    public static final String TAG = NearbyFragment.class.getSimpleName();
+public class SearchFragment extends Fragment {
+    public static final String TAG = SearchFragment.class.getSimpleName();
 
 
-    public NearbyFragment() {
+    public SearchFragment() {
         // Required empty public constructor
     }
 
@@ -25,7 +25,12 @@ public class NearbyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_nearby, container, false);
+      View view = inflater.inflate(R.layout.fragment_search, container, false);
+      view.findViewById(R.id.search_relative_layout).setVisibility(View.GONE);
+
+        return view;
+
     }
+
 
 }
