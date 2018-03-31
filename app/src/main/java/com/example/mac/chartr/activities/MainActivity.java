@@ -117,6 +117,14 @@ public class MainActivity extends AppCompatActivity {
         getDetails();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            super.onBackPressed();
+
+        }
+    }
+
     private void setupTopToolbar() {
         final Context context = this;
         toolbar = (Toolbar) findViewById(R.id.topToolBar);
@@ -154,14 +162,13 @@ public class MainActivity extends AppCompatActivity {
                         getSupportActionBar().setTitle(title);
 
                         // Show or hide plus or search button
-                        if(title == "Trips") {
+                        if (title == "Trips") {
                             findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonSearchRequest).setVisibility(View.GONE);
-                        }else if(title == "") {
+                        } else if (title == "") {
                             findViewById(R.id.buttonSearchRequest).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                        }else
-                        {
+                        } else {
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                             findViewById(R.id.buttonSearchRequest).setVisibility(View.GONE);
                         }
@@ -370,22 +377,13 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            super.onBackPressed();
-
-        }
-}
-
-
     public void search(View view) {
         RelativeLayout r = findViewById(R.id.search_relative_layout);
 
         if (r.getVisibility() == View.VISIBLE) {
             r.setVisibility(View.GONE);
-        }else if (r.getVisibility() == View.GONE) {
+        } else if (r.getVisibility() == View.GONE) {
             r.setVisibility(View.VISIBLE);
         }
     }
-    }
+}
