@@ -62,13 +62,21 @@ public class User {
         this.name = name;
     }
 
-    public String getBirthdate() { return birthdate; }
+    public String getBirthdate() {
+        return birthdate;
+    }
 
-    public void setBirthdate(String birthdate) { this.birthdate = birthdate; }
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
 
-    public String getPhone() { return phone; }
+    public String getPhone() {
+        return phone;
+    }
 
-    public void setPhone(String phone) { this.phone = phone; }
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public Map<String, String> getTrips() {
         return trips;

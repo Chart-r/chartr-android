@@ -1,6 +1,7 @@
 package com.example.mac.chartr.fragments.trips;
 
 import android.location.Geocoder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +35,9 @@ import static org.mockito.Mockito.when;
 /**
  * Created by cygnus on 3/7/18.
  */
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Log.class)
 public class ListTripsFragmentTest {
     @Mock
     private Geocoder geocoder;
@@ -38,6 +47,9 @@ public class ListTripsFragmentTest {
 
     @Test
     public void testAddTripView() {
+        // Allows for code to contain logs without throwing not mocked errors
+        PowerMockito.mockStatic(Log.class);
+
         provider = mock(CommonDependencyProvider.class);
         helper = mock(AppHelper.class);
 

@@ -112,9 +112,9 @@ public class ListTripsFragment extends Fragment {
 
         if (name.equals(getLoggedInUser().getEmail())) {
             name = getLoggedInUser().getName();
-        }
-        else {
-            Log.e(TAG, "Username " + name + " does not match logged in user: " + getLoggedInUser().getName());
+        } else {
+            Log.d(TAG, "Username " + name
+                    + " does not match logged in user: " + getLoggedInUser().getName());
         }
 
         ((TextView) tripContainer.findViewById(R.id.textViewName)).setText(name);

@@ -158,6 +158,6 @@
         android:textAllCaps="false"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/button_default"
-        android:textSize="15dp" />
+        android:textSize="15sp" />
 
 </RelativeLayout>

@@ -65,8 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
             } else {
                 // User is not confirmed
                 showDialogMessage("Confirm Account",
-                        "An email with a confirmation link has been sent to " + emailInput
-                        , true);
+                        "An email with a confirmation link has been sent to " + emailInput,
+                        true);
             }
         }
 
