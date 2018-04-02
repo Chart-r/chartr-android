@@ -142,7 +142,7 @@ public class PostTripActivity extends AppCompatActivity {
             return;
         }
         CommonDependencyProvider commonDependencyProvider =
-                provider == null? new CommonDependencyProvider() : provider;
+                provider == null ? new CommonDependencyProvider() : provider;
         String email = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
 
         Trip trip = new Trip(startTime.getTime(), startTime.getTime(), isQuiet, (!noSmoking),

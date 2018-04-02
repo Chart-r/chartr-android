@@ -235,24 +235,52 @@ public class Trip {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Trip trip = (Trip) o;
 
-        if (startTime != trip.startTime) return false;
-        if (endTime != trip.endTime) return false;
-        if (Double.compare(trip.startLat, startLat) != 0) return false;
-        if (Double.compare(trip.endLat, endLat) != 0) return false;
-        if (Double.compare(trip.endLong, endLong) != 0) return false;
-        if (Double.compare(trip.startLong, startLong) != 0) return false;
-        if (seats != trip.seats) return false;
-        if (Double.compare(trip.price, price) != 0) return false;
-        if (quiet != trip.quiet) return false;
-        if (driverEmail != null ? !driverEmail.equals(trip.driverEmail) : trip.driverEmail != null)
+        if (startTime != trip.startTime) {
             return false;
-        if (id != null ? !id.equals(trip.id) : trip.id != null) return false;
-        if (smoking != null ? !smoking.equals(trip.smoking) : trip.smoking != null) return false;
+        }
+        if (endTime != trip.endTime) {
+            return false;
+        }
+        if (Double.compare(trip.startLat, startLat) != 0) {
+            return false;
+        }
+        if (Double.compare(trip.endLat, endLat) != 0) {
+            return false;
+        }
+        if (Double.compare(trip.endLong, endLong) != 0) {
+            return false;
+        }
+        if (Double.compare(trip.startLong, startLong) != 0) {
+            return false;
+        }
+        if (seats != trip.seats) {
+            return false;
+        }
+        if (Double.compare(trip.price, price) != 0) {
+            return false;
+        }
+        if (quiet != trip.quiet) {
+            return false;
+        }
+        if (driverEmail != null
+                ? !driverEmail.equals(trip.driverEmail) : trip.driverEmail != null) {
+            return false;
+        }
+        if (id != null ? !id.equals(trip.id) : trip.id != null) {
+            return false;
+        }
+        if (smoking != null ? !smoking.equals(trip.smoking) : trip.smoking != null) {
+            return false;
+        }
         return users != null ? users.equals(trip.users) : trip.users == null;
     }
 
