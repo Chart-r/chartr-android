@@ -70,23 +70,30 @@ public class Trip {
     public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, float endLat,
                 float endLong, float startLat, float startLong, int seats, float price,
                 String id, Map<String, String> users) {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.quiet = quiet;
-        this.smoking = smoking;
-        this.endLat = endLat;
-        this.endLong = endLong;
-        this.startLat = startLat;
-        this.startLong = startLong;
-        this.seats = seats;
-        this.price = price;
+
+        this.setProperties(startTime, endTime, quiet, smoking, endLat, endLong, startLat, startLong,
+                seats, price);
+
         this.id = id;
         this.users = users;
+        this.driverEmail = null;
     }
 
     public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, double endLat,
                 double endLong, double startLat, double startLong, int seats, double price,
                 String email) {
+
+        this.setProperties(startTime, endTime, quiet, smoking, endLat, endLong, startLat, startLong,
+                seats, price);
+
+        this.driverEmail = email;
+        this.id = null;
+        this.users = null;
+    }
+
+    private void setProperties(long startTime, long endTime, Boolean quiet, Boolean smoking,
+                              double endLat, double endLong, double startLat, double startLong,
+                              int seats, double price) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.quiet = quiet;
@@ -97,7 +104,6 @@ public class Trip {
         this.startLong = startLong;
         this.seats = seats;
         this.price = price;
-        this.driverEmail = email;
     }
 
     public long getStartTime() {
@@ -225,5 +231,53 @@ public class Trip {
 
         // No driver in list
         return "";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Trip trip = (Trip) o;
+
+        if (startTime != trip.startTime) return false;
+        if (endTime != trip.endTime) return false;
+        if (Double.compare(trip.startLat, startLat) != 0) return false;
+        if (Double.compare(trip.endLat, endLat) != 0) return false;
+        if (Double.compare(trip.endLong, endLong) != 0) return false;
+        if (Double.compare(trip.startLong, startLong) != 0) return false;
+        if (seats != trip.seats) return false;
+        if (Double.compare(trip.price, price) != 0) return false;
+        if (quiet != trip.quiet) return false;
+        if (driverEmail != null ? !driverEmail.equals(trip.driverEmail) : trip.driverEmail != null)
+            return false;
+        if (id != null ? !id.equals(trip.id) : trip.id != null) return false;
+        if (smoking != null ? !smoking.equals(trip.smoking) : trip.smoking != null) return false;
+        return users != null ? users.equals(trip.users) : trip.users == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = driverEmail != null ? driverEmail.hashCode() : 0;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (int) (startTime ^ (startTime >>> 32));
+        result = 31 * result + (int) (endTime ^ (endTime >>> 32));
+        result = 31 * result + (smoking != null ? smoking.hashCode() : 0);
+        temp = Double.doubleToLongBits(startLat);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(endLat);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(endLong);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(startLong);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + seats;
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (users != null ? users.hashCode() : 0);
+        result = 31 * result + (quiet ? 1 : 0);
+        return result;
     }
 }
