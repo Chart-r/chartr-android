@@ -32,6 +32,13 @@
     <string name="start_placeholder">Start</string>
     <string name="destination_placeholder">Destination</string>
     <string name="user_profile_icon">A user uploaded profile image.</string>
-    <string name="Button_search">Search</string>
+    <string name="Button_search">Where do you want to go?</string>
     <string name="title_logistics">Logistics</string>
+    <string name="searchFragmentPreferredDriverEmail">Preferred Driver (email)</string>
+    <string name="searchFragmentPreferredDriver">Preferred Driver</string>
+    <string name="searchFragmentPriceRange">Price range</string>
+    <string name="searchFragmentPriceRangeFrom">From</string>
+    <string name="searchFragmentPriceRangeTo">To</string>
+    <string name="searchFragmentPriceRangeSeparator">-</string>
+    <string name="searchFragmentButtonSearch">Search</string>
 </resources>
