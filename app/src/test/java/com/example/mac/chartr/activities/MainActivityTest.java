@@ -1,21 +1,15 @@
 package com.example.mac.chartr.activities;
 
-import android.app.Activity;
-import android.content.Intent;
-
 import com.example.mac.chartr.CommonDependencyProvider;
 
 import junit.framework.Assert;
 
-import org.apache.tools.ant.Main;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by Michael Rush on 3/4/2018.
