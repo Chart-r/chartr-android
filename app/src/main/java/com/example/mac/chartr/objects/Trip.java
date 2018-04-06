@@ -220,9 +220,8 @@ public class Trip {
             return "";
         }
 
-        Iterator it = users.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
+        for (Object o : users.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
             if (pair.getValue().equals("Driver")) {
                 return pair.getKey().toString();
             }

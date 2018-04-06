@@ -396,14 +396,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void showDialogMessage(String title, String body) {
         final AlertDialog.Builder builder = provider.getAlertDialogBuilder(this);
         builder.setTitle(title).setMessage(body).setNeutralButton("OK",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            userDialog.dismiss();
-                        } catch (Exception e) {
-                            //
-                        }
+                (dialog, which) -> {
+                    try {
+                        userDialog.dismiss();
+                    } catch (Exception e) {
+                        //
                     }
                 });
         userDialog = builder.create();

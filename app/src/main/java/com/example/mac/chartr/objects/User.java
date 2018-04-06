@@ -30,7 +30,7 @@ public class User {
     private float rating;
 
     public User() {
-        this.trips = new HashMap<String, String>();
+        this.trips = new HashMap<>();
     }
 
     public User(String email, String name, float rating) {

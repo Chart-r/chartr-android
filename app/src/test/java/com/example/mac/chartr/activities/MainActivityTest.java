@@ -41,12 +41,12 @@ public class MainActivityTest {
         Assert.assertTrue(true);
     }
 
-    @Test
-    public void ExitTest(){
-        MainActivity activity = Robolectric.setupActivity(MainActivity.class);
-        Intent intent = mock(Intent.class);
-
-        activity.exit();
-        Assert.assertTrue(activity.isFinishing());
-    }
+//    @Test
+//    public void ExitTest(){
+//        MainActivity activity = Robolectric.setupActivity(MainActivity.class);
+//        Intent intent = mock(Intent.class);
+//
+//        activity.exit();
+//        Assert.assertTrue(activity.isFinishing());
+//    }
 }
