@@ -65,10 +65,10 @@ public class SearchFragment extends Fragment {
         String startLocation = inStartLocation.getText().toString();
         String endLocation = inEndLocation.getText().toString();
         final String preferredDriverEmail = inPreferredDriverEmail.getText().toString();
-        final int priceRangeFrom = inPriceRangeFrom.getText().toString().isEmpty()?
-                0: Integer.valueOf(inPriceRangeFrom.getText().toString());
-        final int priceRangeTo = inPriceRangeTo.getText().toString().isEmpty()?
-                Integer.MAX_VALUE: Integer.valueOf(inPriceRangeFrom.getText().toString());
+        final int priceRangeFrom = inPriceRangeFrom.getText().toString().isEmpty()
+                ? 0 : Integer.valueOf(inPriceRangeFrom.getText().toString());
+        final int priceRangeTo = inPriceRangeTo.getText().toString().isEmpty()
+                ? Integer.MAX_VALUE : Integer.valueOf(inPriceRangeFrom.getText().toString());
 
         final double startLat;
         final double startLng;
@@ -120,7 +120,8 @@ public class SearchFragment extends Fragment {
 
                     boolean endLocWithinRange = endLat - 1 < currTrip.getStartLat()
                             && currTrip.getStartLat() < endLat + 1
-                            && endLng - 1 < currTrip.getStartLat() && currTrip.getStartLat() < endLng + 1;
+                            && endLng - 1 < currTrip.getStartLat()
+                            && currTrip.getStartLat() < endLng + 1;
 
                     boolean costOfTripWithinRange = priceRangeFrom < currTrip.getPrice()
                             && currTrip.getPrice() < priceRangeTo;
@@ -129,7 +130,8 @@ public class SearchFragment extends Fragment {
 
                     if (startLocWithinRange && endLocWithinRange && costOfTripWithinRange) {
                         if (!driverPreferrence
-                                || (driverPreferrence && currTrip.getDriverEmail() == preferredDriverEmail)) {
+                                || (driverPreferrence
+                                    && currTrip.getDriverEmail() == preferredDriverEmail)) {
                             result.add(currTrip);
                         }
                     }
