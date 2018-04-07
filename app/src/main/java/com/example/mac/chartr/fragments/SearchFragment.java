@@ -1,5 +1,6 @@
 package com.example.mac.chartr.fragments;
 
+
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -45,18 +47,24 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
       View view = inflater.inflate(R.layout.fragment_search, container, false);
       view.findViewById(R.id.search_relative_layout).setVisibility(View.GONE);
+        Button search = (Button) view.findViewById(R.id.searchFragmentButtonSearch);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchTrips(v);
+            }
+        });
 
         return view;
-
     }
 
-    public void searchTrip(final View view) {
+    public void searchTrips(final View view) {
 
 
         view.findViewById(R.id.search_relative_layout).setVisibility(View.GONE);
 
         EditText inStartLocation = view.findViewById(R.id.searchFragmentEditTextStartLocation);
-        EditText inEndLocation = view.findViewById(R.id.searchFragmentEditTextStartLocation);
+        EditText inEndLocation = view.findViewById(R.id.searchFragmentEditTextEndLocation);
         final EditText inPreferredDriverEmail = view.
                 findViewById(R.id.searchFragmentEditPreferredDriver);
         EditText inPriceRangeFrom = view.findViewById(R.id.searchFragmentEditPriceRangeFrom);
@@ -126,11 +134,11 @@ public class SearchFragment extends Fragment {
                     boolean costOfTripWithinRange = priceRangeFrom < currTrip.getPrice()
                             && currTrip.getPrice() < priceRangeTo;
 
-                    boolean driverPreferrence = !preferredDriverEmail.isEmpty();
+                    boolean hasDriverPreference = !preferredDriverEmail.isEmpty();
 
                     if (startLocWithinRange && endLocWithinRange && costOfTripWithinRange) {
-                        if (!driverPreferrence
-                                || (driverPreferrence
+                        if (!hasDriverPreference
+                                || (hasDriverPreference
                                     && currTrip.getDriverEmail() == preferredDriverEmail)) {
                             result.add(currTrip);
                         }

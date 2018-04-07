@@ -32,7 +32,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:width="@dimen/activity_button_search"
-            android:onClick="search"
+            android:onClick="searchLayout"
             android:textAllCaps="false"
             android:textStyle="italic"
             android:text="@string/Button_search" />

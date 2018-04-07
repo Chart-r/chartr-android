@@ -377,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    public void search(View view) {
+    public void searchLayout(View view) {
         RelativeLayout r = findViewById(R.id.search_relative_layout);
 
         if (r.getVisibility() == View.VISIBLE) {
@@ -385,5 +385,10 @@ public class MainActivity extends AppCompatActivity {
         } else if (r.getVisibility() == View.GONE) {
             r.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void search(View view) {
+        SearchFragment helper = new SearchFragment();
+        helper.searchTrips(view);
     }
 }

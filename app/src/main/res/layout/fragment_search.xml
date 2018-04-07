@@ -162,10 +162,8 @@
                 android:inputType="text"
                 android:paddingLeft="@dimen/activity_text_padding"
                 android:paddingRight="@dimen/activity_text_padding"
-
                 android:textSize="@dimen/post_trip_text_size"
                 android:textStyle="italic" />
-
         </LinearLayout>
 
         <Space
@@ -183,7 +181,6 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_selector"
             android:backgroundTint="@color/grey_700"
-            android:onClick="searchTrip"
             android:text="@string/searchFragmentButtonSearch"
             android:textAllCaps="false"
             android:textColor="@color/white"
