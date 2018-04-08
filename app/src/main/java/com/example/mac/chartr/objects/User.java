@@ -3,10 +3,11 @@ package com.example.mac.chartr.objects;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class User {
+    @SerializedName("uid")
+    @Expose
+    private String uid;
+
     @SerializedName("email")
     @Expose
     private String email;
@@ -23,15 +24,15 @@ public class User {
     @Expose
     private String phone;
 
-    @SerializedName("trips")
+    @SerializedName("rating")
     @Expose
-    private Map<String, String> trips;
-
     private float rating;
 
-    public User() {
-        this.trips = new HashMap<String, String>();
-    }
+    @SerializedName("review_count")
+    @Expose
+    private int reviewCount;
+
+    public User() { }
 
     public User(String email, String name, float rating) {
         this.email = email;
@@ -39,11 +40,26 @@ public class User {
         this.rating = rating;
     }
 
-    public User(String email, String name, float rating, Map<String, String> trips) {
+    public User(String email,
+                String name,
+                String birthdate,
+                String phone,
+                float rating,
+                int reviewCount) {
         this.email = email;
         this.name = name;
+        this.birthdate = birthdate;
+        this.phone = phone;
         this.rating = rating;
-        this.trips = trips;
+        this.reviewCount = reviewCount;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getEmail() {
@@ -78,14 +94,6 @@ public class User {
         this.phone = phone;
     }
 
-    public Map<String, String> getTrips() {
-        return trips;
-    }
-
-    public void setTrips(Map<String, String> trips) {
-        this.trips = trips;
-    }
-
     public float getRating() {
         return rating;
     }
@@ -94,7 +102,11 @@ public class User {
         this.rating = rating;
     }
 
-    public void addTrip(String tripID, String role) {
-        trips.put(tripID, role);
+    public int getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(int reviewCount) {
+        this.reviewCount = reviewCount;
     }
 }

@@ -90,7 +90,7 @@ public class ListTripsFragmentTest {
                 .thenReturn("Test for getLocationName");
 
         when(helper.getLoggedInUser()).thenReturn(new User("me@there.com", "Joe Smo",
-                50f, null));
+                50f));
         Mockito.doCallRealMethod().when(fragment)
                 .addTripView(any(LinearLayout.class), any(Trip.class));
 

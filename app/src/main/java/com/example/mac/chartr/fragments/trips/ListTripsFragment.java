@@ -5,6 +5,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,10 @@ import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -55,10 +60,17 @@ public class ListTripsFragment extends Fragment {
             // Populate scrollview
             final LinearLayout tripsLinearLayout = root.findViewById(R.id.tripsLinearLayout);
 
-            if (getArguments().getString(ListTripsFragment.TRIP_TYPE_KEY).equals("Posted")) {
-                inflatePostedTripsInLayout(tripsLinearLayout);
+            switch (getArguments().getString(ListTripsFragment.TRIP_TYPE_KEY)) {
+                case "Posted":
+                    inflatePostedTripsInLayout(tripsLinearLayout);
+                    break;
+                case "Joined":
+                    inflateJoinedTripsInLayout(tripsLinearLayout);
+                    break;
+                default:
+                    addSectionTitle(tripsLinearLayout, "Default action.");
+                    break;
             }
-
         }
 
         return root;
@@ -69,15 +81,26 @@ public class ListTripsFragment extends Fragment {
         CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
         String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
         ApiInterface apiInterface = ApiClient.getApiInstance();
-        Call<List<Trip>> call = apiInterface.getUserDrivingTrips(userEmail);
+        Call<List<Trip>> call = apiInterface.getUserTripsForStatus(userEmail, "driving");
         Log.d(TAG, "Logged in user: " + userEmail);
         call.enqueue(new Callback<List<Trip>>() {
             @Override
             public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
                 Log.d(TAG, response.code() + "");
 
-                List<Trip> resource = response.body();
-                for (int i = 0; i < resource.size(); i++) {
+                // Sort trips from most earliest to latest
+                ArrayList<Trip> resource = (ArrayList<Trip>) response.body();
+                Collections.sort(resource, new Comparator<Trip>() {
+                    @Override
+                    public int compare(Trip a, Trip b) {
+                        return (int) (b.getStartTime() - a.getStartTime());
+                    }
+                });
+
+                // Get index of first trip that has not ended
+                int activeIndex = getActiveIndex(resource);
+
+                for (int i = activeIndex; i < resource.size(); i++) {
                     addTripView(tripsLinearLayout, resource.get(i));
                 }
             }
@@ -90,6 +113,76 @@ public class ListTripsFragment extends Fragment {
                 call.cancel();
             }
         });
+    }
+
+    protected void inflateJoinedTripsInLayout(final LinearLayout tripsLinearLayout) {
+        CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
+        String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        Call<List<Trip>> call = apiInterface.getUserTripsForStatus(userEmail, "pending");
+        call.enqueue(new Callback<List<Trip>>() {
+            @Override
+            public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
+                Log.d(TAG, response.code() + "");
+
+                // Sort trips from most earliest to latest
+                ArrayList<Trip> resource = (ArrayList<Trip>) response.body();
+                Collections.sort(resource, new Comparator<Trip>() {
+                    @Override
+                    public int compare(Trip a, Trip b) {
+                        return (int) (b.getStartTime() - a.getStartTime());
+                    }
+                });
+
+                // Get index of first trip that has not ended
+                int activeIndex = getActiveIndex(resource);
+
+                addSectionTitle(tripsLinearLayout, "Pending");
+                Log.d(TAG, "Got " + resource.size() + " pending trips.");
+                for (int i = activeIndex; i < resource.size(); i++) {
+                    addTripView(tripsLinearLayout, resource.get(i));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Trip>> call, Throwable t) {
+                Log.d(TAG, "Retrofit failed to get data");
+                Log.d(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
+
+    }
+
+    /**
+     * Finds the index of the first trip that has a start time after the current time
+     * @param trips A list of trips sorted in ascending order by start time
+     * @return The index of the first trip that starts after current time, or trips.size()
+     */
+    protected int getActiveIndex(List<Trip> trips) {
+        int index = 0;
+        GregorianCalendar currentTime = new GregorianCalendar();
+        for (; index < trips.size(); index++) {
+            if (trips.get(index).getEndTime() > currentTime.getTimeInMillis()) {
+                break;
+            }
+        }
+        return index;
+    }
+
+    /**
+     * Adds a TextView section title to the specified linear layout.
+     * @param parentLayout The linear layout containing the trip cards
+     * @param title The section title
+     */
+    protected  void addSectionTitle(LinearLayout parentLayout, String title) {
+        TextView textView = new TextView(getActivity());
+        textView.setText(title);
+        textView.setTextSize(22);
+        textView.setPadding(0, 15, 0, 0);
+        textView.setGravity(Gravity.CENTER);
+        parentLayout.addView(textView);
     }
 
     /**
