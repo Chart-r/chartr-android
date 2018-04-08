@@ -137,14 +137,14 @@ public class PostTripActivity extends AppCompatActivity {
         String email = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
 
         Trip trip = new Trip(startTime.getTime(), startTime.getTime(), isQuiet, (!noSmoking),
-                endLat, endLng, startLat, startLng, numSeats, 5.0, email);
+                endLat, endLng, startLat, startLng, numSeats, 5.0);
 
         ApiInterface apiInterface = ApiClient.getApiInstance();
         callApi(apiInterface, trip);
 
         if (willReturn) {
             Trip returnTrip = new Trip(returnTime.getTime(), returnTime.getTime(), isQuiet,
-                    (!noSmoking), startLat, startLng, endLat, endLng, numSeats, 5.0, email);
+                    (!noSmoking), startLat, startLng, endLat, endLng, numSeats, 5.0);
             callApi(apiInterface, returnTrip);
         }
 
@@ -157,14 +157,17 @@ public class PostTripActivity extends AppCompatActivity {
      * @param trip         The trip to be posted
      */
     private void callApi(ApiInterface apiInterface, Trip trip) {
-        Call<Trip> call;
-        call = apiInterface.postUserDrivingTrip(trip);
-        call.enqueue(new Callback<Trip>() {
+        CommonDependencyProvider provider = new CommonDependencyProvider();
+        String email = provider.getAppHelper().getLoggedInUser().getEmail();
+        Call<String> call;
+        call = apiInterface.postUserDrivingTrip(email, trip);
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Trip> call, Response<Trip> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 int code = response.code();
                 if (code == 200) {
                     Log.d(TAG, "Trip posted successfully.");
+                    Log.d(TAG, "Response was: " + response.body());
                 } else {
                     Log.d(TAG, "Retrofit failed to post trip, response code: "
                             + response.code());
@@ -172,7 +175,7 @@ public class PostTripActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Trip> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 Log.d(TAG, "Retrofit failed to post trip.");
                 Log.e(TAG, t.getMessage());
                 t.printStackTrace();

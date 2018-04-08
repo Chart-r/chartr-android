@@ -12,29 +12,17 @@ import java.util.Map;
 public class Trip {
     private static final String TAG = Trip.class.getSimpleName();
 
-    @SerializedName("email")
+    @SerializedName("tid")
     @Expose
-    private String driverEmail;
-
-    @SerializedName("id")
-    @Expose
-    private String id;
-
-    @SerializedName("start_time")
-    @Expose
-    private long startTime;
-
-    @SerializedName("end_time")
-    @Expose
-    private long endTime;
-
-    @SerializedName("smoking")
-    @Expose
-    private Boolean smoking;
+    private String tid;
 
     @SerializedName("start_lat")
     @Expose
     private double startLat;
+
+    @SerializedName("start_lng")
+    @Expose
+    private double startLong;
 
     @SerializedName("end_lat")
     @Expose
@@ -44,22 +32,29 @@ public class Trip {
     @Expose
     private double endLong;
 
-    @SerializedName("start_lng")
+    @SerializedName("start_time")
     @Expose
-    private double startLong;
+    private long startTime;
 
-    @SerializedName("seats")
+    @SerializedName("end_time")
     @Expose
-    private int seats;
+    private long endTime;
 
     @SerializedName("price")
     @Expose
     private double price;
 
+    @SerializedName("seats")
+    @Expose
+    private int seats;
+
+    @SerializedName("smoking")
+    @Expose
+    private Boolean smoking;
+
     @SerializedName("users")
     @Expose
     private Map<String, String> users;
-
 
     private boolean quiet;
 
@@ -69,7 +64,7 @@ public class Trip {
 
     public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, float endLat,
                 float endLong, float startLat, float startLong, int seats, float price,
-                String id, Map<String, String> users) {
+                String tid, Map<String, String> users) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.quiet = quiet;
@@ -80,13 +75,12 @@ public class Trip {
         this.startLong = startLong;
         this.seats = seats;
         this.price = price;
-        this.id = id;
+        this.tid = tid;
         this.users = users;
     }
 
     public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, double endLat,
-                double endLong, double startLat, double startLong, int seats, double price,
-                String email) {
+                double endLong, double startLat, double startLong, int seats, double price) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.quiet = quiet;
@@ -97,7 +91,6 @@ public class Trip {
         this.startLong = startLong;
         this.seats = seats;
         this.price = price;
-        this.driverEmail = email;
     }
 
     public long getStartTime() {
@@ -181,11 +174,11 @@ public class Trip {
     }
 
     public String getId() {
-        return id;
+        return tid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String tid) {
+        this.tid = tid;
     }
 
     public Map<String, String> getUsers() {
@@ -200,14 +193,6 @@ public class Trip {
         users.put(email, role);
     }
 
-    public String getDriverEmail() {
-        return driverEmail;
-    }
-
-    public void setDriverEmail(String driverEmail) {
-        this.driverEmail = driverEmail;
-    }
-
     public String getDriverFromUsers() {
         // No user map
         if (users == null) {
@@ -217,7 +202,7 @@ public class Trip {
         Iterator it = users.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
-            if (pair.getValue().equals("Driver")) {
+            if (pair.getValue().equals("driving")) {
                 return pair.getKey().toString();
             }
             Log.d(TAG, pair.toString());
