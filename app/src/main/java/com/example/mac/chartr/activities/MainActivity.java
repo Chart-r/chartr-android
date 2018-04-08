@@ -326,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void exit() {
+    protected void exit() {
         Intent intent = new Intent();
         if (username == null) {
             username = "";
