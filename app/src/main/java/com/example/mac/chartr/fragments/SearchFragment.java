@@ -63,8 +63,6 @@ public class SearchFragment extends Fragment {
     public void searchTrips(final View view) {
         view.findViewById(R.id.search_relative_layout).setVisibility(View.GONE);
 
-        final
-
         String startLocation =
                 getStringFromEditText(view, R.id.searchFragmentEditTextStartLocation);
         String endLocation = getStringFromEditText(view, R.id.searchFragmentEditTextEndLocation);
@@ -120,29 +118,22 @@ public class SearchFragment extends Fragment {
                 List<Trip> tripList = response.body();
                 List<Trip> result = new ArrayList<Trip>();
                 for (int i = 0; i < tripList.size(); i++) {
-
                     Trip currTrip = tripList.get(i);
 
                     boolean costOfTripWithinRange = priceRangeFrom < currTrip.getPrice()
                             && currTrip.getPrice() < priceRangeTo;
-
                     boolean hasDriverPreference = !preferredDriverEmail.isEmpty();
+                    boolean isNotDriver = !userEmail.equals(currTrip.getDriverFromUsers());
 
-                    boolean isOtherDriver = !userEmail.equals(currTrip.getDriverFromUsers());
+                    float startDistance = computeDistanceBetween(startLat, startLng,
+                            currTrip.getStartLat(), currTrip.getStartLong());
+                    float endDistance = computeDistanceBetween(endLat, endLng,
+                            currTrip.getEndLat(), currTrip.getEndLong());
 
-                    // distance [0] contains distance between the points in meters
-                    float[] startDistance = new float[1];
-                    float[] endDistance = new float[1];
-                    Location.distanceBetween(startLat, startLng,
-                            currTrip.getStartLat(), currTrip.getStartLong(), startDistance);
-                    Location.distanceBetween(endLat, endLng,
-                            currTrip.getEndLat(), currTrip.getEndLong(), endDistance);
-
-                    if (isOtherDriver && costOfTripWithinRange
-                            && endDistance[0] < 5000f && startDistance[0] < 5000f) {
+                    if (isNotDriver && costOfTripWithinRange
+                            && endDistance < 5000f && startDistance < 5000f) {
                         if (!hasDriverPreference
-                                || (hasDriverPreference
-                                    && currTrip.getDriverFromUsers() == preferredDriverEmail)) {
+                                || currTrip.getDriverFromUsers().contains(preferredDriverEmail)) {
                             result.add(currTrip);
                         }
                     }
@@ -190,6 +181,20 @@ public class SearchFragment extends Fragment {
         float result = editText.getText().toString().isEmpty()
                 ? defaultVal : Float.valueOf(editText.getText().toString());
         return result;
+    }
+
+    /**
+     * Computes the distance between two coordinate points.
+     * @param lat1 first point latitude
+     * @param lng1 first point longitude
+     * @param lat2 second point latitude
+     * @param lng2 second point longitude
+     * @return The straight line distance in meters between two points.
+     */
+    protected float computeDistanceBetween(double lat1, double lng1, double lat2, double lng2) {
+        float[] distance = new float[1];
+        Location.distanceBetween(lat1, lng1, lat2, lng2, distance);
+        return distance[0];
     }
 
     /**
