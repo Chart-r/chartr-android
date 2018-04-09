@@ -190,7 +190,8 @@
         android:id="@+id/searchTripScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:layout_below="@id/search_relative_layout">
 
         <LinearLayout
             android:id="@+id/searchTripsLinearLayout"

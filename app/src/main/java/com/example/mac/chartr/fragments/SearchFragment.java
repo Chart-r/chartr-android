@@ -45,13 +45,13 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        final View view = inflater.inflate(R.layout.fragment_search, container, false);
         view.findViewById(R.id.search_relative_layout).setVisibility(View.GONE);
         Button search = (Button) view.findViewById(R.id.searchFragmentButtonSearch);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchTrips(v);
+                searchTrips(view.findViewById(R.id.search_relative_layout));
             }
         });
 
@@ -59,22 +59,18 @@ public class SearchFragment extends Fragment {
     }
 
     public void searchTrips(final View view) {
+        CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
         view.findViewById(R.id.search_relative_layout).setVisibility(View.GONE);
 
-        EditText inStartLocation = view.findViewById(R.id.searchFragmentEditTextStartLocation);
-        EditText inEndLocation = view.findViewById(R.id.searchFragmentEditTextEndLocation);
-        final EditText inPreferredDriverEmail = view.
-                findViewById(R.id.searchFragmentEditPreferredDriver);
-        EditText inPriceRangeFrom = view.findViewById(R.id.searchFragmentEditPriceRangeFrom);
-        EditText inPriceRangeTo = view.findViewById(R.id.searchFragmentEditPriceRangeTo);
-
-        String startLocation = inStartLocation.getText().toString();
-        String endLocation = inEndLocation.getText().toString();
-        final String preferredDriverEmail = inPreferredDriverEmail.getText().toString();
-        final int priceRangeFrom = inPriceRangeFrom.getText().toString().isEmpty()
-                ? 0 : Integer.valueOf(inPriceRangeFrom.getText().toString());
-        final int priceRangeTo = inPriceRangeTo.getText().toString().isEmpty()
-                ? Integer.MAX_VALUE : Integer.valueOf(inPriceRangeFrom.getText().toString());
+        String startLocation =
+                getStringFromEditText(view, R.id.searchFragmentEditTextStartLocation);
+        String endLocation = getStringFromEditText(view, R.id.searchFragmentEditTextEndLocation);
+        final String preferredDriverEmail =
+                getStringFromEditText(view, R.id.searchFragmentEditPreferredDriver);
+        final int priceRangeFrom =
+                getIntegerFromEditText(view, R.id.searchFragmentEditPriceRangeFrom, 0);
+        final int priceRangeTo = getIntegerFromEditText(
+                view, R.id.searchFragmentEditPriceRangeTo, Integer.MAX_VALUE);
 
         final double startLat;
         final double startLng;
@@ -99,16 +95,14 @@ public class SearchFragment extends Fragment {
             } else {
                 return;
             }
+
         } catch (IOException error) {
             Log.e(TAG, "Error getting location coordinates for: " + startLocation);
             return;
         }
 
-        CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
-        String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
         ApiInterface apiInterface = ApiClient.getApiInstance();
-        Call<List<Trip>> call = apiInterface.getAllUserTrips(userEmail);
-        Log.d(TAG, "Logged in user: " + userEmail);
+        Call<List<Trip>> call = apiInterface.getAllTrips();
         call.enqueue(new Callback<List<Trip>>() {
             @Override
             public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
@@ -167,5 +161,28 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    /**
+     * Gets the string from an EditText
+     * @param view The view to look in
+     * @param id The id of the EditText
+     * @return The String contents of the EditText
+     */
+    protected String getStringFromEditText(View view, int id) {
+        EditText editText = view.findViewById(id);
+        return editText.getText().toString();
+    }
 
+    /**
+     * Gets an integer from an EditText
+     * @param view The view to look in
+     * @param id The id of the EditText
+     * @param defaultVal The default value to use in case of an empty EditText
+     * @return The int contents of the EditText or the default value
+     */
+    protected int getIntegerFromEditText(View view, int id, int defaultVal) {
+        EditText editText = view.findViewById(id);
+        int result = editText.getText().toString().isEmpty()
+                ? defaultVal : Integer.valueOf(editText.getText().toString());
+        return result;
+    }
 }
