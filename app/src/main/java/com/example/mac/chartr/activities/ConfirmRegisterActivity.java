@@ -95,32 +95,28 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
             }
         }
 
-        username = (EditText) findViewById(R.id.editTextConfirmUserId);
-        username.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdLabel);
-                    label.setText(username.getHint());
-                    username.setBackground(getDrawable(R.drawable.text_border_selector));
-                }
-            }
+        initUsername();
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
-                label.setText(" ");
-            }
+        initConfCode();
 
+        confirm = (Button) findViewById(R.id.confirm_button);
+        confirm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdLabel);
-                    label.setText("");
-                }
+            public void onClick(View v) {
+                sendConfCode();
             }
         });
 
+        reqCode = (TextView) findViewById(R.id.resend_confirm_req);
+        reqCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reqConfCode();
+            }
+        });
+    }
+
+    private void initConfCode() {
         confCode = (EditText) findViewById(R.id.editTextConfirmCode);
         confCode.addTextChangedListener(new TextWatcher() {
             @Override
@@ -146,20 +142,32 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-        confirm = (Button) findViewById(R.id.confirm_button);
-        confirm.setOnClickListener(new View.OnClickListener() {
+    private void initUsername() {
+        username = (EditText) findViewById(R.id.editTextConfirmUserId);
+        username.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                sendConfCode();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (s.length() == 0) {
+                    TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdLabel);
+                    label.setText(username.getHint());
+                    username.setBackground(getDrawable(R.drawable.text_border_selector));
+                }
             }
-        });
 
-        reqCode = (TextView) findViewById(R.id.resend_confirm_req);
-        reqCode.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                reqConfCode();
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
+                label.setText(" ");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 0) {
+                    TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdLabel);
+                    label.setText("");
+                }
             }
         });
     }
