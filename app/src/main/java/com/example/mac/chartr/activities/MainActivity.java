@@ -112,14 +112,6 @@ public class MainActivity extends AppCompatActivity {
         getDetails();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            super.onBackPressed();
-
-        }
-    }
-
     private void setupTopToolbar() {
         final Context context = this;
         toolbar = (Toolbar) findViewById(R.id.topToolBar);
@@ -147,30 +139,22 @@ public class MainActivity extends AppCompatActivity {
                     if (topOfBackstack >= 0) {
                         title = getSupportFragmentManager()
                                 .getBackStackEntryAt(topOfBackstack).getName();
+                    }
 
-                        // Show or hide plus or search button
-                        Log.d(TAG, title);
-                        if (title.equals("Trips")) {
-                            getSupportActionBar().setTitle("Trips");
-                            findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
-                        } else if (title.equals("Search")) {
-                            getSupportActionBar().setTitle("");
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
-                            findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                        } else {
-                            if (title.equals("Requests")) {
-                                getSupportActionBar().setTitle("Requests");
-                            } else {
-                                getSupportActionBar().setTitle("Profile");
-                            }
-                            findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
-                        }
+                    // Show or hide search button or title
+                    if (title == "Search") {
+                        getSupportActionBar().setTitle("");
+                        findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
                     } else {
-                        getSupportActionBar().setTitle("Trips");
-                        findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
+                        getSupportActionBar().setTitle(title);
                         findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
+                    }
+
+                    // Show or hide plus button
+                    if (title == "Trips") {
+                        findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
+                    } else {
+                        findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                     }
                 });
     }
@@ -284,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
                 item -> {
                     int itemId = item.getItemId();
                     switch (itemId) {
-                        case R.id.ic_search:
+                        case R.id.ic_nearby:
                             getSupportActionBar().setTitle("");
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                             findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
@@ -299,7 +283,6 @@ public class MainActivity extends AppCompatActivity {
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new TripsFragment())
                                     .addToBackStack("Trips").commit();
-
                             break;
                         case R.id.ic_requests:
                             getSupportActionBar().setTitle("Requests");
@@ -312,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.ic_profile:
                             getSupportActionBar().setTitle("Profile");
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new ProfileFragment())
                                     .addToBackStack("Profile").commit();
@@ -367,9 +351,15 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            super.onBackPressed();
+        }
+    }
+
     public void searchLayout(View view) {
         RelativeLayout r = findViewById(R.id.search_relative_layout);
-
         if (r.getVisibility() == View.VISIBLE) {
             r.setVisibility(View.GONE);
         } else if (r.getVisibility() == View.GONE) {
