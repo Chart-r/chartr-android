@@ -150,16 +150,27 @@ public class MainActivity extends AppCompatActivity {
 
                         // Show or hide plus or search button
                         Log.d(TAG, title);
-                        if (title == "Trips") {
+                        if (title.equals("Trips")) {
+                            getSupportActionBar().setTitle("Trips");
                             findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
-                        } else if (title == "Search") {
+                        } else if (title.equals("Search")) {
+                            getSupportActionBar().setTitle("");
                             findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                         } else {
+                            if (title.equals("Requests")) {
+                                getSupportActionBar().setTitle("Requests");
+                            } else {
+                                getSupportActionBar().setTitle("Profile");
+                            }
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                             findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                         }
+                    } else {
+                        getSupportActionBar().setTitle("Trips");
+                        findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
+                        findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                     }
                 });
     }
