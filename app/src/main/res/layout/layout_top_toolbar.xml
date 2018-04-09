@@ -25,5 +25,20 @@
             android:textColor="@color/grey_100"
             android:textSize="50sp" />
 
+        <Button
+            android:id="@+id/buttonSearchTrips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:width="@dimen/activity_button_search"
+            android:onClick="searchLayout"
+            android:textAllCaps="false"
+            android:textStyle="italic"
+            android:text="@string/Button_search" />
+
+
+
     </RelativeLayout>
+
 </merge>

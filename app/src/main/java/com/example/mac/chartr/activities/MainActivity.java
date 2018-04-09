@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
@@ -23,7 +24,7 @@ import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
-import com.example.mac.chartr.fragments.NearbyFragment;
+import com.example.mac.chartr.fragments.SearchFragment;
 import com.example.mac.chartr.fragments.ProfileFragment;
 import com.example.mac.chartr.fragments.RequestsFragment;
 import com.example.mac.chartr.fragments.trips.TripsFragment;
@@ -96,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        //Setting visibility of buttons when first logged in
+        findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
+        findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
+
         setupTopToolbar();
         setupBottomNavigation();
         setupToolbarListener();
@@ -134,9 +139,16 @@ public class MainActivity extends AppCompatActivity {
                     if (topOfBackstack >= 0) {
                         title = getSupportFragmentManager()
                                 .getBackStackEntryAt(topOfBackstack).getName();
-
                     }
-                    getSupportActionBar().setTitle(title);
+
+                    // Show or hide search button or title
+                    if (title == "Search") {
+                        getSupportActionBar().setTitle("");
+                        findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
+                    } else {
+                        getSupportActionBar().setTitle(title);
+                        findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
+                    }
 
                     // Show or hide plus button
                     if (title == "Trips") {
@@ -256,24 +268,26 @@ public class MainActivity extends AppCompatActivity {
                 item -> {
                     int itemId = item.getItemId();
                     switch (itemId) {
-                        case R.id.ic_nearby:
-                            getSupportActionBar().setTitle("Nearby");
+                        case R.id.ic_search:
+                            getSupportActionBar().setTitle("");
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                            findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
                             getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.content, new NearbyFragment())
-                                    .addToBackStack("Nearby").commit();
+                                    .replace(R.id.content, new SearchFragment())
+                                    .addToBackStack("Search").commit();
                             break;
                         case R.id.ic_trips:
+                            getSupportActionBar().setTitle("Trips");
+                            findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
+                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new TripsFragment())
                                     .addToBackStack("Trips").commit();
-                            getSupportActionBar().setTitle("Trips");
-                            findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-
                             break;
                         case R.id.ic_requests:
                             getSupportActionBar().setTitle("Requests");
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new RequestsFragment())
                                     .addToBackStack("Requests").commit();
@@ -281,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.ic_profile:
                             getSupportActionBar().setTitle("Profile");
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new ProfileFragment())
                                     .addToBackStack("Profile").commit();
@@ -340,7 +355,20 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             super.onBackPressed();
-
         }
+    }
+
+    public void searchLayout(View view) {
+        RelativeLayout r = findViewById(R.id.search_relative_layout);
+        if (r.getVisibility() == View.VISIBLE) {
+            r.setVisibility(View.GONE);
+        } else if (r.getVisibility() == View.GONE) {
+            r.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void search(View view) {
+        SearchFragment helper = new SearchFragment();
+        helper.searchTrips(view);
     }
 }

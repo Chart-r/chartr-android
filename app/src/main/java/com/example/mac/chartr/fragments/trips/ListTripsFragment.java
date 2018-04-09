@@ -67,6 +67,9 @@ public class ListTripsFragment extends Fragment {
                 case "Joined":
                     inflateJoinedTripsInLayout(tripsLinearLayout);
                     break;
+                case "History":
+                    inflatePastTripsInLayout(tripsLinearLayout);
+                    break;
                 default:
                     addSectionTitle(tripsLinearLayout, "Default action.");
                     break;
@@ -79,7 +82,8 @@ public class ListTripsFragment extends Fragment {
     private void inflatePostedTripsInLayout(final LinearLayout tripsLinearLayout) {
         // Gets all trips for logged in user
         CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
-        String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
+        final String userEmail = commonDependencyProvider
+                .getAppHelper().getLoggedInUser().getEmail();
         ApiInterface apiInterface = ApiClient.getApiInstance();
         Call<List<Trip>> call = apiInterface.getUserTripsForStatus(userEmail, "driving");
         Log.d(TAG, "Logged in user: " + userEmail);
@@ -117,9 +121,10 @@ public class ListTripsFragment extends Fragment {
 
     protected void inflateJoinedTripsInLayout(final LinearLayout tripsLinearLayout) {
         CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
-        String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
+        final String userEmail = commonDependencyProvider
+                .getAppHelper().getLoggedInUser().getEmail();
         ApiInterface apiInterface = ApiClient.getApiInstance();
-        Call<List<Trip>> call = apiInterface.getUserTripsForStatus(userEmail, "pending");
+        Call<List<Trip>> call = apiInterface.getAllUserTrips(userEmail);
         call.enqueue(new Callback<List<Trip>>() {
             @Override
             public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
@@ -137,9 +142,52 @@ public class ListTripsFragment extends Fragment {
                 // Get index of first trip that has not ended
                 int activeIndex = getActiveIndex(resource);
 
-                addSectionTitle(tripsLinearLayout, "Pending");
-                Log.d(TAG, "Got " + resource.size() + " pending trips.");
+                if (activeIndex < resource.size()) {
+                    Log.d(TAG, "Got " + resource.size() + " active joined trips.");
+                }
                 for (int i = activeIndex; i < resource.size(); i++) {
+                    String userStatus = resource.get(i).getUserStatus(userEmail);
+                    if (userStatus.equals("pending") || userStatus.equals("riding")) {
+                        addTripViewStatus(tripsLinearLayout, resource.get(i), userEmail);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Trip>> call, Throwable t) {
+                Log.d(TAG, "Retrofit failed to get data");
+                Log.d(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
+    }
+
+    protected void inflatePastTripsInLayout(final LinearLayout tripsLinearLayout) {
+        CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
+        String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        Call<List<Trip>> call = apiInterface.getAllUserTrips(userEmail);
+        call.enqueue(new Callback<List<Trip>>() {
+            @Override
+            public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
+                Log.d(TAG, response.code() + "");
+
+                // Sort trips from most earliest to latest
+                ArrayList<Trip> resource = (ArrayList<Trip>) response.body();
+                Collections.sort(resource, new Comparator<Trip>() {
+                    @Override
+                    public int compare(Trip a, Trip b) {
+                        return (int) (b.getStartTime() - a.getStartTime());
+                    }
+                });
+
+                // Get index of first trip that has not ended
+                int activeIndex = getActiveIndex(resource);
+
+                Log.d(TAG, "Active index is: " + activeIndex);
+
+                for (int i = 0; i < activeIndex; i++) {
                     addTripView(tripsLinearLayout, resource.get(i));
                 }
             }
@@ -152,7 +200,6 @@ public class ListTripsFragment extends Fragment {
                 call.cancel();
             }
         });
-
     }
 
     /**
@@ -162,9 +209,11 @@ public class ListTripsFragment extends Fragment {
      */
     protected int getActiveIndex(List<Trip> trips) {
         int index = 0;
-        GregorianCalendar currentTime = new GregorianCalendar();
+        long currentTime = (new GregorianCalendar()).getTimeInMillis();
         for (; index < trips.size(); index++) {
-            if (trips.get(index).getEndTime() > currentTime.getTimeInMillis()) {
+            Log.d(TAG, "Trip time: " + trips.get(index).getEndTime());
+            Log.d(TAG, "Time now: " + currentTime);
+            if (trips.get(index).getStartTime() > currentTime) {
                 break;
             }
         }
@@ -191,7 +240,7 @@ public class ListTripsFragment extends Fragment {
      * @param parentLayout The layout to which a trip view is to be added
      * @param trip         The trip details to be added
      */
-    protected void addTripView(LinearLayout parentLayout, Trip trip) {
+    public void addTripView(LinearLayout parentLayout, Trip trip) {
         //create a view to inflate the layout_item (the xml with the textView created before)
         View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container,
                 parentLayout, false);
@@ -209,6 +258,33 @@ public class ListTripsFragment extends Fragment {
             Log.d(TAG, "Username " + name
                     + " does not match logged in user: " + getLoggedInUser().getName());
         }
+
+        ((TextView) tripContainer.findViewById(R.id.textViewName)).setText(name);
+        ((TextView) tripContainer.findViewById(R.id.textViewRating)).setText(rating);
+        ((TextView) tripContainer.findViewById(R.id.textViewSeats)).setText(seats);
+        ((TextView) tripContainer.findViewById(R.id.textViewStart)).setText(start);
+        ((TextView) tripContainer.findViewById(R.id.textViewDestination)).setText(destination);
+
+        parentLayout.addView(tripContainer);
+    }
+
+    /**
+     * Adds a user card to the layout with the user's status instead of his/her name.
+     * @param parentLayout The layout that is being added to
+     * @param trip The trip to add.
+     * @param userEmail The user's email.
+     */
+    public void addTripViewStatus(LinearLayout parentLayout, Trip trip, String userEmail) {
+        //create a view to inflate the layout_item (the xml with the textView created before)
+        View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container,
+                parentLayout, false);
+
+        // Set TextViews with appropriate data
+        String name = trip.getUserStatus(userEmail);
+        String rating = "rating";
+        String seats = (trip.getUsers().size() - 1) + "/" + trip.getSeats();
+        String start = getLocationName(trip.getStartLat(), trip.getStartLong());
+        String destination = getLocationName(trip.getEndLat(), trip.getEndLong());
 
         ((TextView) tripContainer.findViewById(R.id.textViewName)).setText(name);
         ((TextView) tripContainer.findViewById(R.id.textViewRating)).setText(rating);

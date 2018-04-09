@@ -26,6 +26,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.content.Intent;
 
 
 public class PostTripActivity extends AppCompatActivity {
@@ -68,25 +69,18 @@ public class PostTripActivity extends AppCompatActivity {
      * @param view The current view
      */
     public void postTrip(View view) {
-        EditText inStartLocation = findViewById(R.id.editTextStartLocation);
-        EditText inEndLocation = findViewById(R.id.editTextEndLocation);
         EditText inDepartureDate = findViewById(R.id.editTextDepartureDate);
         EditText inReturnDate = findViewById(R.id.editTextReturnDate);
         EditText inDepartureTime = findViewById(R.id.editTextDepartureTime);
         EditText inReturnTime = findViewById(R.id.editTextReturnTime);
-        Switch inCanPickUp = findViewById(R.id.switchCanPickUp);
-        inNumSeats = findViewById(R.id.textViewSeatValue);
-        Switch inNoSmoking = findViewById(R.id.switchNoSmoking);
-        Switch inIsQuiet = findViewById(R.id.switchQuite);
-        Switch inWillReturn = findViewById(R.id.switchReturn);
 
-        String startLocation = inStartLocation.getText().toString();
-        String endLocation = inEndLocation.getText().toString();
-        boolean canPickUp = inCanPickUp.isChecked();
-        int numSeats = Integer.valueOf(inNumSeats.getText().toString());
-        boolean noSmoking = inNoSmoking.isChecked();
-        boolean isQuiet = inIsQuiet.isChecked();
-        boolean willReturn = inWillReturn.isChecked();
+        String startLocation = getStringFromEditText(R.id.editTextStartLocation);
+        String endLocation = getStringFromEditText(R.id.editTextEndLocation);
+        boolean canPickUp = getBooleanFromSwitch(R.id.switchCanPickUp);
+        int numSeats = getIntegerFromTextView(R.id.textViewSeatValue, 4);
+        boolean noSmoking = getBooleanFromSwitch(R.id.switchNoSmoking);
+        boolean isQuiet = getBooleanFromSwitch(R.id.switchQuite);
+        boolean willReturn = getBooleanFromSwitch(R.id.switchReturn);
 
         DateFormat dfDate = new SimpleDateFormat("MM/dd/yyyyhh:mm");
         Date startTime;
@@ -157,6 +151,8 @@ public class PostTripActivity extends AppCompatActivity {
             callApi(apiInterface, returnTrip);
         }
 
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     /**
@@ -192,4 +188,40 @@ public class PostTripActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Gets an integer from an EditText
+     *
+     * @param id         The id of the EditText
+     * @return The String content of the EditText
+     */
+    protected String getStringFromEditText(int id) {
+        EditText editText = findViewById(id);
+        return editText.getText().toString();
+    }
+
+    /**
+     * Gets an integer from an EditText
+     *
+     * @param id         The id of the EditText
+     * @param defaultVal The default value to use in case of an empty EditText
+     * @return The int contents of the EditText or the default value
+     */
+    protected int getIntegerFromTextView(int id, int defaultVal) {
+        TextView textView = findViewById(id);
+        int result = textView.getText().toString().isEmpty()
+                ? defaultVal : Integer.valueOf(textView.getText().toString());
+        return result;
+    }
+
+    /**
+     * Gets a boolean from an Switch
+     * @param id         The id of the EditText
+     * @return The boolean contents of the Switch
+     */
+    protected Boolean getBooleanFromSwitch(int id) {
+        Switch s = findViewById(id);
+        return s.isChecked();
+    }
+
 }

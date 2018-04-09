@@ -1,0 +1,206 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mac.chartr.fragments.SearchFragment"
+    android:id="@+id/search_parent_layout">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:weightSum="3"
+        android:id="@+id/search_relative_layout"
+        android:orientation="vertical">
+
+        <Space
+            android:id="@+id/searchFragmentSpace1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_inter_group_separation"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/searchFragmentTextViewLogistics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/searchFragmentSpace1"
+            android:ems="20"
+            android:text="@string/title_logistics"
+            android:textColor="@color/grey_700"
+            android:textSize="@dimen/post_trip_text_size"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/searchFragmentEditTextStartLocation"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:layout_below="@+id/searchFragmentTextViewLogistics"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/text_border_selector"
+            android:hint="Start Location"
+            android:inputType="text"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:textSize="@dimen/post_trip_text_size"
+            android:textStyle="italic" />
+
+        <EditText
+            android:id="@+id/searchFragmentEditTextEndLocation"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:layout_below="@+id/searchFragmentEditTextStartLocation"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/text_border_selector"
+            android:hint="End Location"
+            android:inputType="text"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:textSize="@dimen/post_trip_text_size"
+            android:textStyle="italic" />
+
+        <Space
+            android:id="@+id/searchFragmentSpace2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_inter_group_separation"
+            android:layout_below="@+id/searchFragmentEditTextEndLocation"
+            android:layout_centerHorizontal="true" />
+
+        <LinearLayout
+            android:id="@+id/searchFragmentLinearLayoutDriver"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/searchFragmentSpace2"
+            android:orientation="horizontal"
+            android:weightSum="8">
+
+            <TextView
+                android:id="@+id/searchFragmentTextViewPreferredDriver"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="20"
+                android:layout_weight="3"
+                android:text="@string/searchFragmentPreferredDriver"
+                android:textColor="@color/grey_700"
+                android:textSize="@dimen/post_trip_text_size"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/searchFragmentEditPreferredDriver"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/activity_text_height_post_trip"
+                android:background="@drawable/text_border_selector"
+                android:hint="@string/searchFragmentPreferredDriverEmail"
+                android:layout_weight="5"
+                android:inputType="text"
+                android:paddingLeft="@dimen/activity_text_padding"
+                android:paddingRight="@dimen/activity_text_padding"
+
+                android:textSize="@dimen/post_trip_text_size"
+                android:textStyle="italic" />
+
+        </LinearLayout>
+
+        <Space
+            android:id="@+id/searchFragmentSpace3"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_inter_group_separation"
+            android:layout_below="@+id/searchFragmentLinearLayoutDriver"
+            android:layout_centerHorizontal="true" />
+
+        <LinearLayout
+            android:id="@+id/searchFragmentLinearLayoutPriceRange"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/searchFragmentSpace3"
+            android:orientation="horizontal"
+            android:weightSum="8">
+
+            <TextView
+                android:id="@+id/searchFragmentTextViewPriceRange"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="20"
+                android:layout_weight="3"
+                android:text="@string/searchFragmentPriceRange"
+                android:textColor="@color/grey_700"
+                android:textSize="@dimen/post_trip_text_size"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/searchFragmentEditPriceRangeFrom"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/activity_text_height_post_trip"
+                android:background="@drawable/text_border_selector"
+                android:hint="@string/searchFragmentPriceRangeFrom"
+                android:layout_weight="2"
+                android:inputType="numberDecimal"
+                android:paddingLeft="@dimen/activity_text_padding"
+                android:paddingRight="@dimen/activity_text_padding"
+
+                android:textSize="@dimen/post_trip_text_size"
+                android:textStyle="italic" />
+            <TextView
+                android:id="@+id/searchFragmentTextViewPriceRange-"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="20"
+                android:layout_weight="1"
+                android:text="@string/searchFragmentPriceRangeSeparator"
+                android:textColor="@color/grey_700"
+                android:textSize="@dimen/post_trip_text_size"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/searchFragmentEditPriceRangeTo"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/activity_text_height_post_trip"
+                android:background="@drawable/text_border_selector"
+                android:hint="@string/searchFragmentPriceRangeTo"
+                android:layout_weight="2"
+                android:inputType="numberDecimal"
+                android:paddingLeft="@dimen/activity_text_padding"
+                android:paddingRight="@dimen/activity_text_padding"
+                android:textSize="@dimen/post_trip_text_size"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <Space
+            android:id="@+id/searchFragmentSpace4"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_inter_group_separation"
+            android:layout_below="@+id/searchFragmentLinearLayoutPriceRange"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/searchFragmentButtonSearch"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:layout_below="@id/searchFragmentSpace4"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_selector"
+            android:backgroundTint="@color/grey_700"
+            android:text="@string/searchFragmentButtonSearch"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/activity_button_text_size" />
+
+    </RelativeLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/searchTripScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_below="@id/search_relative_layout">
+
+        <LinearLayout
+            android:id="@+id/searchTripsLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"></LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>
