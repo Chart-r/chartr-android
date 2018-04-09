@@ -1,7 +1,6 @@
 package com.example.mac.chartr.activities;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -396,14 +395,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void showDialogMessage(String title, String body) {
         final AlertDialog.Builder builder = provider.getAlertDialogBuilder(this);
         builder.setTitle(title).setMessage(body).setNeutralButton("OK",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            userDialog.dismiss();
-                        } catch (Exception e) {
-                            //
-                        }
+                (dialog, which) -> {
+                    try {
+                        userDialog.dismiss();
+                    } catch (Exception e) {
+                        //
                     }
                 });
         userDialog = builder.create();

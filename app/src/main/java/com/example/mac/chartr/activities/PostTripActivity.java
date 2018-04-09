@@ -34,6 +34,8 @@ public class PostTripActivity extends AppCompatActivity {
     private TextView inNumSeats;
     private int numSeats;
 
+    private CommonDependencyProvider provider = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,10 @@ public class PostTripActivity extends AppCompatActivity {
         if (numSeats > 1) {
             inNumSeats.setText(String.valueOf(numSeats - 1));
         }
+    }
+
+    public void setProvider(CommonDependencyProvider provider) {
+        this.provider = provider;
     }
 
     /**
@@ -131,9 +137,12 @@ public class PostTripActivity extends AppCompatActivity {
         } catch (IOException error) {
             Log.e(TAG, "Error getting location coordinates for: " + startLocation);
             return;
+        } catch (Exception e) {
+            Log.e(TAG, "Error in Geocode lookup for: " + startLocation);
+            return;
         }
-
-        CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
+        CommonDependencyProvider commonDependencyProvider =
+                provider == null ? new CommonDependencyProvider() : provider;
         String email = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
 
         Trip trip = new Trip(startTime.getTime(), startTime.getTime(), isQuiet, (!noSmoking),

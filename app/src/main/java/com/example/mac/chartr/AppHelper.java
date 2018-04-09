@@ -21,12 +21,10 @@ import android.content.Context;
 import android.util.Log;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession;
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.cognitoidentityprovider.model.AttributeType;
 import com.example.mac.chartr.objects.User;
 
 import java.util.ArrayList;
@@ -66,19 +64,10 @@ public class AppHelper {
     private CognitoUserPool userPool;
     private String user;
     private CognitoDevice newDevice;
-    private CognitoUserAttributes attributesChanged;
-    private List<AttributeType> attributesToDelete;
     private int itemCount;
-    private int trustedDevicesCount;
-    private List<CognitoDevice> deviceDetails;
     private CognitoDevice thisDevice;
     private boolean thisDeviceTrustState;
-    private Map<String, String> firstTimeLogInUserAttributes;
-    private List<String> firstTimeLogInRequiredAttributes;
-    private int firstTimeLogInItemsCount;
     private Map<String, String> firstTimeLogInUpDatedAttributes;
-    private String firstTimeLoginNewPassword;
-    private List<String> mfaAllOptionsCode;
     // User details from the service
     private CognitoUserSession currSession;
     private CognitoUserDetails userDetails;
@@ -121,6 +110,26 @@ public class AppHelper {
         thisDeviceTrustState = false;
     }
 
+    public void setCurrUserAttributes(Set<String> currUserAttributes) {
+        this.currUserAttributes = currUserAttributes;
+    }
+
+    public boolean isPhoneVerified() {
+        return phoneVerified;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public boolean isPhoneAvailable() {
+        return phoneAvailable;
+    }
+
+    public boolean isEmailAvailable() {
+        return emailAvailable;
+    }
+
     public CognitoUserPool getPool() {
         return userPool;
     }
@@ -129,24 +138,8 @@ public class AppHelper {
         return signUpFieldsC2O;
     }
 
-    public Map<String, String> getSignUpFieldsO2C() {
-        return signUpFieldsO2C;
-    }
-
-    public List<String> getAttributeDisplaySeq() {
-        return attributeDisplaySeq;
-    }
-
-    public CognitoUserSession getCurrSession() {
-        return currSession;
-    }
-
     public void setCurrSession(CognitoUserSession session) {
         currSession = session;
-    }
-
-    public CognitoUserDetails getUserDetails() {
-        return userDetails;
     }
 
     public void setUserDetails(CognitoUserDetails details) {
@@ -160,56 +153,6 @@ public class AppHelper {
 
     public void setUser(String newUser) {
         user = newUser;
-    }
-
-    public boolean isPhoneVerified() {
-        return phoneVerified;
-    }
-
-    public void setPhoneVerified(boolean phoneVerif) {
-        phoneVerified = phoneVerif;
-    }
-
-    public boolean isEmailVerified() {
-        return emailVerified;
-    }
-
-    public void setEmailVerified(boolean emailVerif) {
-        emailVerified = emailVerif;
-    }
-
-    public boolean isPhoneAvailable() {
-        return phoneAvailable;
-    }
-
-    public void setPhoneAvailable(boolean phoneAvail) {
-        phoneAvailable = phoneAvail;
-    }
-
-    public boolean isEmailAvailable() {
-        return emailAvailable;
-    }
-
-    public void setEmailAvailable(boolean emailAvail) {
-        emailAvailable = emailAvail;
-    }
-
-    public void clearCurrUserAttributes() {
-        currUserAttributes.clear();
-    }
-
-    public void addCurrUserattribute(String attribute) {
-        currUserAttributes.add(attribute);
-    }
-
-    public List<String> getNewAvailableOptions() {
-        List<String> newOption = new ArrayList<String>();
-        for (String attribute : attributeDisplaySeq) {
-            if (!(currUserAttributes.contains(attribute))) {
-                newOption.add(attribute);
-            }
-        }
-        return newOption;
     }
 
     public String formatException(Exception exception) {
@@ -229,64 +172,12 @@ public class AppHelper {
         return formattedString;
     }
 
-    public int getItemCount() {
-        return itemCount;
-    }
-
-    public int getDevicesCount() {
-        return trustedDevicesCount;
-    }
-
-    public int getFirstTimeLogInItemsCount() {
-        return firstTimeLogInItemsCount;
-    }
-
-    public Map<String, String> getUserAttributesForFirstTimeLogin() {
-        return firstTimeLogInUpDatedAttributes;
-    }
-
-    public String getPasswordForFirstTimeLogin() {
-        return firstTimeLoginNewPassword;
-    }
-
-    public void setPasswordForFirstTimeLogin(String password) {
-        firstTimeLoginNewPassword = password;
-    }
-
     public void newDevice(CognitoDevice device) {
         newDevice = device;
     }
 
-    public CognitoDevice getDeviceDetail(int position) {
-        if (position <= trustedDevicesCount) {
-            return deviceDetails.get(position);
-        } else {
-            return null;
-        }
-    }
-
-    public List<String> getAllMfaOptions() {
-        return mfaAllOptionsCode;
-    }
-
-    public String getMfaOptionCode(int position) {
-        return mfaAllOptionsCode.get(position);
-    }
-
     public CognitoDevice getNewDevice() {
         return newDevice;
-    }
-
-    public CognitoDevice getThisDevice() {
-        return thisDevice;
-    }
-
-    public void setThisDevice(CognitoDevice device) {
-        thisDevice = device;
-    }
-
-    public boolean getThisDeviceTrustState() {
-        return thisDeviceTrustState;
     }
 
     private void setData() {
