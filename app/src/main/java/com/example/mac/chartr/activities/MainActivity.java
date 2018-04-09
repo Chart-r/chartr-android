@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
                 item -> {
                     int itemId = item.getItemId();
                     switch (itemId) {
-                        case R.id.ic_nearby:
+                        case R.id.ic_search:
                             getSupportActionBar().setTitle("");
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                             findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
