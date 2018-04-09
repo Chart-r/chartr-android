@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class Trip {
@@ -197,9 +196,8 @@ public class Trip {
             return "";
         }
 
-        Iterator it = users.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
+        for (Object o : users.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
             if (pair.getValue().equals("driving")) {
                 return pair.getKey().toString();
             }
@@ -215,9 +213,8 @@ public class Trip {
             return "";
         }
 
-        Iterator it = users.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
+        for (Object o : users.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
             if (pair.getKey().equals(userEmail)) {
                 return pair.getValue().toString();
             }
@@ -225,5 +222,76 @@ public class Trip {
 
         // No driver in list
         return "";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Trip trip = (Trip) o;
+
+        if (Double.compare(trip.startLat, startLat) != 0) {
+            return false;
+        }
+        if (Double.compare(trip.startLong, startLong) != 0) {
+            return false;
+        }
+        if (Double.compare(trip.endLat, endLat) != 0) {
+            return false;
+        }
+        if (Double.compare(trip.endLong, endLong) != 0) {
+            return false;
+        }
+        if (startTime != trip.startTime) {
+            return false;
+        }
+        if (endTime != trip.endTime) {
+            return false;
+        }
+        if (Double.compare(trip.price, price) != 0) {
+            return false;
+        }
+        if (seats != trip.seats) {
+            return false;
+        }
+        if (quiet != trip.quiet) {
+            return false;
+        }
+        if (!tid.equals(trip.tid)) {
+            return false;
+        }
+        if (!smoking.equals(trip.smoking)) {
+            return false;
+        }
+        return users.equals(trip.users);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = tid.hashCode();
+        temp = Double.doubleToLongBits(startLat);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(startLong);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(endLat);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(endLong);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (int) (startTime ^ (startTime >>> 32));
+        result = 31 * result + (int) (endTime ^ (endTime >>> 32));
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + seats;
+        result = 31 * result + smoking.hashCode();
+        result = 31 * result + users.hashCode();
+        result = 31 * result + (quiet ? 1 : 0);
+        return result;
     }
 }
