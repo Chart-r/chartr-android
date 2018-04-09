@@ -77,7 +77,7 @@ public class PostTripActivity extends AppCompatActivity {
         String startLocation = getStringFromEditText(R.id.editTextStartLocation);
         String endLocation = getStringFromEditText(R.id.editTextEndLocation);
         boolean canPickUp = getBooleanFromSwitch(R.id.switchCanPickUp);
-        int numSeats = getIntegerFromEditText(R.id.textViewSeatValue, 4);
+        int numSeats = getIntegerFromTextView(R.id.textViewSeatValue, 4);
         boolean noSmoking = getBooleanFromSwitch(R.id.switchNoSmoking);
         boolean isQuiet = getBooleanFromSwitch(R.id.switchQuite);
         boolean willReturn = getBooleanFromSwitch(R.id.switchReturn);
@@ -194,7 +194,7 @@ public class PostTripActivity extends AppCompatActivity {
      *
      * @param id         The id of the EditText
      * @return The String content of the EditText
-*/
+     */
     protected String getStringFromEditText(int id) {
         EditText editText = findViewById(id);
         return editText.getText().toString();
@@ -207,10 +207,10 @@ public class PostTripActivity extends AppCompatActivity {
      * @param defaultVal The default value to use in case of an empty EditText
      * @return The int contents of the EditText or the default value
      */
-    protected int getIntegerFromEditText(int id, int defaultVal) {
-        EditText editText = findViewById(id);
-        int result = editText.getText().toString().isEmpty()
-                ? defaultVal : Integer.valueOf(editText.getText().toString());
+    protected int getIntegerFromTextView(int id, int defaultVal) {
+        TextView textView = findViewById(id);
+        int result = textView.getText().toString().isEmpty()
+                ? defaultVal : Integer.valueOf(textView.getText().toString());
         return result;
     }
 
@@ -225,4 +225,3 @@ public class PostTripActivity extends AppCompatActivity {
     }
 
 }
-
