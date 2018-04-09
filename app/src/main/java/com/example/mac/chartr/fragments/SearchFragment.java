@@ -139,7 +139,7 @@ public class SearchFragment extends Fragment {
                     if (startLocWithinRange && endLocWithinRange && costOfTripWithinRange) {
                         if (!hasDriverPreference
                                 || (hasDriverPreference
-                                    && currTrip.getDriverEmail() == preferredDriverEmail)) {
+                                    && currTrip.getDriverFromUsers() == preferredDriverEmail)) {
                             result.add(currTrip);
                         }
                     }

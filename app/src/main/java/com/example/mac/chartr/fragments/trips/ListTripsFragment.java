@@ -137,9 +137,14 @@ public class ListTripsFragment extends Fragment {
                 // Get index of first trip that has not ended
                 int activeIndex = getActiveIndex(resource);
 
-                addSectionTitle(tripsLinearLayout, "Pending");
-                Log.d(TAG, "Got " + resource.size() + " pending trips.");
+                Log.d(TAG, "Active index is: " + activeIndex);
+
+                if (activeIndex < resource.size()) {
+                    addSectionTitle(tripsLinearLayout, "Pending");
+                    Log.d(TAG, "Got " + resource.size() + " active pending trips.");
+                }
                 for (int i = activeIndex; i < resource.size(); i++) {
+                    Log.d(TAG, "Inside pending trip loop");
                     addTripView(tripsLinearLayout, resource.get(i));
                 }
             }
@@ -162,9 +167,11 @@ public class ListTripsFragment extends Fragment {
      */
     protected int getActiveIndex(List<Trip> trips) {
         int index = 0;
-        GregorianCalendar currentTime = new GregorianCalendar();
+        long currentTime = (new GregorianCalendar()).getTimeInMillis();
         for (; index < trips.size(); index++) {
-            if (trips.get(index).getEndTime() > currentTime.getTimeInMillis()) {
+            Log.d(TAG, "Trip time: " + trips.get(index).getEndTime());
+            Log.d(TAG, "Time now: " + currentTime);
+            if (trips.get(index).getStartTime() > currentTime) {
                 break;
             }
         }

@@ -27,6 +27,7 @@
         android:id="@+id/textViewName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLines="1"
         android:layout_marginStart="@dimen/activity_separator_small"
         android:layout_marginTop="@dimen/activity_separator_small"
         android:layout_toEndOf="@+id/imageViewProfileIcon"
