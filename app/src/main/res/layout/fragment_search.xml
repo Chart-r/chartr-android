@@ -17,7 +17,6 @@
             android:id="@+id/searchFragmentSpace1"
             android:layout_width="match_parent"
             android:layout_height="@dimen/activity_inter_group_separation"
-            android:layout_below="@+id/editTextEndLocation"
             android:layout_centerHorizontal="true" />
 
         <TextView
@@ -79,7 +78,6 @@
                 android:id="@+id/searchFragmentTextViewPreferredDriver"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/searchFragmentSpace2"
                 android:ems="20"
                 android:layout_weight="3"
                 android:text="@string/searchFragmentPreferredDriver"

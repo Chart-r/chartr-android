@@ -1,7 +1,5 @@
 package com.example.mac.chartr.objects;
 
-import android.util.Log;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -205,7 +203,24 @@ public class Trip {
             if (pair.getValue().equals("driving")) {
                 return pair.getKey().toString();
             }
-            Log.d(TAG, pair.toString());
+        }
+
+        // No driver in list
+        return "";
+    }
+
+    public String getUserStatus(String userEmail) {
+        // No user map
+        if (users == null) {
+            return "";
+        }
+
+        Iterator it = users.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (pair.getKey().equals(userEmail)) {
+                return pair.getValue().toString();
+            }
         }
 
         // No driver in list

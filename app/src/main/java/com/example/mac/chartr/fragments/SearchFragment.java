@@ -45,8 +45,8 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-      View view = inflater.inflate(R.layout.fragment_search, container, false);
-      view.findViewById(R.id.search_relative_layout).setVisibility(View.GONE);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        view.findViewById(R.id.search_relative_layout).setVisibility(View.GONE);
         Button search = (Button) view.findViewById(R.id.searchFragmentButtonSearch);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,8 +59,6 @@ public class SearchFragment extends Fragment {
     }
 
     public void searchTrips(final View view) {
-
-
         view.findViewById(R.id.search_relative_layout).setVisibility(View.GONE);
 
         EditText inStartLocation = view.findViewById(R.id.searchFragmentEditTextStartLocation);
