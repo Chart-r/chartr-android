@@ -9,10 +9,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    private static String ROOT_URL = "https://99sepehum8.execute-api.us-east-2.amazonaws.com";
+    private static final String ROOT_URL =
+            "https://6zvb3ngfyk.execute-api.us-east-2.amazonaws.com/prod/";
 
     private static Retrofit getClientInstance() {
-        return new Retrofit.Builder().baseUrl(ROOT_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        return new Retrofit.Builder().baseUrl(ROOT_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
     }
 
     public static ApiInterface getApiInstance() {

@@ -40,9 +40,10 @@ public class ProfileFragment extends Fragment {
         return root;
     }
 
-    public void logout(View view){
+    public void logout(View view) {
         Intent intent = new Intent(this.getActivity().getApplicationContext(), LoginActivity.class);
         ((MainActivity) getActivity()).signOut();
-        startActivity(intent); }
+        startActivity(intent);
+    }
 
 }

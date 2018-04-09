@@ -1,13 +1,13 @@
 package com.example.mac.chartr;
 
-import android.support.v7.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 
 /**
  * Class used to retrieve dependencies in app activities and fragments.
- *
+ * <p>
  * Used as a form of dependency injection such that classes can be more easily mocked.
  */
 public class CommonDependencyProvider {

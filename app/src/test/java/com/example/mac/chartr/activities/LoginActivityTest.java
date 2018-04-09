@@ -15,19 +15,18 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static android.app.Activity.RESULT_OK;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.times;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import static android.app.Activity.RESULT_OK;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 /**
  * Created by cygnus on 3/7/18.
- *
  */
 
 @RunWith(RobolectricTestRunner.class)
@@ -51,7 +50,8 @@ public class LoginActivityTest {
         when(builder.create()).thenReturn(dialog);
         when(builder.setTitle(any(String.class))).thenReturn(builder);
         when(builder.setMessage(any(String.class))).thenReturn(builder);
-        when(builder.setNeutralButton(any(String.class), any(DialogInterface.OnClickListener.class))).thenReturn(builder);
+        when(builder.setNeutralButton(any(String.class),
+                any(DialogInterface.OnClickListener.class))).thenReturn(builder);
 
 
         activity.showDialogMessage("This is a test", "Body body body");

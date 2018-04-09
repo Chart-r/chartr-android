@@ -1,19 +1,19 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true">
 
         <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+            android:id="@+id/bottomNavigationBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/bottomNavigationBar"
             android:background="@color/colorPrimaryDark"
             app:itemIconTint="@color/navbar_icon_color"
             app:itemTextColor="@color/navbar_icon_color"
-            app:menu="@menu/bottom_navigation_menu">
-        </com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx>
+            app:menu="@menu/bottom_navigation_menu"></com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx>
 
     </RelativeLayout>
 </merge>

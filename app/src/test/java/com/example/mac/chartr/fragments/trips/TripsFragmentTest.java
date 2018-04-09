@@ -22,11 +22,10 @@ import static junit.framework.Assert.assertNotNull;
 public class TripsFragmentTest {
 
     @Test
-    public void shouldNotBeNull() throws Exception
-    {
+    public void shouldNotBeNull() throws Exception {
         TripsFragment fragment = new TripsFragment();
         SupportFragmentTestUtil.startFragment(fragment, PostTripActivity.class);
-        assertNotNull( fragment );
+        assertNotNull(fragment);
     }
 
     @Test
