@@ -3,6 +3,7 @@ package com.example.mac.chartr.fragments;
 
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,17 +13,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
-import com.example.mac.chartr.fragments.trips.ListTripsFragment;
 import com.example.mac.chartr.objects.Trip;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,7 +53,7 @@ public class SearchFragment extends Fragment {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchTrips(view.findViewById(R.id.search_relative_layout));
+                searchTrips(view.findViewById(R.id.search_parent_layout));
             }
         });
 
@@ -59,18 +61,19 @@ public class SearchFragment extends Fragment {
     }
 
     public void searchTrips(final View view) {
-        CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
         view.findViewById(R.id.search_relative_layout).setVisibility(View.GONE);
+
+        final
 
         String startLocation =
                 getStringFromEditText(view, R.id.searchFragmentEditTextStartLocation);
         String endLocation = getStringFromEditText(view, R.id.searchFragmentEditTextEndLocation);
         final String preferredDriverEmail =
                 getStringFromEditText(view, R.id.searchFragmentEditPreferredDriver);
-        final int priceRangeFrom =
-                getIntegerFromEditText(view, R.id.searchFragmentEditPriceRangeFrom, 0);
-        final int priceRangeTo = getIntegerFromEditText(
-                view, R.id.searchFragmentEditPriceRangeTo, Integer.MAX_VALUE);
+        final float priceRangeFrom =
+                getFloatFromEditText(view, R.id.searchFragmentEditPriceRangeFrom, 0f);
+        final float priceRangeTo = getFloatFromEditText(
+                view, R.id.searchFragmentEditPriceRangeTo, Float.MAX_VALUE);
 
         final double startLat;
         final double startLng;
@@ -102,33 +105,41 @@ public class SearchFragment extends Fragment {
         }
 
         ApiInterface apiInterface = ApiClient.getApiInstance();
-        Call<List<Trip>> call = apiInterface.getAllTrips();
+        Call<List<Trip>> call = apiInterface.getAllCurrentTrips();
         call.enqueue(new Callback<List<Trip>>() {
             @Override
             public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
                 Log.d(TAG, response.code() + "");
+
+                CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
+                String userEmail =
+                        commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
+
+                LinearLayout tripsLayout = view.findViewById(R.id.searchTripsLinearLayout);
 
                 List<Trip> tripList = response.body();
                 List<Trip> result = new ArrayList<Trip>();
                 for (int i = 0; i < tripList.size(); i++) {
 
                     Trip currTrip = tripList.get(i);
-                    boolean startLocWithinRange = startLat - 1 < currTrip.getStartLat()
-                            && currTrip.getStartLat() < startLat + 1
-                            && startLng - 1 < currTrip.getStartLat()
-                            && currTrip.getStartLat() < startLng + 1;
-
-                    boolean endLocWithinRange = endLat - 1 < currTrip.getStartLat()
-                            && currTrip.getStartLat() < endLat + 1
-                            && endLng - 1 < currTrip.getStartLat()
-                            && currTrip.getStartLat() < endLng + 1;
 
                     boolean costOfTripWithinRange = priceRangeFrom < currTrip.getPrice()
                             && currTrip.getPrice() < priceRangeTo;
 
                     boolean hasDriverPreference = !preferredDriverEmail.isEmpty();
 
-                    if (startLocWithinRange && endLocWithinRange && costOfTripWithinRange) {
+                    boolean isOtherDriver = !userEmail.equals(currTrip.getDriverFromUsers());
+
+                    // distance [0] contains distance between the points in meters
+                    float[] startDistance = new float[1];
+                    float[] endDistance = new float[1];
+                    Location.distanceBetween(startLat, startLng,
+                            currTrip.getStartLat(), currTrip.getStartLong(), startDistance);
+                    Location.distanceBetween(endLat, endLng,
+                            currTrip.getEndLat(), currTrip.getEndLong(), endDistance);
+
+                    if (isOtherDriver && costOfTripWithinRange
+                            && endDistance[0] < 5000f && startDistance[0] < 5000f) {
                         if (!hasDriverPreference
                                 || (hasDriverPreference
                                     && currTrip.getDriverFromUsers() == preferredDriverEmail)) {
@@ -136,7 +147,6 @@ public class SearchFragment extends Fragment {
                         }
                     }
                 }
-                LinearLayout tripsLayout = view.findViewById(R.id.searchTripsLinearLayout);
 
                 displayTrips(result, tripsLayout);
             }
@@ -149,15 +159,11 @@ public class SearchFragment extends Fragment {
                     call.cancel();
                 }
         });
-
     }
 
     public void displayTrips(List<Trip> trips, LinearLayout layout) {
-
-        ListTripsFragment helper = new ListTripsFragment();
-
         for (Trip trip: trips) {
-            helper.addTripView(layout, trip);
+            addTripView(layout, trip);
         }
     }
 
@@ -179,10 +185,81 @@ public class SearchFragment extends Fragment {
      * @param defaultVal The default value to use in case of an empty EditText
      * @return The int contents of the EditText or the default value
      */
-    protected int getIntegerFromEditText(View view, int id, int defaultVal) {
+    protected float getFloatFromEditText(View view, int id, float defaultVal) {
         EditText editText = view.findViewById(id);
-        int result = editText.getText().toString().isEmpty()
-                ? defaultVal : Integer.valueOf(editText.getText().toString());
+        float result = editText.getText().toString().isEmpty()
+                ? defaultVal : Float.valueOf(editText.getText().toString());
         return result;
+    }
+
+    /**
+     * Adds an individual trip view to the linear layout passed in.
+     *
+     * @param parentLayout The layout to which a trip view is to be added
+     * @param trip         The trip details to be added
+     */
+    public void addTripView(LinearLayout parentLayout, Trip trip) {
+        //create a view to inflate the layout_item (the xml with the textView created before)
+        View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container,
+                parentLayout, false);
+
+        // Set TextViews with appropriate data
+        String name = trip.getDriverFromUsers();
+        String rating = "rating";
+        String seats = (trip.getUsers().size() - 1) + "/" + trip.getSeats();
+        String start = getLocationName(trip.getStartLat(), trip.getStartLong());
+        String destination = getLocationName(trip.getEndLat(), trip.getEndLong());
+
+        ((TextView) tripContainer.findViewById(R.id.textViewName)).setText(name);
+        ((TextView) tripContainer.findViewById(R.id.textViewRating)).setText(rating);
+        ((TextView) tripContainer.findViewById(R.id.textViewSeats)).setText(seats);
+        ((TextView) tripContainer.findViewById(R.id.textViewStart)).setText(start);
+        ((TextView) tripContainer.findViewById(R.id.textViewDestination)).setText(destination);
+
+        parentLayout.addView(tripContainer);
+    }
+
+    protected String getLocationName(double latitude, double longitude) {
+        /* testAddTripView was failing on account of this code, specifically:
+         * Method getFromLocation in android.location.Geocoder not mocked.
+         * Geocoder functionality needs to be extracted to a separate function which
+         * receives a geocoder argument that can be mocked and passed in for testing.
+        */
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+        List<Address> addresses = null;
+
+        try {
+            addresses = geocoder.getFromLocation(
+                    latitude,
+                    longitude,
+                    1);
+        } catch (IOException ioException) {
+            // Catch network or other I/O problems.
+            Log.e(TAG, ioException.toString());
+        } catch (IllegalArgumentException illegalArgumentException) {
+            // Catch invalid latitude or longitude values.
+            Log.e(TAG, "Lat/Long Error: "
+                    + "Latitude = " + latitude
+                    + ", Longitude = "
+                    + longitude, illegalArgumentException);
+        }
+
+        // Handle case where no address was found.
+        if (addresses == null || addresses.size() == 0) {
+            Log.e(TAG, "No address found");
+        } else {
+            Address address = addresses.get(0);
+            StringBuilder stringBuilder = new StringBuilder(address.getAddressLine(0));
+
+            // Fetch the address lines using getAddressLine
+            for (int i = 1; i <= address.getMaxAddressLineIndex(); i++) {
+                stringBuilder.append(", ").append(address.getAddressLine(i));
+            }
+            Log.i(TAG, "Address found");
+            return stringBuilder.toString();
+        }
+
+        // In the case of failure, return location coordinate string
+        return latitude + ", " + longitude;
     }
 }
