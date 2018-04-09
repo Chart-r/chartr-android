@@ -11,29 +11,17 @@ import java.util.Map;
 public class Trip {
     private static final String TAG = Trip.class.getSimpleName();
 
-    @SerializedName("email")
+    @SerializedName("tid")
     @Expose
-    private String driverEmail;
-
-    @SerializedName("id")
-    @Expose
-    private String id;
-
-    @SerializedName("start_time")
-    @Expose
-    private long startTime;
-
-    @SerializedName("end_time")
-    @Expose
-    private long endTime;
-
-    @SerializedName("smoking")
-    @Expose
-    private Boolean smoking;
+    private String tid;
 
     @SerializedName("start_lat")
     @Expose
     private double startLat;
+
+    @SerializedName("start_lng")
+    @Expose
+    private double startLong;
 
     @SerializedName("end_lat")
     @Expose
@@ -43,22 +31,29 @@ public class Trip {
     @Expose
     private double endLong;
 
-    @SerializedName("start_lng")
+    @SerializedName("start_time")
     @Expose
-    private double startLong;
+    private long startTime;
 
-    @SerializedName("seats")
+    @SerializedName("end_time")
     @Expose
-    private int seats;
+    private long endTime;
 
     @SerializedName("price")
     @Expose
     private double price;
 
+    @SerializedName("seats")
+    @Expose
+    private int seats;
+
+    @SerializedName("smoking")
+    @Expose
+    private Boolean smoking;
+
     @SerializedName("users")
     @Expose
     private Map<String, String> users;
-
 
     private boolean quiet;
 
@@ -68,31 +63,23 @@ public class Trip {
 
     public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, float endLat,
                 float endLong, float startLat, float startLong, int seats, float price,
-                String id, Map<String, String> users) {
-
-        this.setProperties(startTime, endTime, quiet, smoking, endLat, endLong, startLat, startLong,
-                seats, price);
-
-        this.id = id;
+                String tid, Map<String, String> users) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.quiet = quiet;
+        this.smoking = smoking;
+        this.endLat = endLat;
+        this.endLong = endLong;
+        this.startLat = startLat;
+        this.startLong = startLong;
+        this.seats = seats;
+        this.price = price;
+        this.tid = tid;
         this.users = users;
-        this.driverEmail = null;
     }
 
     public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, double endLat,
-                double endLong, double startLat, double startLong, int seats, double price,
-                String email) {
-
-        this.setProperties(startTime, endTime, quiet, smoking, endLat, endLong, startLat, startLong,
-                seats, price);
-
-        this.driverEmail = email;
-        this.id = null;
-        this.users = null;
-    }
-
-    private void setProperties(long startTime, long endTime, Boolean quiet, Boolean smoking,
-                              double endLat, double endLong, double startLat, double startLong,
-                              int seats, double price) {
+                double endLong, double startLat, double startLong, int seats, double price) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.quiet = quiet;
@@ -186,11 +173,11 @@ public class Trip {
     }
 
     public String getId() {
-        return id;
+        return tid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String tid) {
+        this.tid = tid;
     }
 
     public Map<String, String> getUsers() {
@@ -205,14 +192,6 @@ public class Trip {
         users.put(email, role);
     }
 
-    public String getDriverEmail() {
-        return driverEmail;
-    }
-
-    public void setDriverEmail(String driverEmail) {
-        this.driverEmail = driverEmail;
-    }
-
     public String getDriverFromUsers() {
         // No user map
         if (users == null) {
@@ -221,7 +200,7 @@ public class Trip {
 
         for (Object o : users.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
-            if (pair.getValue().equals("Driver")) {
+            if (pair.getValue().equals("driving")) {
                 return pair.getKey().toString();
             }
             Log.d(TAG, pair.toString());
@@ -242,13 +221,10 @@ public class Trip {
 
         Trip trip = (Trip) o;
 
-        if (startTime != trip.startTime) {
-            return false;
-        }
-        if (endTime != trip.endTime) {
-            return false;
-        }
         if (Double.compare(trip.startLat, startLat) != 0) {
+            return false;
+        }
+        if (Double.compare(trip.startLong, startLong) != 0) {
             return false;
         }
         if (Double.compare(trip.endLat, endLat) != 0) {
@@ -257,52 +233,50 @@ public class Trip {
         if (Double.compare(trip.endLong, endLong) != 0) {
             return false;
         }
-        if (Double.compare(trip.startLong, startLong) != 0) {
+        if (startTime != trip.startTime) {
             return false;
         }
-        if (seats != trip.seats) {
+        if (endTime != trip.endTime) {
             return false;
         }
         if (Double.compare(trip.price, price) != 0) {
             return false;
         }
+        if (seats != trip.seats) {
+            return false;
+        }
         if (quiet != trip.quiet) {
             return false;
         }
-        if (driverEmail != null
-                ? !driverEmail.equals(trip.driverEmail) : trip.driverEmail != null) {
+        if (!tid.equals(trip.tid)) {
             return false;
         }
-        if (id != null ? !id.equals(trip.id) : trip.id != null) {
+        if (!smoking.equals(trip.smoking)) {
             return false;
         }
-        if (smoking != null ? !smoking.equals(trip.smoking) : trip.smoking != null) {
-            return false;
-        }
-        return users != null ? users.equals(trip.users) : trip.users == null;
+        return users.equals(trip.users);
     }
 
     @Override
     public int hashCode() {
         int result;
         long temp;
-        result = driverEmail != null ? driverEmail.hashCode() : 0;
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (int) (startTime ^ (startTime >>> 32));
-        result = 31 * result + (int) (endTime ^ (endTime >>> 32));
-        result = 31 * result + (smoking != null ? smoking.hashCode() : 0);
+        result = tid.hashCode();
         temp = Double.doubleToLongBits(startLat);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(startLong);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(endLat);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(endLong);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(startLong);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + seats;
+        result = 31 * result + (int) (startTime ^ (startTime >>> 32));
+        result = 31 * result + (int) (endTime ^ (endTime >>> 32));
         temp = Double.doubleToLongBits(price);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (users != null ? users.hashCode() : 0);
+        result = 31 * result + seats;
+        result = 31 * result + smoking.hashCode();
+        result = 31 * result + users.hashCode();
         result = 31 * result + (quiet ? 1 : 0);
         return result;
     }

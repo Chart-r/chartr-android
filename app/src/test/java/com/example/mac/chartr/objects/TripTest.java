@@ -5,6 +5,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import java.util.HashMap;
+
 /**
  * Created by cygnus on 4/1/18.
  */
@@ -18,9 +20,15 @@ public class TripTest {
                 223, 224, 102, 103,
                 4, 12.34f, null, null);
 
+        trip1.setId("abc");
+        trip1.setUsers(new HashMap<>());
+
         Trip trip2 = new Trip(120, 123, true, false,
                 223, 224, 102, 103,
-                4, 12.34f, null);
+                4, 12.34f);
+
+        trip2.setId("abc");
+        trip2.setUsers(new HashMap<>());
 
         Assert.assertTrue(trip1.equals(trip2));
     }
@@ -31,7 +39,6 @@ public class TripTest {
                 223, 224, 102, 103,
                 4, 12.34f, null, null);
 
-        Assert.assertEquals(trip.getDriverEmail(), null);
         Assert.assertEquals(trip.getStartTime(), 120);
         Assert.assertEquals(trip.getEndTime(), 123);
         Assert.assertTrue(trip.getQuiet());
@@ -58,9 +65,8 @@ public class TripTest {
         trip.setPrice(1f);
         trip.setId("100");
         trip.setUsers(null);
-        trip.setDriverEmail("nothing");
 
-        Assert.assertEquals(trip.getDriverEmail(), "nothing");
+
         Assert.assertEquals(trip.getStartTime(), 1);
         Assert.assertEquals(trip.getEndTime(), 1);
         Assert.assertFalse(trip.getQuiet());
@@ -79,7 +85,7 @@ public class TripTest {
     public void testHash() {
         Trip trip = new Trip(120, 123, true, false,
                 223, 224, 102, 103,
-                4, 12.34f, null, null);
+                4, 12.34f, "abc", new HashMap<>());
 
         int hash = trip.hashCode();
 
