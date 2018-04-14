@@ -68,6 +68,10 @@ public class PostTripActivity extends AppCompatActivity {
 
     }
 
+    //https://stackoverflow.com/questions/14933330/
+    // datepicker-how-to-popup-datepicker-when-click-on-edittext
+    //
+    //https://stackoverflow.com/questions/17901946/timepicker-dialog-from-clicking-edittext
     private void initPickers() {
     /*
     SETUP DEPARTURE DATE PICKER
