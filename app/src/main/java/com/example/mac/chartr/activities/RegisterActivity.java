@@ -20,6 +20,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHan
 import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
+import com.example.mac.chartr.MaskWatcher;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.User;
 
@@ -211,8 +212,12 @@ public class RegisterActivity extends AppCompatActivity {
     private void initPhone() {
         phone = (EditText) findViewById(R.id.editTextRegPhone);
         phone.addTextChangedListener(new TextWatcher() {
+            private MaskWatcher maskWatcher = new MaskWatcher("+##########");
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                maskWatcher.beforeTextChanged(s, start, count, after);
+
                 if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewRegPhoneLabel);
                     label.setText("Phone number with country code\n(example: +18883334444)");
@@ -222,12 +227,16 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                maskWatcher.onTextChanged(s, start, before, count);
+
                 TextView label = (TextView) findViewById(R.id.textViewRegPhoneMessage);
                 label.setText("");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                maskWatcher.afterTextChanged(s);
+
                 if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewRegPhoneLabel);
                     label.setText("");
@@ -239,20 +248,25 @@ public class RegisterActivity extends AppCompatActivity {
     private void initBirthday() {
         birthday = (EditText) findViewById(R.id.editTextRegBirthday);
         birthday.addTextChangedListener(new TextWatcher() {
+            private MaskWatcher maskWatcher = new MaskWatcher("##/##/####");
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegEmailLabel);
-                    label.setText(email.getHint());
+                    TextView label = (TextView) findViewById(R.id.textViewRegBirthdayLabel);
+                    label.setText(birthday.getHint());
                     birthday.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
+
+                maskWatcher.beforeTextChanged(s, start, count, after);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 TextView label = (TextView) findViewById(R.id.textViewRegBirthdayMessage);
-                label.setText(birthday.getHint());
+                label.setText("");
 
+                maskWatcher.onTextChanged(s, start, before, count);
             }
 
             @Override
@@ -261,6 +275,8 @@ public class RegisterActivity extends AppCompatActivity {
                     TextView label = (TextView) findViewById(R.id.textViewRegBirthdayLabel);
                     label.setText("");
                 }
+
+                maskWatcher.afterTextChanged(s);
             }
         });
     }

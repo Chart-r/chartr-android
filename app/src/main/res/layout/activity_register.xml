@@ -139,6 +139,7 @@
         android:background="@drawable/text_border_selector"
         android:hint="Birthday (MM/dd/YYYY)"
         android:inputType="date"
+        android:maxLength="10"
         android:paddingLeft="@dimen/activity_text_padding"
         android:paddingRight="@dimen/activity_text_padding" />
 
@@ -170,8 +171,9 @@
         android:layout_below="@id/textViewRegPhoneLabel"
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
-        android:hint="Phone number"
+        android:hint="Phone number (with country code)"
         android:inputType="phone"
+        android:maxLength="12"
         android:paddingLeft="@dimen/activity_text_padding"
         android:paddingRight="@dimen/activity_text_padding" />
 
