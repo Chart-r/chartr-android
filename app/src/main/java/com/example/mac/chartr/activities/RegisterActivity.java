@@ -25,7 +25,11 @@ import com.example.mac.chartr.MaskWatcher;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.User;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -249,11 +253,21 @@ public class RegisterActivity extends AppCompatActivity {
              Check birthday and add to AppHelper Attribute
              */
             userInput = birthday.getText().toString();
+            DateFormat originalFormat = new SimpleDateFormat("MM/dd/yyyy");
+            DateFormat transformedFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Date birthdayDate = originalFormat.parse(userInput);
+                userInput = transformedFormat.format(birthdayDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             if (userInput.length() > 0) {
                 userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
                         .get("Birthday"), userInput);
             }
             user.setBirthdate(userInput);
+            System.out.println(userInput);
 
             /*
              Check phone and add to AppHelper Attribute
