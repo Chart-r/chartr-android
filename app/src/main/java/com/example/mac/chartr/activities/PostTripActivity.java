@@ -206,6 +206,9 @@ public class PostTripActivity extends AppCompatActivity {
         EditText inDepartureTime = findViewById(R.id.editTextDepartureTime);
         EditText inReturnTime = findViewById(R.id.editTextReturnTime);
 
+        EditText inStartLocation = findViewById(R.id.editTextStartLocation);
+        EditText inEndLocation = findViewById(R.id.editTextEndLocation);
+
         String startLocation = getStringFromEditText(R.id.editTextStartLocation);
         String endLocation = getStringFromEditText(R.id.editTextEndLocation);
         boolean canPickUp = getBooleanFromSwitch(R.id.switchCanPickUp);
@@ -213,6 +216,25 @@ public class PostTripActivity extends AppCompatActivity {
         boolean noSmoking = getBooleanFromSwitch(R.id.switchNoSmoking);
         boolean isQuiet = getBooleanFromSwitch(R.id.switchQuite);
         boolean willReturn = getBooleanFromSwitch(R.id.switchReturn);
+
+        inStartLocation.setBackground(getDrawable(R.drawable.text_border_default));
+        inEndLocation.setBackground(getDrawable(R.drawable.text_border_default));
+        inDepartureDate.setBackground(getDrawable(R.drawable.text_border_default));
+        inDepartureTime.setBackground(getDrawable(R.drawable.text_border_default));
+        inReturnDate.setBackground(getDrawable(R.drawable.text_border_default));
+        inReturnTime.setBackground(getDrawable(R.drawable.text_border_default));
+
+
+
+        if (startLocation.equals("")) {
+            makeLongToast("Please enter a starting location");
+            inStartLocation.setBackground(getDrawable(R.drawable.text_border_error));
+            return;
+        } else if (endLocation.equals("")) {
+            makeLongToast("Please enter a ending location");
+            inEndLocation.setBackground(getDrawable(R.drawable.text_border_error));
+            return;
+        }
 
         DateFormat dfDate = new SimpleDateFormat("MM/dd/yyhh:mm a", Locale.US);
         Date startTime;
@@ -223,6 +245,9 @@ public class PostTripActivity extends AppCompatActivity {
                             + inDepartureTime.getText().toString());
         } catch (ParseException error) {
             Log.e(TAG, "Error Parsing date/time.");
+            makeLongToast("Please enter a departure date and time");
+            inDepartureDate.setBackground(getDrawable(R.drawable.text_border_error));
+            inDepartureTime.setBackground(getDrawable(R.drawable.text_border_error));
             return;
         }
 
@@ -233,11 +258,16 @@ public class PostTripActivity extends AppCompatActivity {
                                 + inReturnTime.getText().toString());
             } catch (ParseException error) {
                 Log.e(TAG, "Error Parsing date/time.");
+                makeLongToast("Please enter a return date and time");
+                inReturnDate.setBackground(getDrawable(R.drawable.text_border_error));
+                inReturnTime.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
             }
 
             if (returnTime.before(startTime)) {
                 makeLongToast("Return date must be after departure date");
+                inReturnDate.setBackground(getDrawable(R.drawable.text_border_error));
+                inReturnTime.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
             }
         }
@@ -245,6 +275,9 @@ public class PostTripActivity extends AppCompatActivity {
         Date today = gmttoLocalDate(new Date());
         if (startTime.before(today)) {
             makeLongToast("Start date must be in the future, not past");
+            inDepartureDate.setBackground(getDrawable(R.drawable.text_border_error));
+            inDepartureTime.setBackground(getDrawable(R.drawable.text_border_error));
+
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Log.e(TAG, formatter.format(today));
             Log.e(TAG, formatter.format(startTime));
@@ -267,6 +300,7 @@ public class PostTripActivity extends AppCompatActivity {
             } else {
                 makeLongToast("Could not find starting location..."
                         + "Please try a different address");
+                inStartLocation.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
             }
 
@@ -277,6 +311,7 @@ public class PostTripActivity extends AppCompatActivity {
             } else {
                 makeLongToast("Could not find ending address..."
                         + "Please try a different address");
+                inEndLocation.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
             }
         } catch (IOException error) {
