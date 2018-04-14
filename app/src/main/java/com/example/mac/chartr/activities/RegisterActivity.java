@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
@@ -156,48 +157,111 @@ public class RegisterActivity extends AppCompatActivity {
             // Read user data and register
             CognitoUserAttributes userAttributes = new CognitoUserAttributes();
 
+            email.setBackground(getDrawable(R.drawable.text_border_default));
+            password.setBackground(getDrawable(R.drawable.text_border_default));
+            givenName.setBackground(getDrawable(R.drawable.text_border_default));
+            birthday.setBackground(getDrawable(R.drawable.text_border_default));
+            phone.setBackground(getDrawable(R.drawable.text_border_default));
+
+            /*
+             Check for a valid EMAIL
+             */
             emailInput = email.getText().toString();
-            if (emailInput.isEmpty()) {
-                TextView view = (TextView) findViewById(R.id.textViewRegEmailMessage);
-                view.setText(email.getHint() + " cannot be empty");
+            TextView emailMessage = (TextView) findViewById(R.id.textViewRegEmailMessage);
+            if (emailInput.isEmpty() || !emailMessage.getText().toString().equals("")) {
                 email.setBackground(getDrawable(R.drawable.text_border_error));
+                Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_LONG)
+                .show();
                 return;
             }
             user.setEmail(emailInput);
 
+            /*
+             Check for a valid PASSWORD
+             */
             String userpasswordInput = password.getText().toString();
+            TextView passwordMessage = (TextView) findViewById(R.id.textViewUserRegPasswordMessage);
             userPasswd = userpasswordInput;
-            if (userpasswordInput.isEmpty()) {
-                TextView view = (TextView) findViewById(R.id.textViewUserRegPasswordMessage);
-                view.setText(password.getHint() + " cannot be empty");
+            if (userpasswordInput.isEmpty() || !passwordMessage.getText().toString().equals("")) {
                 password.setBackground(getDrawable(R.drawable.text_border_error));
+                Toast.makeText(getApplicationContext(), "Invalid Password", Toast.LENGTH_LONG)
+                        .show();
                 return;
             }
 
+            /*
+             Check for a valid NAME
+             */
+            String name = givenName.getText().toString();
+            TextView nameMessage = (TextView) findViewById(R.id.textViewRegGivenNameMessage);
+            if (name.isEmpty() || !nameMessage.getText().toString().equals("")) {
+                givenName.setBackground(getDrawable(R.drawable.text_border_error));
+                Toast.makeText(getApplicationContext(), "Invalid Name", Toast.LENGTH_LONG)
+                        .show();
+                return;
+            }
+
+            /*
+             Check for a valid BIRTHDAY
+             */
+            String birthdayInput = givenName.getText().toString();
+            TextView birthdayMessage = (TextView) findViewById(R.id.textViewRegBirthdayMessage);
+            if (birthdayInput.isEmpty() || !birthdayMessage.getText().toString().equals("")) {
+                birthday.setBackground(getDrawable(R.drawable.text_border_error));
+                Toast.makeText(getApplicationContext(), "Invalid Birthday", Toast.LENGTH_LONG)
+                        .show();
+                return;
+            }
+
+            /*
+             Check for a valid PHONE NUMBER
+             */
+            String phoneInput = givenName.getText().toString();
+            TextView phoneMessage = (TextView) findViewById(R.id.textViewRegPhoneMessage);
+            if (phoneInput.isEmpty() || !phoneMessage.getText().toString().equals("")) {
+                phone.setBackground(getDrawable(R.drawable.text_border_error));
+                Toast.makeText(getApplicationContext(), "Invalid Phone Number",
+                        Toast.LENGTH_LONG)
+                        .show();
+                return;
+            }
+
+            /*
+             Check name and add to AppHelper Attribute
+             */
             String userInput = givenName.getText().toString();
             if (userInput.length() > 0) {
                 userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
-                        .get(givenName.getHint()), userInput);
+                        .get("Given name"), userInput);
             }
             user.setName(userInput);
 
+            /*
+             Check email and add to AppHelper Attribute
+             */
             userInput = email.getText().toString();
             if (userInput.length() > 0) {
                 userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
-                        .get(email.getHint()), userInput);
+                        .get("Email"), userInput);
             }
 
+            /*
+             Check birthday and add to AppHelper Attribute
+             */
             userInput = birthday.getText().toString();
             if (userInput.length() > 0) {
                 userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
-                        .get(birthday.getHint()), userInput);
+                        .get("Birthday"), userInput);
             }
             user.setBirthdate(userInput);
 
+            /*
+             Check phone and add to AppHelper Attribute
+             */
             userInput = phone.getText().toString();
             if (userInput.length() > 0) {
                 userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
-                        .get(phone.getHint()), userInput);
+                        .get("Phone number"), userInput);
             }
             user.setPhone(userInput);
 
