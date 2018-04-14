@@ -24,6 +24,7 @@ import com.example.mac.chartr.MaskWatcher;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.User;
 
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -273,8 +274,34 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView label = (TextView) findViewById(R.id.textViewRegBirthdayMessage);
-                label.setText("");
+                TextView message = (TextView) findViewById(R.id.textViewRegBirthdayMessage);
+
+                String enteredBirthday = birthday.getText().toString();
+                //https://stackoverflow.com/questions/5978510/regex-to-match-date
+                Pattern pattern =
+                        Pattern.compile("(?:(09|04|06|11)([/])(0[1-9]|[12]\\d|30)" +
+                                "([/])((?:19|20)\\d\\d))|(?:(01|03|05|07|08|10|12)" +
+                                "([/])(0[1-9]|[12]\\d|3[01])([/])((?:19|20)\\d\\d))" +
+                                "|(?:02([/])(?:(?:(0[1-9]|1\\d|2[0-8])([/])" +
+                                "((?:19|20)\\d\\d))|(?:(29)([/])" +
+                                "((?:(?:19|20)(?:04|08|12|16|20|24|28|32|36|40|44|48|52|56|" +
+                                "60|64|68|72|76|80|84|88|92|96))|2000))))");
+                Matcher matcher = pattern.matcher(enteredBirthday);
+
+
+                if (matcher.find()) {
+                    int year = Calendar.getInstance().get(Calendar.YEAR);
+                    int enteredYear = Integer.parseInt(enteredBirthday
+                            .substring(enteredBirthday.length() - 4));
+
+                    if (enteredYear < 1880 || enteredYear >= year - 1) {
+                        message.setText("Invalid birthday");
+                    } else {
+                        message.setText("");
+                    }
+                } else {
+                    message.setText("Invalid birthday");
+                }
 
                 maskWatcher.onTextChanged(s, start, before, count);
             }
