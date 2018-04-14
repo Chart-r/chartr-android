@@ -145,8 +145,8 @@ public class PostTripActivity extends AppCompatActivity {
     }
 
     private String extractTimeString(int minutesOrHours) {
-        return minutesOrHours < 10 ?
-                "0" + Integer.toString(minutesOrHours) : Integer.toString(minutesOrHours);
+        return minutesOrHours < 10
+                ? "0" + Integer.toString(minutesOrHours) : Integer.toString(minutesOrHours);
     }
 
     private void updateDepartureDateLabel() {
@@ -186,7 +186,8 @@ public class PostTripActivity extends AppCompatActivity {
     //https://stackoverflow.com/questions/37390080/convert-local-time-to-utc-and-vice-versa
     public static Date gmttoLocalDate(Date date) {
         String timeZone = Calendar.getInstance().getTimeZone().getID();
-        Date local = new Date(date.getTime() + TimeZone.getTimeZone(timeZone).getOffset(date.getTime()));
+        Date local = new Date(date.getTime()
+                + TimeZone.getTimeZone(timeZone).getOffset(date.getTime()));
         return local;
     }
 
@@ -260,8 +261,8 @@ public class PostTripActivity extends AppCompatActivity {
                 startLat = addresses.get(0).getLatitude();
                 startLng = addresses.get(0).getLongitude();
             } else {
-                makeLongToast("Could not find starting location..." +
-                        "Please try a different address");
+                makeLongToast("Could not find starting location..."
+                        + "Please try a different address");
                 return;
             }
 
@@ -270,8 +271,8 @@ public class PostTripActivity extends AppCompatActivity {
                 endLat = addresses.get(0).getLatitude();
                 endLng = addresses.get(0).getLongitude();
             } else {
-                makeLongToast("Could not find ending address..." +
-                        "Please try a different address");
+                makeLongToast("Could not find ending address..."
+                        + "Please try a different address");
                 return;
             }
         } catch (IOException error) {
