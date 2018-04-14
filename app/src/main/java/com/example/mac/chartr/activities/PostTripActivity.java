@@ -1,6 +1,7 @@
 package com.example.mac.chartr.activities;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import android.content.Intent;
+import android.widget.TimePicker;
 
 
 public class PostTripActivity extends AppCompatActivity {
@@ -49,15 +51,25 @@ public class PostTripActivity extends AppCompatActivity {
     EditText returnEditText;
     DatePickerDialog.OnDateSetListener returnDate;
 
+    EditText departureTimeText;
+    TimePickerDialog.OnTimeSetListener departTime;
+
+    EditText returnTimeText;
+    TimePickerDialog.OnTimeSetListener returnTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_trip);
+        initPickers();
 
 
-        /*
-        SETUP DEPARTURE DATE PICKER
-         */
+    }
+
+    private void initPickers() {
+    /*
+    SETUP DEPARTURE DATE PICKER
+     */
         departureEditText = (EditText) findViewById(R.id.editTextDepartureDate);
         departureDate  = (view, year, monthOfYear, dayOfMonth) -> {
             departureCalendar.set(Calendar.YEAR, year);
@@ -85,6 +97,54 @@ public class PostTripActivity extends AppCompatActivity {
             new DatePickerDialog(PostTripActivity.this, returnDate, returnCalendar
                     .get(Calendar.YEAR), returnCalendar.get(Calendar.MONTH),
                     returnCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+
+        /*
+        SETUP DEPARTURE TIME PICKER
+         */
+        departureTimeText = (EditText) findViewById(R.id.editTextDepartureTime);
+        departTime  = (TimePicker timePicker, int selectedHour, int selectedMinute) -> {
+            String modifier = "am";
+            String minutes, hours;
+            if (selectedHour > 12) {
+                selectedHour -= 12;
+                modifier = "pm";
+            }
+            minutes = selectedMinute < 10 ?
+                    "0" + Integer.toString(selectedMinute) : Integer.toString(selectedMinute);
+
+            hours = selectedHour < 10 ?
+                    "0" + Integer.toString(selectedHour) : Integer.toString(selectedHour);
+
+            departureTimeText.setText("" + hours + ":" + minutes + " " + modifier);
+        };
+        departureTimeText.setOnClickListener(v -> {
+            new TimePickerDialog(PostTripActivity.this, departTime, 0, 0,
+                    false).show();
+        });
+
+        /*
+        SETUP RETURN TIME PICKER
+         */
+        returnTimeText = (EditText) findViewById(R.id.editTextReturnTime);
+        returnTime  = (TimePicker timePicker, int selectedHour, int selectedMinute) -> {
+            String modifier = "am";
+            String minutes, hours;
+            if (selectedHour > 12) {
+                selectedHour -= 12;
+                modifier = "pm";
+            }
+            minutes = selectedMinute < 10 ?
+                    "0" + Integer.toString(selectedMinute) : Integer.toString(selectedMinute);
+
+            hours = selectedHour < 10 ?
+                    "0" + Integer.toString(selectedHour) : Integer.toString(selectedHour);
+
+            returnTimeText.setText("" + hours + ":" + minutes + " " + modifier);
+        };
+        returnTimeText.setOnClickListener(v -> {
+            new TimePickerDialog(PostTripActivity.this, returnTime, 0, 0,
+                    false).show();
         });
     }
 
@@ -141,7 +201,7 @@ public class PostTripActivity extends AppCompatActivity {
         boolean isQuiet = getBooleanFromSwitch(R.id.switchQuite);
         boolean willReturn = getBooleanFromSwitch(R.id.switchReturn);
 
-        DateFormat dfDate = new SimpleDateFormat("MM/dd/yyyyhh:mm");
+        DateFormat dfDate = new SimpleDateFormat("MM/dd/yyhh:mm a");
         Date startTime;
         Date returnTime = new Date(0);
         try {
