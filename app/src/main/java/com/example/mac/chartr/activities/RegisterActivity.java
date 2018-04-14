@@ -229,8 +229,18 @@ public class RegisterActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 maskWatcher.onTextChanged(s, start, before, count);
 
-                TextView label = (TextView) findViewById(R.id.textViewRegPhoneMessage);
-                label.setText("");
+                TextView message = (TextView) findViewById(R.id.textViewRegPhoneMessage);
+
+                Pattern pattern =
+                        Pattern.compile("^\\+1([1-9])(\\d{9})");
+                Matcher matcher = pattern.matcher(phone.getText().toString());
+
+                if (matcher.find() || (phone.getText().toString().length() > 2 &&
+                        phone.getText().toString().charAt(1) != '1')) {
+                    message.setText("");
+                } else {
+                    message.setText("Invalid phone number");
+                }
             }
 
             @Override
