@@ -26,12 +26,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import android.content.Intent;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 
 public class PostTripActivity extends AppCompatActivity {
@@ -110,11 +112,8 @@ public class PostTripActivity extends AppCompatActivity {
                 selectedHour -= 12;
                 modifier = "pm";
             }
-            minutes = selectedMinute < 10 ?
-                    "0" + Integer.toString(selectedMinute) : Integer.toString(selectedMinute);
-
-            hours = selectedHour < 10 ?
-                    "0" + Integer.toString(selectedHour) : Integer.toString(selectedHour);
+            minutes = extractTimeString(selectedMinute);
+            hours = extractTimeString(selectedHour);
 
             departureTimeText.setText("" + hours + ":" + minutes + " " + modifier);
         };
@@ -134,11 +133,8 @@ public class PostTripActivity extends AppCompatActivity {
                 selectedHour -= 12;
                 modifier = "pm";
             }
-            minutes = selectedMinute < 10 ?
-                    "0" + Integer.toString(selectedMinute) : Integer.toString(selectedMinute);
-
-            hours = selectedHour < 10 ?
-                    "0" + Integer.toString(selectedHour) : Integer.toString(selectedHour);
+            minutes = extractTimeString(selectedMinute);
+            hours = extractTimeString(selectedHour);
 
             returnTimeText.setText("" + hours + ":" + minutes + " " + modifier);
         };
@@ -146,6 +142,11 @@ public class PostTripActivity extends AppCompatActivity {
             new TimePickerDialog(PostTripActivity.this, returnTime, 0, 0,
                     false).show();
         });
+    }
+
+    private String extractTimeString(int minutesOrHours) {
+        return minutesOrHours < 10 ?
+                "0" + Integer.toString(minutesOrHours) : Integer.toString(minutesOrHours);
     }
 
     private void updateDepartureDateLabel() {
@@ -182,6 +183,13 @@ public class PostTripActivity extends AppCompatActivity {
         this.provider = provider;
     }
 
+    //https://stackoverflow.com/questions/37390080/convert-local-time-to-utc-and-vice-versa
+    public static Date gmttoLocalDate(Date date) {
+        String timeZone = Calendar.getInstance().getTimeZone().getID();
+        Date local = new Date(date.getTime() + TimeZone.getTimeZone(timeZone).getOffset(date.getTime()));
+        return local;
+    }
+
     /**
      * Retrieves data from the form and makes a post api call to the trip endpoint.
      *
@@ -201,7 +209,7 @@ public class PostTripActivity extends AppCompatActivity {
         boolean isQuiet = getBooleanFromSwitch(R.id.switchQuite);
         boolean willReturn = getBooleanFromSwitch(R.id.switchReturn);
 
-        DateFormat dfDate = new SimpleDateFormat("MM/dd/yyhh:mm a");
+        DateFormat dfDate = new SimpleDateFormat("MM/dd/yyhh:mm a", Locale.US);
         Date startTime;
         Date returnTime = new Date(0);
         try {
@@ -222,6 +230,21 @@ public class PostTripActivity extends AppCompatActivity {
                 Log.e(TAG, "Error Parsing date/time.");
                 return;
             }
+
+            if (returnTime.before(startTime)) {
+                makeLongToast("Return date must be after departure date");
+                return;
+            }
+        }
+
+        Date today = gmttoLocalDate(new Date());
+        if (startTime.before(today)) {
+            makeLongToast("Start date must be in the future, not past");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Log.e(TAG, formatter.format(today));
+            Log.e(TAG, formatter.format(startTime));
+            Log.e(TAG, Calendar.getInstance().getTimeZone().getID());
+            return;
         }
 
         double startLat;
@@ -237,6 +260,8 @@ public class PostTripActivity extends AppCompatActivity {
                 startLat = addresses.get(0).getLatitude();
                 startLng = addresses.get(0).getLongitude();
             } else {
+                makeLongToast("Could not find starting location..." +
+                        "Please try a different address");
                 return;
             }
 
@@ -245,6 +270,8 @@ public class PostTripActivity extends AppCompatActivity {
                 endLat = addresses.get(0).getLatitude();
                 endLng = addresses.get(0).getLongitude();
             } else {
+                makeLongToast("Could not find ending address..." +
+                        "Please try a different address");
                 return;
             }
         } catch (IOException error) {
@@ -272,6 +299,11 @@ public class PostTripActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    protected void makeLongToast(String message) {
+        Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_LONG).show();
     }
 
     /**
