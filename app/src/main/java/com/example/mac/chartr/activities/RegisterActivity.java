@@ -326,8 +326,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewRegUserPasswordLabel);
                     //ADD CHECK FOR REQUIREMENTS TO SET THIS LABEL
-                    label.setText("Password must be at least 8 characters and contain a number,"
-                            + " a special character, a lowercase letter, and an uppercase letter.");
+                    label.setText("Password");
                     password.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
             }
@@ -344,18 +343,16 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 TextView message = (TextView) findViewById(R.id.textViewUserRegPasswordMessage);
-                message.setText("");
 
-                TextView label = (TextView) findViewById(R.id.textViewRegUserPasswordLabel);
                 Pattern pattern =
                         Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)" +
                                 "(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,}");
                 Matcher matcher = pattern.matcher(password.getText().toString());
 
                 if (matcher.find()) {
-                    label.setText("Password matches requirements");
+                    message.setText("");
                 } else {
-                    label.setText("Password must be at least 8 characters and contain a number,"
+                    message.setText("Password must be at least 8 characters and contain a number,"
                             + " a special character, a lowercase letter, and an uppercase letter.");
                 }
             }
@@ -382,15 +379,32 @@ public class RegisterActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewRegEmailLabel);
-                    label.setText(email.getHint());
+                    label.setText("Email");
                     email.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView label = (TextView) findViewById(R.id.textViewRegEmailMessage);
-                label.setText("");
+                TextView message = (TextView) findViewById(R.id.textViewRegEmailMessage);
+
+                Pattern pattern =
+                        Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\." +
+                                "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"" +
+                                "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\" +
+                                "x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9]" +
+                                "(?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\" +
+                                "[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]" +
+                                "|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\" +
+                                "x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\" +
+                                "x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
+                Matcher matcher = pattern.matcher(email.getText().toString());
+
+                if (matcher.find()) {
+                    message.setText("");
+                } else {
+                    message.setText("Invalid email format");
+                }
 
             }
 
