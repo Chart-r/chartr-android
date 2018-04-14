@@ -37,7 +37,7 @@
         android:layout_below="@+id/textViewRegEmailLabel"
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
-        android:hint="Email"
+        android:hint="Email (person@website.com)"
         android:inputType="textEmailAddress"
         android:paddingLeft="@dimen/activity_text_padding"
         android:paddingRight="@dimen/activity_text_padding" />
@@ -137,7 +137,7 @@
         android:layout_below="@id/textViewRegBirthdayLabel"
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
-        android:hint="Birthday"
+        android:hint="Birthday (MM/dd/YYYY)"
         android:inputType="date"
         android:paddingLeft="@dimen/activity_text_padding"
         android:paddingRight="@dimen/activity_text_padding" />

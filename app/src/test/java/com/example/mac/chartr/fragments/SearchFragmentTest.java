@@ -10,9 +10,6 @@ import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
 
 import static junit.framework.Assert.assertNotNull;
 
-/**
- * Created by cygnus on 3/13/18.
- */
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)

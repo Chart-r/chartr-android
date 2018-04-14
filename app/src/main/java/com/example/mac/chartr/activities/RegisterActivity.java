@@ -23,6 +23,9 @@ import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.User;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -212,7 +215,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewRegPhoneLabel);
-                    label.setText(phone.getHint() + " with country code and no seperators");
+                    label.setText("Phone number with country code\n(example: +18883334444)");
                     phone.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
             }
@@ -248,7 +251,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 TextView label = (TextView) findViewById(R.id.textViewRegBirthdayMessage);
-                label.setText("");
+                label.setText(birthday.getHint());
 
             }
 
@@ -293,22 +296,59 @@ public class RegisterActivity extends AppCompatActivity {
     private void initPassword() {
         password = (EditText) findViewById(R.id.editTextRegUserPassword);
         password.addTextChangedListener(new TextWatcher() {
+            /**
+             * Make the label text up top change once the user starts typing (thus, the current
+             * length is zero before the change)
+             *
+             * @param s CharSequence
+             * @param start Start
+             * @param count Count
+             * @param after After
+             */
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewRegUserPasswordLabel);
-                    label.setText(password.getHint());
+                    //ADD CHECK FOR REQUIREMENTS TO SET THIS LABEL
+                    label.setText("Password must be at least 8 characters and contain a number,"
+                            + " a special character, a lowercase letter, and an uppercase letter.");
                     password.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
             }
 
+            /**
+             * This means that the text in the box has been changed, and thus we should reset the
+             * error message that can occur upon sign-up failure
+             *
+             * @param s Charsequence of the change
+             * @param start Start index
+             * @param before Before change
+             * @param count Count after change
+             */
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView label = (TextView) findViewById(R.id.textViewUserRegPasswordMessage);
-                label.setText("");
+                TextView message = (TextView) findViewById(R.id.textViewUserRegPasswordMessage);
+                message.setText("");
 
+                TextView label = (TextView) findViewById(R.id.textViewRegUserPasswordLabel);
+                Pattern pattern =
+                        Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)" +
+                                "(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,}");
+                Matcher matcher = pattern.matcher(password.getText().toString());
+
+                if (matcher.find()) {
+                    label.setText("Password matches requirements");
+                } else {
+                    label.setText("Password must be at least 8 characters and contain a number,"
+                            + " a special character, a lowercase letter, and an uppercase letter.");
+                }
             }
 
+            /**
+             * If the user has cleared the text field, reset the upper label
+             *
+             * @param s Change to the text field
+             */
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
