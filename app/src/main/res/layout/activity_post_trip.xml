@@ -69,8 +69,8 @@
             android:layout_weight="1"
             android:background="@drawable/text_border_selector"
             android:hint="Departure Date"
-
-            android:inputType="date"
+            android:clickable="true"
+            android:focusable="false"
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
             android:textSize="@dimen/post_trip_text_size"

@@ -1,5 +1,6 @@
 package com.example.mac.chartr.activities;
 
+import android.app.DatePickerDialog;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -20,8 +21,10 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,10 +40,66 @@ public class PostTripActivity extends AppCompatActivity {
 
     private CommonDependencyProvider provider = null;
 
+    Calendar departureCalendar = Calendar.getInstance();
+    Calendar returnCalendar = Calendar.getInstance();
+
+    EditText departureEditText;
+    DatePickerDialog.OnDateSetListener departureDate;
+
+    EditText returnEditText;
+    DatePickerDialog.OnDateSetListener returnDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_trip);
+
+
+        /*
+        SETUP DEPARTURE DATE PICKER
+         */
+        departureEditText = (EditText) findViewById(R.id.editTextDepartureDate);
+        departureDate  = (view, year, monthOfYear, dayOfMonth) -> {
+            departureCalendar.set(Calendar.YEAR, year);
+            departureCalendar.set(Calendar.MONTH, monthOfYear);
+            departureCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateDepartureDateLabel();
+        };
+        departureEditText.setOnClickListener(v -> {
+            new DatePickerDialog(PostTripActivity.this, departureDate, departureCalendar
+                    .get(Calendar.YEAR), departureCalendar.get(Calendar.MONTH),
+                    departureCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+
+        /*
+        SETUP RETURN DATE PICKER
+         */
+        returnEditText = (EditText) findViewById(R.id.editTextReturnDate);
+        returnDate  = (view, year, monthOfYear, dayOfMonth) -> {
+            returnCalendar.set(Calendar.YEAR, year);
+            returnCalendar.set(Calendar.MONTH, monthOfYear);
+            returnCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateReturnDateLabel();
+        };
+        returnEditText.setOnClickListener(v -> {
+            new DatePickerDialog(PostTripActivity.this, returnDate, returnCalendar
+                    .get(Calendar.YEAR), returnCalendar.get(Calendar.MONTH),
+                    returnCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+    }
+
+    private void updateDepartureDateLabel() {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        departureEditText.setText(sdf.format(departureCalendar.getTime()));
+    }
+
+    private void updateReturnDateLabel() {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        returnEditText.setText(sdf.format(returnCalendar.getTime()));
     }
 
     public void incrementSeats(View view) {
