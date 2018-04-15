@@ -1,6 +1,5 @@
 package com.example.mac.chartr.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -95,56 +93,6 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
             }
         }
 
-        initUsername();
-
-        initConfCode();
-
-        confirm = (Button) findViewById(R.id.confirm_button);
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendConfCode();
-            }
-        });
-
-        reqCode = (TextView) findViewById(R.id.resend_confirm_req);
-        reqCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reqConfCode();
-            }
-        });
-    }
-
-    private void initConfCode() {
-        confCode = (EditText) findViewById(R.id.editTextConfirmCode);
-        confCode.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewConfirmCodeLabel);
-                    label.setText(confCode.getHint());
-                    confCode.setBackground(getDrawable(R.drawable.text_border_selector));
-                }
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView label = (TextView) findViewById(R.id.textViewConfirmCodeMessage);
-                label.setText(" ");
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewConfirmCodeLabel);
-                    label.setText("");
-                }
-            }
-        });
-    }
-
-    private void initUsername() {
         username = (EditText) findViewById(R.id.editTextConfirmUserId);
         username.addTextChangedListener(new TextWatcher() {
             @Override
@@ -170,6 +118,38 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
                 }
             }
         });
+
+        confCode = (EditText) findViewById(R.id.editTextConfirmCode);
+        confCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (s.length() == 0) {
+                    TextView label = (TextView) findViewById(R.id.textViewConfirmCodeLabel);
+                    label.setText(confCode.getHint());
+                    confCode.setBackground(getDrawable(R.drawable.text_border_selector));
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                TextView label = (TextView) findViewById(R.id.textViewConfirmCodeMessage);
+                label.setText(" ");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 0) {
+                    TextView label = (TextView) findViewById(R.id.textViewConfirmCodeLabel);
+                    label.setText("");
+                }
+            }
+        });
+
+        confirm = (Button) findViewById(R.id.confirm_button);
+        confirm.setOnClickListener(v -> sendConfCode());
+
+        reqCode = (TextView) findViewById(R.id.resend_confirm_req);
+        reqCode.setOnClickListener(v -> reqConfCode());
     }
 
     protected void extractFromExtras(Bundle extras) {
@@ -243,17 +223,14 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
     protected void showDialogMessage(String title, String body, final boolean exitActivity) {
         final AlertDialog.Builder builder = provider.getAlertDialogBuilder(this);
         builder.setTitle(title).setMessage(body).setNeutralButton("OK",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            userDialog.dismiss();
-                            if (exitActivity) {
-                                exit();
-                            }
-                        } catch (Exception e) {
+                (dialog, which) -> {
+                    try {
+                        userDialog.dismiss();
+                        if (exitActivity) {
                             exit();
                         }
+                    } catch (Exception e) {
+                        exit();
                     }
                 });
         userDialog = builder.create();

@@ -3,18 +3,13 @@ package com.example.mac.chartr.activities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -104,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Setting visibility of buttons when first logged in
         findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-        findViewById(R.id.buttonSearchRequest).setVisibility(View.GONE);
+        findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
 
         setupTopToolbar();
         setupBottomNavigation();
@@ -117,26 +112,15 @@ public class MainActivity extends AppCompatActivity {
         getDetails();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            super.onBackPressed();
-
-        }
-    }
-
     private void setupTopToolbar() {
         final Context context = this;
         toolbar = (Toolbar) findViewById(R.id.topToolBar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
         Button goToCreateTrip = findViewById(R.id.buttonAddTrip);
-        goToCreateTrip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, PostTripActivity.class);
-                startActivity(intent);
-            }
+        goToCreateTrip.setOnClickListener(v -> {
+            Intent intent = new Intent(context, PostTripActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -146,32 +130,31 @@ public class MainActivity extends AppCompatActivity {
     private void setupToolbarListener() {
         final Activity activity = this;
         getSupportFragmentManager().addOnBackStackChangedListener(
-                new FragmentManager.OnBackStackChangedListener() {
-                    @Override
-                    public void onBackStackChanged() {
-                        int topOfBackstack = getSupportFragmentManager()
-                                .getBackStackEntryCount() - 1;
+                () -> {
+                    int topOfBackstack = getSupportFragmentManager()
+                            .getBackStackEntryCount() - 1;
 
-                        // Set top toolbar title
-                        String title = "Trips";
-                        if (topOfBackstack >= 0) {
-                            title = getSupportFragmentManager()
-                                    .getBackStackEntryAt(topOfBackstack).getName();
+                    // Set top toolbar title
+                    String title = "Trips";
+                    if (topOfBackstack >= 0) {
+                        title = getSupportFragmentManager()
+                                .getBackStackEntryAt(topOfBackstack).getName();
+                    }
 
-                        }
+                    // Show or hide search button or title
+                    if (title == "Search") {
+                        getSupportActionBar().setTitle("");
+                        findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
+                    } else {
                         getSupportActionBar().setTitle(title);
+                        findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
+                    }
 
-                        // Show or hide plus or search button
-                        if (title == "Trips") {
-                            findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-                            findViewById(R.id.buttonSearchRequest).setVisibility(View.GONE);
-                        } else if (title == "") {
-                            findViewById(R.id.buttonSearchRequest).setVisibility(View.VISIBLE);
-                            findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                        } else {
-                            findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                            findViewById(R.id.buttonSearchRequest).setVisibility(View.GONE);
-                        }
+                    // Show or hide plus button
+                    if (title == "Trips") {
+                        findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
+                    } else {
+                        findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                     }
                 });
     }
@@ -248,26 +231,20 @@ public class MainActivity extends AppCompatActivity {
         //input.requestFocus();
         //builder.setView(input);
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    //String newValue = input.getText().toString();
-                    showWaitDialog("Remembering this device...");
-                    updateDeviceStatus(newDevice);
-                    userDialog.dismiss();
-                } catch (Exception e) {
-                    // Log failure
-                }
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            try {
+                //String newValue = input.getText().toString();
+                showWaitDialog("Remembering this device...");
+                updateDeviceStatus(newDevice);
+                userDialog.dismiss();
+            } catch (Exception e) {
+                // Log failure
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    userDialog.dismiss();
-                } catch (Exception e) {
-                    // Log failure
-                }
+        }).setNegativeButton("No", (dialog, which) -> {
+            try {
+                userDialog.dismiss();
+            } catch (Exception e) {
+                // Log failure
             }
         });
         userDialog = builder.create();
@@ -288,43 +265,43 @@ public class MainActivity extends AppCompatActivity {
         navBar.setTextVisibility(true);
         navBar.setSelectedItemId(R.id.ic_trips);
         navBar.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        int itemId = item.getItemId();
-                        switch (itemId) {
-                            case R.id.ic_search:
-                                getSupportActionBar().setTitle("Search");
-                                findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.content, new SearchFragment())
-                                        .addToBackStack("").commit();
-                                break;
-                            case R.id.ic_trips:
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.content, new TripsFragment())
-                                        .addToBackStack("Trips").commit();
-                                getSupportActionBar().setTitle("Trips");
-                                findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-
-                                break;
-                            case R.id.ic_requests:
-                                getSupportActionBar().setTitle("Requests");
-                                findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.content, new RequestsFragment())
-                                        .addToBackStack("Requests").commit();
-                                break;
-                            case R.id.ic_profile:
-                                getSupportActionBar().setTitle("Profile");
-                                findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.content, new ProfileFragment())
-                                        .addToBackStack("Profile").commit();
-                                break;
-                        }
-                        return true;
+                item -> {
+                    int itemId = item.getItemId();
+                    switch (itemId) {
+                        case R.id.ic_search:
+                            getSupportActionBar().setTitle("");
+                            findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                            findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.content, new SearchFragment())
+                                    .addToBackStack("Search").commit();
+                            break;
+                        case R.id.ic_trips:
+                            getSupportActionBar().setTitle("Trips");
+                            findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
+                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.content, new TripsFragment())
+                                    .addToBackStack("Trips").commit();
+                            break;
+                        case R.id.ic_requests:
+                            getSupportActionBar().setTitle("Requests");
+                            findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.content, new RequestsFragment())
+                                    .addToBackStack("Requests").commit();
+                            break;
+                        case R.id.ic_profile:
+                            getSupportActionBar().setTitle("Profile");
+                            findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.content, new ProfileFragment())
+                                    .addToBackStack("Profile").commit();
+                            break;
                     }
+                    return true;
                 });
     }
 
@@ -338,20 +315,17 @@ public class MainActivity extends AppCompatActivity {
     private void showDialogMessage(String title, String body, final boolean exit) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title).setMessage(body).setNeutralButton("OK",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            userDialog.dismiss();
-                            if (exit) {
-                                exit();
-                            }
-                        } catch (Exception e) {
-                            // Log failure
-                            Log.e(TAG, " -- Dialog dismiss failed");
-                            if (exit) {
-                                exit();
-                            }
+                (dialog, which) -> {
+                    try {
+                        userDialog.dismiss();
+                        if (exit) {
+                            exit();
+                        }
+                    } catch (Exception e) {
+                        // Log failure
+                        Log.e(TAG, " -- Dialog dismiss failed");
+                        if (exit) {
+                            exit();
                         }
                     }
                 });
@@ -367,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void exit() {
+    protected void exit() {
         Intent intent = new Intent();
         if (username == null) {
             username = "";
@@ -377,9 +351,15 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            super.onBackPressed();
+        }
+    }
+
     public void searchLayout(View view) {
         RelativeLayout r = findViewById(R.id.search_relative_layout);
-
         if (r.getVisibility() == View.VISIBLE) {
             r.setVisibility(View.GONE);
         } else if (r.getVisibility() == View.GONE) {
