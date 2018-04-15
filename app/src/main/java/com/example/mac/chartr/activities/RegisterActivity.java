@@ -462,9 +462,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                 //https://stackoverflow.com/questions/19605150/
                 // regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
+                String specialCharacters = "\\^ $ \\* \\. \\[ \\] \\{ \\} \\( \\) \\? \\-"
+                        + "\" ! @ # % & / \\\\ , > < \' : ; \\| _ ~ `";
                 Pattern pattern =
-                        Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)"
-                                + "(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,}");
+                        Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[" + specialCharacters
+                                + "])[A-Za-z\\d" + specialCharacters + "]{8,}");
                 Matcher matcher = pattern.matcher(password.getText().toString());
 
                 if (matcher.find()) {
