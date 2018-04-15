@@ -41,4 +41,7 @@
     <string name="searchFragmentPriceRangeTo">To</string>
     <string name="searchFragmentPriceRangeSeparator">-</string>
     <string name="searchFragmentButtonSearch">Search</string>
+    <string name="searchFragmentDepartureDate">Departure date</string>
+    <string name="searchFragmentDateExample">eg: mm/dd/yyyy</string>
 </resources>
+
