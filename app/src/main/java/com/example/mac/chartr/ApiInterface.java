@@ -1,5 +1,6 @@
 package com.example.mac.chartr;
 
+import com.example.mac.chartr.objects.Review;
 import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
 
@@ -113,4 +114,30 @@ public interface ApiInterface {
      */
     @DELETE("trip/{tid}")
     Call<Void> deleteTrip(@Path("tid") String tid);
+
+    // Review related API calls
+    /**
+     * Posts a review from the specified user.
+     * @param uid The ID of the user posting the review
+     * @param review The review, must contain a reviewee, tid, comment, and rating
+     * @return A call to post the review
+     */
+    @POST("user/{uid}/review")
+    Call<String> postReviewFromUser(@Path("uid") String uid, @Body Review review);
+
+    /**
+     * Gets a single review with the specified rid.
+     * @param rid The review's ID
+     * @return A call to get a review
+     */
+    @GET("review/{rid}")
+    Call<Review> getReview(@Path("rid") String rid);
+
+    /**
+     * Gets all the reviews for the specified user.
+     * @param uid The user's ID
+     * @return A call to get a list of all the reviews for a user.
+     */
+    @GET("user/{uid}/review")
+    Call<List<Review>> getAllReviewsForUser(@Path("uid") String uid);
 }
