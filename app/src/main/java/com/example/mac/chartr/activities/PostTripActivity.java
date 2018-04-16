@@ -137,7 +137,6 @@ public class PostTripActivity extends AppCompatActivity {
         }
         CommonDependencyProvider commonDependencyProvider =
                 provider == null ? new CommonDependencyProvider() : provider;
-        String email = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
 
         Trip trip = new Trip(startTime.getTime(), startTime.getTime(), isQuiet, (!noSmoking),
                 endLat, endLng, startLat, startLng, numSeats, 5.0);
@@ -163,9 +162,9 @@ public class PostTripActivity extends AppCompatActivity {
      */
     private void callApi(ApiInterface apiInterface, Trip trip) {
         CommonDependencyProvider provider = new CommonDependencyProvider();
-        String email = provider.getAppHelper().getLoggedInUser().getEmail();
+        String uid = provider.getAppHelper().getLoggedInUser().getUid();
         Call<String> call;
-        call = apiInterface.postUserDrivingTrip(email, trip);
+        call = apiInterface.postUserDrivingTrip(uid, trip);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
