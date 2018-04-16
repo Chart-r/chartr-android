@@ -173,7 +173,7 @@
         android:background="@drawable/text_border_selector"
         android:hint="Phone number (with country code)"
         android:inputType="phone"
-        android:maxLength="12"
+        android:maxLength="15"
         android:paddingLeft="@dimen/activity_text_padding"
         android:paddingRight="@dimen/activity_text_padding" />
 

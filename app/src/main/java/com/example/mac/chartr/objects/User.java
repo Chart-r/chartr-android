@@ -8,6 +8,7 @@ public class User {
     @Expose
     private String uid;
 
+    // Format for email is +12223334444
     @SerializedName("email")
     @Expose
     private String email;

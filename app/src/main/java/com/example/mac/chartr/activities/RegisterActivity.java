@@ -231,26 +231,22 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             /*
-             Check name and add to AppHelper Attribute
+             Add name to AppHelper Attribute
              */
             String userInput = givenName.getText().toString();
-            if (userInput.length() > 0) {
-                userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
-                        .get("Given name"), userInput);
-            }
+            userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
+                    .get("Given name"), userInput);
             user.setName(userInput);
 
             /*
-             Check email and add to AppHelper Attribute
+             Add email to AppHelper Attribute
              */
             userInput = email.getText().toString();
-            if (userInput.length() > 0) {
-                userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
-                        .get("Email"), userInput);
-            }
+            userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
+                    .get("Email"), userInput);
 
             /*
-             Check birthday and add to AppHelper Attribute
+             Add birthday to AppHelper Attribute
              */
             userInput = birthday.getText().toString();
             DateFormat originalFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -262,21 +258,19 @@ public class RegisterActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            if (userInput.length() > 0) {
-                userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
-                        .get("Birthday"), userInput);
-            }
+            userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
+                    .get("Birthday"), userInput);
             user.setBirthdate(userInput);
             System.out.println(userInput);
 
             /*
-             Check phone and add to AppHelper Attribute
+             Add phone to AppHelper Attribute
              */
             userInput = phone.getText().toString();
-            if (userInput.length() > 0) {
-                userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
-                        .get("Phone number"), userInput);
-            }
+            userInput = userInput.substring(0, 2) + userInput.substring(3, 6)
+                    + userInput.substring(7, 10) + userInput.substring(11);
+            userAttributes.addAttribute(provider.getAppHelper().getSignUpFieldsC2O()
+                    .get("Phone number"), userInput);
             user.setPhone(userInput);
 
             showWaitDialog("Signing up...");
@@ -291,7 +285,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void initPhone() {
         phone = (EditText) findViewById(R.id.editTextRegPhone);
         phone.addTextChangedListener(new TextWatcher() {
-            private MaskWatcher maskWatcher = new MaskWatcher("+##########");
+            private MaskWatcher maskWatcher = new MaskWatcher("+#-###-###-####");
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -299,7 +293,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewRegPhoneLabel);
-                    label.setText("Phone number with country code\n(example: +18883334444)");
+                    label.setText("Phone number with country code\n(example: +1-888-333-4444)");
                     phone.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
             }
@@ -309,9 +303,8 @@ public class RegisterActivity extends AppCompatActivity {
                 maskWatcher.onTextChanged(s, start, before, count);
 
                 TextView message = (TextView) findViewById(R.id.textViewRegPhoneMessage);
-
                 Pattern pattern =
-                        Pattern.compile("^\\+1([1-9])(\\d{9})");
+                        Pattern.compile("^\\+1\\-([1-9])(\\d{2})\\-(\\d{3})\\-(\\d{4})");
                 Matcher matcher = pattern.matcher(phone.getText().toString());
 
                 if (matcher.find() || (phone.getText().toString().length() > 2
@@ -510,7 +503,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 //http://emailregex.com/
                 Pattern pattern =
-                        Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
+                        Pattern.compile("^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
                                 + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\""
                                 + "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\"
                                 + "x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9]"
