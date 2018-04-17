@@ -17,7 +17,6 @@ import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
-import com.example.mac.chartr.objects.User;
 
 import java.io.IOException;
 import java.util.ArrayList;

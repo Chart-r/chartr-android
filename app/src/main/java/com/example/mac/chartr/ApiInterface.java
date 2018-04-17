@@ -25,7 +25,15 @@ public interface ApiInterface {
      * @return A call to get the user corresponding to the email
      */
     @GET("user/{email}")
-    Call<User> getUser(@Path("email") String email);
+    Call<User> getUserFromEmail(@Path("email") String email);
+
+    /**
+     * Gets a user corresponding to the given uid.
+     * @param uid The user's uid
+     * @return A call to get the user corresponding to the uid.
+     */
+    @GET("user/uid/{uid}")
+    Call<User> getUserFromUid(@Path("uid") String uid);
 
     /**
      * Posts a user.

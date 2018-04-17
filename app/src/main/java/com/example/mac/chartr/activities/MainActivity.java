@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void callGetUserApi(ApiInterface apiInterface, String username) {
         Call<User> call;
-        call = apiInterface.getUser(username);
+        call = apiInterface.getUserFromEmail(username);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
