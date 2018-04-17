@@ -18,8 +18,8 @@
         android:id="@+id/imageViewProfileIcon"
         android:layout_width="@dimen/profile_icon_small"
         android:layout_height="@dimen/profile_icon_small"
-        android:layout_marginStart="@dimen/activity_separator_small"
-        android:layout_marginTop="@dimen/activity_separator_small"
+        android:layout_marginStart="@dimen/activity_intra_group_separation"
+        android:layout_marginTop="@dimen/activity_intra_group_separation"
         android:contentDescription="@string/user_profile_icon"
         android:src="@drawable/ic_account_circle_white" />
 
@@ -28,8 +28,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:layout_marginStart="@dimen/activity_separator_small"
-        android:layout_marginTop="@dimen/activity_separator_small"
+        android:layout_marginStart="@dimen/activity_intra_group_separation"
+        android:layout_marginTop="@dimen/activity_intra_group_separation"
         android:layout_toEndOf="@+id/imageViewProfileIcon"
         android:layout_toStartOf="@+id/textViewSeats"
         android:text="@string/name_placeholder"
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewName"
-        android:layout_marginStart="@dimen/activity_separator_small"
+        android:layout_marginStart="@dimen/activity_intra_group_separation"
         android:layout_toEndOf="@+id/imageViewProfileIcon"
         android:text="@string/rating_placeholder" />
 
@@ -49,8 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="@dimen/activity_separator_small"
-        android:layout_marginTop="@dimen/activity_separator_small"
+        android:layout_marginEnd="@dimen/activity_intra_group_separation"
+        android:layout_marginTop="@dimen/activity_intra_group_separation"
         android:text="@string/seat_number_placeholder"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/textViewSeats"
-        android:layout_marginEnd="@dimen/activity_separator_small"
+        android:layout_marginEnd="@dimen/activity_intra_group_separation"
         android:text="@string/seat_text" />
 
     <ImageView
@@ -80,7 +80,7 @@
         android:layout_height="@dimen/text_view_medium_height"
         android:layout_alignStart="@+id/textViewName"
         android:layout_below="@+id/textViewRating"
-        android:layout_marginTop="@dimen/activity_separator_small"
+        android:layout_marginTop="@dimen/activity_intra_group_separation"
         android:text="@string/start_placeholder"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
