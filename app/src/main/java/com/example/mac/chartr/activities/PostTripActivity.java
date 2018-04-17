@@ -110,16 +110,7 @@ public class PostTripActivity extends AppCompatActivity {
          */
         departureTimeText = (EditText) findViewById(R.id.editTextDepartureTime);
         departTime  = (TimePicker timePicker, int selectedHour, int selectedMinute) -> {
-            String modifier = "am";
-            String minutes, hours;
-            if (selectedHour > 12) {
-                selectedHour -= 12;
-                modifier = "pm";
-            }
-            minutes = extractTimeString(selectedMinute);
-            hours = extractTimeString(selectedHour);
-
-            departureTimeText.setText("" + hours + ":" + minutes + " " + modifier);
+            setTimeField(selectedHour, selectedMinute, departureTimeText);
         };
         departureTimeText.setOnClickListener(v -> {
             new TimePickerDialog(PostTripActivity.this, departTime, 0, 0,
@@ -131,21 +122,29 @@ public class PostTripActivity extends AppCompatActivity {
          */
         returnTimeText = (EditText) findViewById(R.id.editTextReturnTime);
         returnTime  = (TimePicker timePicker, int selectedHour, int selectedMinute) -> {
-            String modifier = "am";
-            String minutes, hours;
-            if (selectedHour > 12) {
-                selectedHour -= 12;
-                modifier = "pm";
-            }
-            minutes = extractTimeString(selectedMinute);
-            hours = extractTimeString(selectedHour);
-
-            returnTimeText.setText("" + hours + ":" + minutes + " " + modifier);
+            setTimeField(selectedHour, selectedMinute, returnTimeText);
         };
         returnTimeText.setOnClickListener(v -> {
             new TimePickerDialog(PostTripActivity.this, returnTime, 0, 0,
                     false).show();
         });
+    }
+
+    private void setTimeField(int selectedHour, int selectedMinute, EditText field) {
+        String modifier = "am";
+        String minutes, hours;
+        if (selectedHour > 12) {
+            selectedHour -= 12;
+            modifier = "pm";
+        } else if (selectedHour == 0) {
+            selectedHour = 12;
+        } else if (selectedHour == 12) {
+            modifier = "pm";
+        }
+        minutes = extractTimeString(selectedMinute);
+        hours = extractTimeString(selectedHour);
+
+        field.setText("" + hours + ":" + minutes + " " + modifier);
     }
 
     private String extractTimeString(int minutesOrHours) {
@@ -231,7 +230,7 @@ public class PostTripActivity extends AppCompatActivity {
             inStartLocation.setBackground(getDrawable(R.drawable.text_border_error));
             return;
         } else if (endLocation.equals("")) {
-            makeLongToast("Please enter a ending location");
+            makeLongToast("Please enter an ending location");
             inEndLocation.setBackground(getDrawable(R.drawable.text_border_error));
             return;
         }
