@@ -1,5 +1,7 @@
 package com.example.mac.chartr.activities;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -20,13 +22,18 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import android.content.Intent;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 
 public class PostTripActivity extends AppCompatActivity {
@@ -37,10 +44,126 @@ public class PostTripActivity extends AppCompatActivity {
 
     private CommonDependencyProvider provider = null;
 
+    Calendar departureCalendar = Calendar.getInstance();
+    Calendar returnCalendar = Calendar.getInstance();
+
+    EditText departureEditText;
+    DatePickerDialog.OnDateSetListener departureDate;
+
+    EditText returnEditText;
+    DatePickerDialog.OnDateSetListener returnDate;
+
+    EditText departureTimeText;
+    TimePickerDialog.OnTimeSetListener departTime;
+
+    EditText returnTimeText;
+    TimePickerDialog.OnTimeSetListener returnTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_trip);
+        initPickers();
+
+
+    }
+
+    //https://stackoverflow.com/questions/14933330/
+    // datepicker-how-to-popup-datepicker-when-click-on-edittext
+    //
+    //https://stackoverflow.com/questions/17901946/timepicker-dialog-from-clicking-edittext
+    private void initPickers() {
+    /*
+    SETUP DEPARTURE DATE PICKER
+     */
+        departureEditText = (EditText) findViewById(R.id.editTextDepartureDate);
+        departureDate  = (view, year, monthOfYear, dayOfMonth) -> {
+            departureCalendar.set(Calendar.YEAR, year);
+            departureCalendar.set(Calendar.MONTH, monthOfYear);
+            departureCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateDepartureDateLabel();
+        };
+        departureEditText.setOnClickListener(v -> {
+            new DatePickerDialog(PostTripActivity.this, departureDate, departureCalendar
+                    .get(Calendar.YEAR), departureCalendar.get(Calendar.MONTH),
+                    departureCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+
+        /*
+        SETUP RETURN DATE PICKER
+         */
+        returnEditText = (EditText) findViewById(R.id.editTextReturnDate);
+        returnDate  = (view, year, monthOfYear, dayOfMonth) -> {
+            returnCalendar.set(Calendar.YEAR, year);
+            returnCalendar.set(Calendar.MONTH, monthOfYear);
+            returnCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateReturnDateLabel();
+        };
+        returnEditText.setOnClickListener(v -> {
+            new DatePickerDialog(PostTripActivity.this, returnDate, returnCalendar
+                    .get(Calendar.YEAR), returnCalendar.get(Calendar.MONTH),
+                    returnCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+
+        /*
+        SETUP DEPARTURE TIME PICKER
+         */
+        departureTimeText = (EditText) findViewById(R.id.editTextDepartureTime);
+        departTime  = (TimePicker timePicker, int selectedHour, int selectedMinute) -> {
+            setTimeField(selectedHour, selectedMinute, departureTimeText);
+        };
+        departureTimeText.setOnClickListener(v -> {
+            new TimePickerDialog(PostTripActivity.this, departTime, 0, 0,
+                    false).show();
+        });
+
+        /*
+        SETUP RETURN TIME PICKER
+         */
+        returnTimeText = (EditText) findViewById(R.id.editTextReturnTime);
+        returnTime  = (TimePicker timePicker, int selectedHour, int selectedMinute) -> {
+            setTimeField(selectedHour, selectedMinute, returnTimeText);
+        };
+        returnTimeText.setOnClickListener(v -> {
+            new TimePickerDialog(PostTripActivity.this, returnTime, 0, 0,
+                    false).show();
+        });
+    }
+
+    private void setTimeField(int selectedHour, int selectedMinute, EditText field) {
+        String modifier = "am";
+        String minutes, hours;
+        if (selectedHour > 12) {
+            selectedHour -= 12;
+            modifier = "pm";
+        } else if (selectedHour == 0) {
+            selectedHour = 12;
+        } else if (selectedHour == 12) {
+            modifier = "pm";
+        }
+        minutes = extractTimeString(selectedMinute);
+        hours = extractTimeString(selectedHour);
+
+        field.setText("" + hours + ":" + minutes + " " + modifier);
+    }
+
+    private String extractTimeString(int minutesOrHours) {
+        return minutesOrHours < 10
+                ? "0" + Integer.toString(minutesOrHours) : Integer.toString(minutesOrHours);
+    }
+
+    private void updateDepartureDateLabel() {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        departureEditText.setText(sdf.format(departureCalendar.getTime()));
+    }
+
+    private void updateReturnDateLabel() {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        returnEditText.setText(sdf.format(returnCalendar.getTime()));
     }
 
     public void incrementSeats(View view) {
@@ -63,6 +186,14 @@ public class PostTripActivity extends AppCompatActivity {
         this.provider = provider;
     }
 
+    //https://stackoverflow.com/questions/37390080/convert-local-time-to-utc-and-vice-versa
+    public static Date gmttoLocalDate(Date date) {
+        String timeZone = Calendar.getInstance().getTimeZone().getID();
+        Date local = new Date(date.getTime()
+                + TimeZone.getTimeZone(timeZone).getOffset(date.getTime()));
+        return local;
+    }
+
     /**
      * Retrieves data from the form and makes a post api call to the trip endpoint.
      *
@@ -74,6 +205,9 @@ public class PostTripActivity extends AppCompatActivity {
         EditText inDepartureTime = findViewById(R.id.editTextDepartureTime);
         EditText inReturnTime = findViewById(R.id.editTextReturnTime);
 
+        EditText inStartLocation = findViewById(R.id.editTextStartLocation);
+        EditText inEndLocation = findViewById(R.id.editTextEndLocation);
+
         String startLocation = getStringFromEditText(R.id.editTextStartLocation);
         String endLocation = getStringFromEditText(R.id.editTextEndLocation);
         boolean canPickUp = getBooleanFromSwitch(R.id.switchCanPickUp);
@@ -82,7 +216,26 @@ public class PostTripActivity extends AppCompatActivity {
         boolean isQuiet = getBooleanFromSwitch(R.id.switchQuite);
         boolean willReturn = getBooleanFromSwitch(R.id.switchReturn);
 
-        DateFormat dfDate = new SimpleDateFormat("MM/dd/yyyyhh:mm");
+        inStartLocation.setBackground(getDrawable(R.drawable.text_border_default));
+        inEndLocation.setBackground(getDrawable(R.drawable.text_border_default));
+        inDepartureDate.setBackground(getDrawable(R.drawable.text_border_default));
+        inDepartureTime.setBackground(getDrawable(R.drawable.text_border_default));
+        inReturnDate.setBackground(getDrawable(R.drawable.text_border_default));
+        inReturnTime.setBackground(getDrawable(R.drawable.text_border_default));
+
+
+
+        if (startLocation.equals("")) {
+            makeLongToast("Please enter a starting location");
+            inStartLocation.setBackground(getDrawable(R.drawable.text_border_error));
+            return;
+        } else if (endLocation.equals("")) {
+            makeLongToast("Please enter an ending location");
+            inEndLocation.setBackground(getDrawable(R.drawable.text_border_error));
+            return;
+        }
+
+        DateFormat dfDate = new SimpleDateFormat("MM/dd/yyhh:mm a", Locale.US);
         Date startTime;
         Date returnTime = new Date(0);
         try {
@@ -91,6 +244,9 @@ public class PostTripActivity extends AppCompatActivity {
                             + inDepartureTime.getText().toString());
         } catch (ParseException error) {
             Log.e(TAG, "Error Parsing date/time.");
+            makeLongToast("Please enter a departure date and time");
+            inDepartureDate.setBackground(getDrawable(R.drawable.text_border_error));
+            inDepartureTime.setBackground(getDrawable(R.drawable.text_border_error));
             return;
         }
 
@@ -101,8 +257,31 @@ public class PostTripActivity extends AppCompatActivity {
                                 + inReturnTime.getText().toString());
             } catch (ParseException error) {
                 Log.e(TAG, "Error Parsing date/time.");
+                makeLongToast("Please enter a return date and time");
+                inReturnDate.setBackground(getDrawable(R.drawable.text_border_error));
+                inReturnTime.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
             }
+
+            if (returnTime.before(startTime)) {
+                makeLongToast("Return date must be after departure date");
+                inReturnDate.setBackground(getDrawable(R.drawable.text_border_error));
+                inReturnTime.setBackground(getDrawable(R.drawable.text_border_error));
+                return;
+            }
+        }
+
+        Date today = gmttoLocalDate(new Date());
+        if (startTime.before(today)) {
+            makeLongToast("Start date must be in the future, not past");
+            inDepartureDate.setBackground(getDrawable(R.drawable.text_border_error));
+            inDepartureTime.setBackground(getDrawable(R.drawable.text_border_error));
+
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Log.e(TAG, formatter.format(today));
+            Log.e(TAG, formatter.format(startTime));
+            Log.e(TAG, Calendar.getInstance().getTimeZone().getID());
+            return;
         }
 
         double startLat;
@@ -118,6 +297,9 @@ public class PostTripActivity extends AppCompatActivity {
                 startLat = addresses.get(0).getLatitude();
                 startLng = addresses.get(0).getLongitude();
             } else {
+                makeLongToast("Could not find starting location..."
+                        + "Please try a different address");
+                inStartLocation.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
             }
 
@@ -126,6 +308,9 @@ public class PostTripActivity extends AppCompatActivity {
                 endLat = addresses.get(0).getLatitude();
                 endLng = addresses.get(0).getLongitude();
             } else {
+                makeLongToast("Could not find ending address..."
+                        + "Please try a different address");
+                inEndLocation.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
             }
         } catch (IOException error) {
@@ -153,6 +338,11 @@ public class PostTripActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    protected void makeLongToast(String message) {
+        Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_LONG).show();
     }
 
     /**
