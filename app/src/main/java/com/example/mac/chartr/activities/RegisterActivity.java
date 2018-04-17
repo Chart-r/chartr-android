@@ -307,8 +307,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Pattern.compile("^\\+1\\-([1-9])(\\d{2})\\-(\\d{3})\\-(\\d{4})");
                 Matcher matcher = pattern.matcher(phone.getText().toString());
 
-                if (matcher.find() || (phone.getText().toString().length() > 2
-                        && phone.getText().toString().charAt(1) != '1')) {
+                if (matcher.find()) {
                     message.setText("");
                 } else {
                     message.setText("Invalid phone number");
