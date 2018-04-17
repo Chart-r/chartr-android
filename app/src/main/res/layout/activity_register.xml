@@ -194,7 +194,7 @@
         <Space
             android:id="@+id/space_about_2"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_separator_small_with_button"
+            android:layout_height="@dimen/activity_inter_group_separation_with_button"
             android:layout_below="@id/textViewRegPhoneMessage" />
 
         <Button
