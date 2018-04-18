@@ -1,5 +1,6 @@
 package com.example.mac.chartr.activities;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.location.Address;
@@ -17,6 +18,11 @@ import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -38,6 +44,9 @@ import android.widget.Toast;
 
 public class PostTripActivity extends AppCompatActivity {
     private static final String TAG = PostTripActivity.class.getSimpleName();
+    final int START_PLACE_PICKER = 1;
+    final int DEST_PLACE_PICKER = 2;
+
 
     private TextView inNumSeats;
     private int numSeats;
@@ -59,13 +68,46 @@ public class PostTripActivity extends AppCompatActivity {
     EditText returnTimeText;
     TimePickerDialog.OnTimeSetListener returnTime;
 
+    EditText startLocationEditText;
+    Double startLocationLat;
+    Double startLocationLng;
+
+    EditText endLocationEditText;
+    Double endLocationLat;
+    Double endLocationLng;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_trip);
+        initViews();
         initPickers();
+    }
 
 
+    private void initViews() {
+        departureEditText = findViewById(R.id.editTextDepartureDate);
+        returnEditText = findViewById(R.id.editTextReturnDate);
+        departureTimeText = findViewById(R.id.editTextDepartureTime);
+        returnTimeText = findViewById(R.id.editTextReturnTime);
+        startLocationEditText = findViewById(R.id.editTextStartLocation);
+        startLocationEditText.setFocusable(false);
+        startLocationEditText.setClickable(true);
+        startLocationEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPickButtonClick(START_PLACE_PICKER);
+            }
+        });
+        endLocationEditText = findViewById(R.id.editTextEndLocation);
+        endLocationEditText.setFocusable(false);
+        endLocationEditText.setClickable(true);
+        endLocationEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPickButtonClick(DEST_PLACE_PICKER);
+            }
+        });
     }
 
     //https://stackoverflow.com/questions/14933330/
@@ -128,6 +170,65 @@ public class PostTripActivity extends AppCompatActivity {
             new TimePickerDialog(PostTripActivity.this, returnTime, 0, 0,
                     false).show();
         });
+    }
+
+    public void onPickButtonClick(int key) {
+        // Construct an intent for the place picker
+        try {
+            PlacePicker.IntentBuilder intentBuilder =
+                    new PlacePicker.IntentBuilder();
+            Intent intent = intentBuilder.build(this);
+            // Start the intent by requesting a result,
+            // identified by a request code.
+            startActivityForResult(intent, key);
+
+        } catch (GooglePlayServicesRepairableException e) {
+            // ...
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // ...
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode,
+                                 int resultCode, Intent data) {
+        if ( (requestCode == START_PLACE_PICKER || requestCode == DEST_PLACE_PICKER)
+                && resultCode == Activity.RESULT_OK) {
+            // The user has selected a place. Extract the name and address.
+            final Place place = PlacePicker.getPlace(this, data);
+            final CharSequence name = place.getName();
+            final CharSequence address = place.getAddress();
+            LatLng placeCoordinates = place.getLatLng();
+            String attributions = PlacePicker.getAttributions(data);
+            if (attributions == null) {
+                attributions = "";
+            }
+
+            if (requestCode == START_PLACE_PICKER) {
+                startLocationLat = placeCoordinates.latitude;
+                startLocationLat = placeCoordinates.longitude;
+                if (place.getPlaceTypes().get(0) == 0) {
+                    startLocationEditText.setText(address);
+                }
+                else {
+                    startLocationEditText.setText(name);
+                }
+            }
+            else {
+                endLocationLat = placeCoordinates.latitude;
+                endLocationLat = placeCoordinates.longitude;
+                if (place.getPlaceTypes().get(0) == 0) {
+                    endLocationEditText.setText(address);
+                }
+                else {
+                    endLocationEditText.setText(name);
+                }
+            }
+
+        }
+        else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private void setTimeField(int selectedHour, int selectedMinute, EditText field) {
@@ -200,38 +301,30 @@ public class PostTripActivity extends AppCompatActivity {
      * @param view The current view
      */
     public void postTrip(View view) {
-        EditText inDepartureDate = findViewById(R.id.editTextDepartureDate);
-        EditText inReturnDate = findViewById(R.id.editTextReturnDate);
-        EditText inDepartureTime = findViewById(R.id.editTextDepartureTime);
-        EditText inReturnTime = findViewById(R.id.editTextReturnTime);
-
-        EditText inStartLocation = findViewById(R.id.editTextStartLocation);
-        EditText inEndLocation = findViewById(R.id.editTextEndLocation);
-
-        String startLocation = getStringFromEditText(R.id.editTextStartLocation);
-        String endLocation = getStringFromEditText(R.id.editTextEndLocation);
+        String startLocation = startLocationEditText.getText().toString();
+        String endLocation = endLocationEditText.getText().toString();
         boolean canPickUp = getBooleanFromSwitch(R.id.switchCanPickUp);
         int numSeats = getIntegerFromTextView(R.id.textViewSeatValue, 4);
         boolean noSmoking = getBooleanFromSwitch(R.id.switchNoSmoking);
         boolean isQuiet = getBooleanFromSwitch(R.id.switchQuite);
         boolean willReturn = getBooleanFromSwitch(R.id.switchReturn);
 
-        inStartLocation.setBackground(getDrawable(R.drawable.text_border_default));
-        inEndLocation.setBackground(getDrawable(R.drawable.text_border_default));
-        inDepartureDate.setBackground(getDrawable(R.drawable.text_border_default));
-        inDepartureTime.setBackground(getDrawable(R.drawable.text_border_default));
-        inReturnDate.setBackground(getDrawable(R.drawable.text_border_default));
-        inReturnTime.setBackground(getDrawable(R.drawable.text_border_default));
+        startLocationEditText.setBackground(getDrawable(R.drawable.text_border_default));
+        endLocationEditText.setBackground(getDrawable(R.drawable.text_border_default));
+        departureEditText.setBackground(getDrawable(R.drawable.text_border_default));
+        departureTimeText.setBackground(getDrawable(R.drawable.text_border_default));
+        returnEditText.setBackground(getDrawable(R.drawable.text_border_default));
+        returnTimeText.setBackground(getDrawable(R.drawable.text_border_default));
 
 
 
         if (startLocation.equals("")) {
             makeLongToast("Please enter a starting location");
-            inStartLocation.setBackground(getDrawable(R.drawable.text_border_error));
+            startLocationEditText.setBackground(getDrawable(R.drawable.text_border_error));
             return;
         } else if (endLocation.equals("")) {
             makeLongToast("Please enter an ending location");
-            inEndLocation.setBackground(getDrawable(R.drawable.text_border_error));
+            endLocationEditText.setBackground(getDrawable(R.drawable.text_border_error));
             return;
         }
 
@@ -240,33 +333,33 @@ public class PostTripActivity extends AppCompatActivity {
         Date returnTime = new Date(0);
         try {
             startTime = dfDate.parse(
-                    inDepartureDate.getText().toString()
-                            + inDepartureTime.getText().toString());
+                    departureEditText.getText().toString()
+                            + departureTimeText.getText().toString());
         } catch (ParseException error) {
             Log.e(TAG, "Error Parsing date/time.");
             makeLongToast("Please enter a departure date and time");
-            inDepartureDate.setBackground(getDrawable(R.drawable.text_border_error));
-            inDepartureTime.setBackground(getDrawable(R.drawable.text_border_error));
+            departureEditText.setBackground(getDrawable(R.drawable.text_border_error));
+            departureTimeText.setBackground(getDrawable(R.drawable.text_border_error));
             return;
         }
 
         if (willReturn) {
             try {
                 returnTime = dfDate.parse(
-                        inReturnDate.getText().toString()
-                                + inReturnTime.getText().toString());
+                        returnEditText.getText().toString()
+                                + returnTimeText.getText().toString());
             } catch (ParseException error) {
                 Log.e(TAG, "Error Parsing date/time.");
                 makeLongToast("Please enter a return date and time");
-                inReturnDate.setBackground(getDrawable(R.drawable.text_border_error));
-                inReturnTime.setBackground(getDrawable(R.drawable.text_border_error));
+                returnEditText.setBackground(getDrawable(R.drawable.text_border_error));
+                returnTimeText.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
             }
 
             if (returnTime.before(startTime)) {
                 makeLongToast("Return date must be after departure date");
-                inReturnDate.setBackground(getDrawable(R.drawable.text_border_error));
-                inReturnTime.setBackground(getDrawable(R.drawable.text_border_error));
+                returnEditText.setBackground(getDrawable(R.drawable.text_border_error));
+                returnTimeText.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
             }
         }
@@ -274,8 +367,8 @@ public class PostTripActivity extends AppCompatActivity {
         Date today = gmttoLocalDate(new Date());
         if (startTime.before(today)) {
             makeLongToast("Start date must be in the future, not past");
-            inDepartureDate.setBackground(getDrawable(R.drawable.text_border_error));
-            inDepartureTime.setBackground(getDrawable(R.drawable.text_border_error));
+            departureEditText.setBackground(getDrawable(R.drawable.text_border_error));
+            departureTimeText.setBackground(getDrawable(R.drawable.text_border_error));
 
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Log.e(TAG, formatter.format(today));
@@ -284,54 +377,18 @@ public class PostTripActivity extends AppCompatActivity {
             return;
         }
 
-        double startLat;
-        double startLng;
-        double endLat;
-        double endLng;
-        try {
-            Geocoder geocoder = new Geocoder(this);
-            List<Address> addresses;
-
-            addresses = geocoder.getFromLocationName(startLocation, 1);
-            if (addresses.size() > 0) {
-                startLat = addresses.get(0).getLatitude();
-                startLng = addresses.get(0).getLongitude();
-            } else {
-                makeLongToast("Could not find starting location..."
-                        + "Please try a different address");
-                inStartLocation.setBackground(getDrawable(R.drawable.text_border_error));
-                return;
-            }
-
-            addresses = geocoder.getFromLocationName(endLocation, 1);
-            if (addresses.size() > 0) {
-                endLat = addresses.get(0).getLatitude();
-                endLng = addresses.get(0).getLongitude();
-            } else {
-                makeLongToast("Could not find ending address..."
-                        + "Please try a different address");
-                inEndLocation.setBackground(getDrawable(R.drawable.text_border_error));
-                return;
-            }
-        } catch (IOException error) {
-            Log.e(TAG, "Error getting location coordinates for: " + startLocation);
-            return;
-        } catch (Exception e) {
-            Log.e(TAG, "Error in Geocode lookup for: " + startLocation);
-            return;
-        }
         CommonDependencyProvider commonDependencyProvider =
                 provider == null ? new CommonDependencyProvider() : provider;
 
         Trip trip = new Trip(startTime.getTime(), startTime.getTime(), isQuiet, (!noSmoking),
-                endLat, endLng, startLat, startLng, numSeats, 5.0);
+                endLocationLat, endLocationLng, startLocationLat, startLocationLng, numSeats, 5.0);
 
         ApiInterface apiInterface = ApiClient.getApiInstance();
         callApi(apiInterface, trip);
 
         if (willReturn) {
             Trip returnTrip = new Trip(returnTime.getTime(), returnTime.getTime(), isQuiet,
-                    (!noSmoking), startLat, startLng, endLat, endLng, numSeats, 5.0);
+                    (!noSmoking), startLocationLat, startLocationLng, endLocationLat, endLocationLng, numSeats, 5.0);
             callApi(apiInterface, returnTrip);
         }
 
@@ -376,17 +433,6 @@ public class PostTripActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
-    }
-
-    /**
-     * Gets an integer from an EditText
-     *
-     * @param id         The id of the EditText
-     * @return The String content of the EditText
-     */
-    protected String getStringFromEditText(int id) {
-        EditText editText = findViewById(id);
-        return editText.getText().toString();
     }
 
     /**
