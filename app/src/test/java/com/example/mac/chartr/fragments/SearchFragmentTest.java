@@ -44,35 +44,6 @@ public class SearchFragmentTest {
     }
 
     @Test
-    public void testGetLocationNameNoAddress() {
-        SearchFragment fragment = new SearchFragment();
-        SupportFragmentTestUtil.startFragment(fragment);
-
-
-        fragment.getLocationName(12, 13, geocoder);
-    }
-
-    @Test
-    public void testGetLocationName() throws IOException {
-        SearchFragment fragment = new SearchFragment();
-        SupportFragmentTestUtil.startFragment(fragment);
-
-        Address address = mock(Address.class);
-        when(address.getAddressLine(0)).thenReturn("123 my way");
-        when(address.getMaxAddressLineIndex()).thenReturn(0);
-
-        List<Address> addressList = new ArrayList<>();
-        addressList.add(address);
-        when(geocoder.getFromLocation(12, 13, 1))
-                .thenReturn(addressList);
-
-
-        String result = fragment.getLocationName(12, 13, geocoder);
-
-        assertEquals("123 my way", result);
-    }
-
-    @Test
     public void testAddTripView() {
         SearchFragment fragment = mock(SearchFragment.class);
         TextView tv = mock(TextView.class);

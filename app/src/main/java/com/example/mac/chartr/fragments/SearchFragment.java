@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
+import com.example.mac.chartr.LocationNameProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
 
@@ -226,49 +227,6 @@ public class SearchFragment extends Fragment {
 
     protected String getLocationName(double latitude, double longitude) {
         Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-        return getLocationName(latitude, longitude, geocoder);
-    }
-
-    protected String getLocationName(double latitude, double longitude, Geocoder geocoder) {
-        /* testAddTripView was failing on account of this code, specifically:
-         * Method getFromLocation in android.location.Geocoder not mocked.
-         * Geocoder functionality needs to be extracted to a separate function which
-         * receives a geocoder argument that can be mocked and passed in for testing.
-        */
-        List<Address> addresses = null;
-
-        try {
-            addresses = geocoder.getFromLocation(
-                    latitude,
-                    longitude,
-                    1);
-        } catch (IOException ioException) {
-            // Catch network or other I/O problems.
-            Log.e(TAG, ioException.toString());
-        } catch (IllegalArgumentException illegalArgumentException) {
-            // Catch invalid latitude or longitude values.
-            Log.e(TAG, "Lat/Long Error: "
-                    + "Latitude = " + latitude
-                    + ", Longitude = "
-                    + longitude, illegalArgumentException);
-        }
-
-        // Handle case where no address was found.
-        if (addresses == null || addresses.size() == 0) {
-            Log.e(TAG, "No address found");
-        } else {
-            Address address = addresses.get(0);
-            StringBuilder stringBuilder = new StringBuilder(address.getAddressLine(0));
-
-            // Fetch the address lines using getAddressLine
-            for (int i = 1; i <= address.getMaxAddressLineIndex(); i++) {
-                stringBuilder.append(", ").append(address.getAddressLine(i));
-            }
-            Log.i(TAG, "Address found");
-            return stringBuilder.toString();
-        }
-
-        // In the case of failure, return location coordinate string
-        return latitude + ", " + longitude;
+        return LocationNameProvider.getLocationName(latitude, longitude, geocoder, TAG);
     }
 }
