@@ -17,7 +17,6 @@ import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
-import com.example.mac.chartr.objects.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -79,14 +78,14 @@ public class ListTripsFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Inflates all trips that the logged in user is driving in the layout.
+     * @param tripsLinearLayout The linearlayout that the trips will populate
+     */
     private void inflatePostedTripsInLayout(final LinearLayout tripsLinearLayout) {
-        // Gets all trips for logged in user
-        CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
-        final String userEmail = commonDependencyProvider
-                .getAppHelper().getLoggedInUser().getEmail();
+        final String uid = getLoggedInUid();
         ApiInterface apiInterface = ApiClient.getApiInstance();
-        Call<List<Trip>> call = apiInterface.getUserTripsForStatus(userEmail, "driving");
-        Log.d(TAG, "Logged in user: " + userEmail);
+        Call<List<Trip>> call = apiInterface.getUserTripsForStatus(uid, "driving");
         call.enqueue(new Callback<List<Trip>>() {
             @Override
             public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
@@ -120,11 +119,9 @@ public class ListTripsFragment extends Fragment {
     }
 
     protected void inflateJoinedTripsInLayout(final LinearLayout tripsLinearLayout) {
-        CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
-        final String userEmail = commonDependencyProvider
-                .getAppHelper().getLoggedInUser().getEmail();
+        final String uid = getLoggedInUid();
         ApiInterface apiInterface = ApiClient.getApiInstance();
-        Call<List<Trip>> call = apiInterface.getAllUserTrips(userEmail);
+        Call<List<Trip>> call = apiInterface.getAllUserTrips(uid);
         call.enqueue(new Callback<List<Trip>>() {
             @Override
             public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
@@ -146,9 +143,9 @@ public class ListTripsFragment extends Fragment {
                     Log.d(TAG, "Got " + resource.size() + " active joined trips.");
                 }
                 for (int i = activeIndex; i < resource.size(); i++) {
-                    String userStatus = resource.get(i).getUserStatus(userEmail);
+                    String userStatus = resource.get(i).getUserStatus(uid);
                     if (userStatus.equals("pending") || userStatus.equals("riding")) {
-                        addTripViewStatus(tripsLinearLayout, resource.get(i), userEmail);
+                        addTripViewStatus(tripsLinearLayout, resource.get(i), uid);
                     }
                 }
             }
@@ -164,10 +161,9 @@ public class ListTripsFragment extends Fragment {
     }
 
     protected void inflatePastTripsInLayout(final LinearLayout tripsLinearLayout) {
-        CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
-        String userEmail = commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
+        String uid = getLoggedInUid();
         ApiInterface apiInterface = ApiClient.getApiInstance();
-        Call<List<Trip>> call = apiInterface.getAllUserTrips(userEmail);
+        Call<List<Trip>> call = apiInterface.getAllUserTrips(uid);
         call.enqueue(new Callback<List<Trip>>() {
             @Override
             public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
@@ -251,13 +247,6 @@ public class ListTripsFragment extends Fragment {
         String seats = (trip.getUsers().size() - 1) + "/" + trip.getSeats();
         String start = getLocationName(trip.getStartLat(), trip.getStartLong());
         String destination = getLocationName(trip.getEndLat(), trip.getEndLong());
-
-        if (name.equals(getLoggedInUser().getEmail())) {
-            name = getLoggedInUser().getName();
-        } else {
-            Log.d(TAG, "Username " + name
-                    + " does not match logged in user: " + getLoggedInUser().getName());
-        }
 
         ((TextView) tripContainer.findViewById(R.id.textViewName)).setText(name);
         ((TextView) tripContainer.findViewById(R.id.textViewRating)).setText(rating);
@@ -343,7 +332,7 @@ public class ListTripsFragment extends Fragment {
      * Gets the logged in user from the provider
      * @return logged in user
      */
-    private User getLoggedInUser() {
-        return provider.getAppHelper().getLoggedInUser();
+    private String getLoggedInUid() {
+        return provider.getAppHelper().getLoggedInUser().getUid();
     }
 }

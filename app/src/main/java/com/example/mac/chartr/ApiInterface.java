@@ -1,5 +1,6 @@
 package com.example.mac.chartr;
 
+import com.example.mac.chartr.objects.Review;
 import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
 
@@ -18,14 +19,21 @@ import retrofit2.http.Path;
 
 public interface ApiInterface {
     // User API calls
-
     /**
      * Gets a user corresponding to the given email.
      * @param email The user's email
      * @return A call to get the user corresponding to the email
      */
     @GET("user/{email}")
-    Call<User> getUser(@Path("email") String email);
+    Call<User> getUserFromEmail(@Path("email") String email);
+
+    /**
+     * Gets a user corresponding to the given uid.
+     * @param uid The user's uid
+     * @return A call to get the user corresponding to the uid.
+     */
+    @GET("user/uid/{uid}")
+    Call<User> getUserFromUid(@Path("uid") String uid);
 
     /**
      * Posts a user.
@@ -38,11 +46,11 @@ public interface ApiInterface {
 
     /**
      * Deletes the user corresponding to the given email.
-     * @param email The email of the user to be deleted
+     * @param uid The ID of the user to be deleted
      * @return A call to delete the specified user
      */
-    @DELETE("user/{email}")
-    Call<Void> deleteUser(@Path("email") String email);
+    @DELETE("user/{uid}")
+    Call<Void> deleteUser(@Path("uid") String uid);
 
     // Trip API calls
     /**
@@ -61,57 +69,83 @@ public interface ApiInterface {
 
     /**
      * Gets all the trips for a given user.
-     * @param email Email of the user.
+     * @param uid The user's ID
      * @return A call to get a list of trips fulfilling the criteria
      */
-    @GET("user/{email}/trip")
-    Call<List<Trip>> getAllUserTrips(@Path("email") String email);
+    @GET("user/{uid}/trip")
+    Call<List<Trip>> getAllUserTrips(@Path("uid") String uid);
 
     /**
      * Gets all trips for a user with the specified status
-     * @param email user's email
+     * @param uid The user's ID
      * @param status user's status, can be either driving, riding, or pending
      * @return A call to get a list of trips fulfilling the criteria
      */
-    @GET("user/{email}/trip/{status}")
-    Call<List<Trip>> getUserTripsForStatus(@Path("email") String email,
+    @GET("user/{uid}/trip/{status}")
+    Call<List<Trip>> getUserTripsForStatus(@Path("uid") String uid,
                                            @Path("status") String status);
 
     /**
      * Gets a single trip matching the specified trip ID.
-     * @param tripID The trip's ID.
+     * @param tid The trip's ID.
      * @return A call to get the specified trip.
      */
-    @GET("trip/{tripID}")
-    Call<Trip> getTrip(@Path("tripID") String tripID);
+    @GET("trip/{tid}")
+    Call<Trip> getTrip(@Path("tid") String tid);
 
     /**
      * Updates a specified user's status in a specified trip to the status provided.
-     * @param email The user to be updated
-     * @param tripID The trip to be updated
+     * @param uid ID of the user to be updated
+     * @param tid ID of the trip to be updated
      * @param status The new status of the user
      * @return A call to get a list of trips fulfilling the criteria
      */
-    @GET("user/{email}/trip/{tripID}/{status}")
-    Call<String> updateTrip(@Path("email") String email,
-                            @Path("tripID") String tripID,
+    @GET("user/{uid}/trip/{tid}/{status}")
+    Call<String> updateTrip(@Path("uid") String uid,
+                            @Path("tid") String tid,
                             @Path("status") String status);
 
     /**
      * Posts a trip with the specified user as the driver.
-     * @param email The driver's email
+     * @param uid Driver's uid
      * @param trip The trip details
      * @return A call to post the trip.
      */
-    @POST("user/{email}/trip")
-    Call<String> postUserDrivingTrip(@Path("email") String email,
-                                   @Body Trip trip);
+    @POST("user/{uid}/trip")
+    Call<String> postUserDrivingTrip(@Path("uid") String uid,
+                                     @Body Trip trip);
 
     /**
      * Delete the specified trip.
-     * @param tripID The trip ID of the trip to delete
+     * @param tid Trip's ID
      * @return A call to delete the trip
      */
-    @DELETE("trip/{tripID}")
-    Call<Void> deleteTrip(@Path("tripID") String tripID);
+    @DELETE("trip/{tid}")
+    Call<Void> deleteTrip(@Path("tid") String tid);
+
+    // Review related API calls
+    /**
+     * Posts a review from the specified user.
+     * @param uid The ID of the user posting the review
+     * @param review The review, must contain a reviewee, tid, comment, and rating
+     * @return A call to post the review
+     */
+    @POST("user/{uid}/review")
+    Call<String> postReviewFromUser(@Path("uid") String uid, @Body Review review);
+
+    /**
+     * Gets a single review with the specified rid.
+     * @param rid The review's ID
+     * @return A call to get a review
+     */
+    @GET("review/{rid}")
+    Call<Review> getReview(@Path("rid") String rid);
+
+    /**
+     * Gets all the reviews for the specified user.
+     * @param uid The user's ID
+     * @return A call to get a list of all the reviews for a user.
+     */
+    @GET("user/{uid}/review")
+    Call<List<Review>> getAllReviewsForUser(@Path("uid") String uid);
 }

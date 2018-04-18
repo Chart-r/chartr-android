@@ -110,8 +110,8 @@ public class SearchFragment extends Fragment {
                 Log.d(TAG, response.code() + "");
 
                 CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
-                String userEmail =
-                        commonDependencyProvider.getAppHelper().getLoggedInUser().getEmail();
+                String loggedInUid =
+                        commonDependencyProvider.getAppHelper().getLoggedInUser().getUid();
 
                 LinearLayout tripsLayout = view.findViewById(R.id.searchTripsLinearLayout);
 
@@ -123,7 +123,7 @@ public class SearchFragment extends Fragment {
                     boolean costOfTripWithinRange = priceRangeFrom < currTrip.getPrice()
                             && currTrip.getPrice() < priceRangeTo;
                     boolean hasDriverPreference = !preferredDriverEmail.isEmpty();
-                    boolean isNotDriver = !userEmail.equals(currTrip.getDriverFromUsers());
+                    boolean isNotDriver = !loggedInUid.equals(currTrip.getDriverFromUsers());
 
                     float startDistance = computeDistanceBetween(startLat, startLng,
                             currTrip.getStartLat(), currTrip.getStartLong());
