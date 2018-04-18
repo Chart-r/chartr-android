@@ -13,7 +13,6 @@ import com.example.mac.chartr.objects.Trip;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
@@ -83,7 +82,7 @@ public class SearchFragmentTest {
         LinearLayout layout = mock(LinearLayout.class);
         Trip trip = new Trip(123, 123, true, false,
                 20.3f, 20.4f, 30.4f, 23.4f, 3,
-                12.5f,"nnnn", new HashMap<>());
+                12.5f, "nnnn", new HashMap<>());
         doCallRealMethod().when(fragment).addTripView(any(LinearLayout.class), any(Trip.class));
         when(fragment.getLayoutInflater()).thenReturn(inflater);
         when(inflater.inflate(any(int.class), any(ViewGroup.class), any(boolean.class)))
