@@ -30,18 +30,18 @@ public class TripsFragment extends Fragment {
         tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
         Bundle arg1 = new Bundle();
-        arg1.putString(ListTripsFragment.TRIP_TYPE_KEY, "Posted");
-        tabHost.addTab(tabHost.newTabSpec("PostedTab").setIndicator("Posted"),
+        arg1.putString(ListTripsFragment.TRIP_TYPE_KEY, "Confirmed");
+        tabHost.addTab(tabHost.newTabSpec("ConfirmedTab").setIndicator("Confirmed"),
                 ListTripsFragment.class, arg1);
 
         Bundle arg2 = new Bundle();
-        arg2.putString(ListTripsFragment.TRIP_TYPE_KEY, "Joined");
-        tabHost.addTab(tabHost.newTabSpec("JoinedTab").setIndicator("Joined"),
+        arg2.putString(ListTripsFragment.TRIP_TYPE_KEY, "Pending");
+        tabHost.addTab(tabHost.newTabSpec("PendingTab").setIndicator("Pending"),
                 ListTripsFragment.class, arg2);
 
         Bundle arg3 = new Bundle();
-        arg3.putString(ListTripsFragment.TRIP_TYPE_KEY, "History");
-        tabHost.addTab(tabHost.newTabSpec("HistoryTab").setIndicator("History"),
+        arg3.putString(ListTripsFragment.TRIP_TYPE_KEY, "Posted");
+        tabHost.addTab(tabHost.newTabSpec("PostedTab").setIndicator("Posted"),
                 ListTripsFragment.class, arg3);
 
         return root;
