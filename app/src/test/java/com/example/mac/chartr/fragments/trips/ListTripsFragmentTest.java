@@ -32,9 +32,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by cygnus on 3/7/18.
- */
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Log.class)
