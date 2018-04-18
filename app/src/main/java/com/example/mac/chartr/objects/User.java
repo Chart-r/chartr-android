@@ -137,7 +137,7 @@ public class User {
         if (name != null ? !name.equals(user.name) : user.name != null) {
             return false;
         }
-        if (birthdate != null ? !birthdate.equals(user.birthdate) : user.birthdate != null){
+        if (birthdate != null ? !birthdate.equals(user.birthdate) : user.birthdate != null) {
             return false;
         }
         return phone != null ? phone.equals(user.phone) : user.phone == null;

@@ -1,6 +1,5 @@
 package com.example.mac.chartr.fragments.trips;
 
-import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,7 +19,6 @@ import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;

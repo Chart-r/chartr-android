@@ -4,10 +4,8 @@ package com.example.mac.chartr;
 import android.location.Address;
 import android.location.Geocoder;
 
-import com.example.mac.chartr.fragments.SearchFragment;
 
 import org.junit.Test;
-import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -11,7 +11,7 @@ import java.util.List;
 public class LocationNameProvider {
 
     public static String getLocationName(double latitude, double longitude,
-                                         Geocoder geocoder, String TAG) {
+                                         Geocoder geocoder, String tag) {
         List<Address> addresses = null;
 
         try {
@@ -21,10 +21,10 @@ public class LocationNameProvider {
                     1);
         } catch (IOException ioException) {
             // Catch network or other I/O problems.
-            Log.e(TAG, ioException.toString());
+            Log.e(tag, ioException.toString());
         } catch (IllegalArgumentException illegalArgumentException) {
             // Catch invalid latitude or longitude values.
-            Log.e(TAG, "Lat/Long Error: "
+            Log.e(tag, "Lat/Long Error: "
                     + "Latitude = " + latitude
                     + ", Longitude = "
                     + longitude, illegalArgumentException);
@@ -32,7 +32,7 @@ public class LocationNameProvider {
 
         // Handle case where no address was found.
         if (addresses == null || addresses.size() == 0) {
-            Log.e(TAG, "No address found");
+            Log.e(tag, "No address found");
         } else {
             Address address = addresses.get(0);
             StringBuilder stringBuilder = new StringBuilder(address.getAddressLine(0));
@@ -41,7 +41,7 @@ public class LocationNameProvider {
             for (int i = 1; i <= address.getMaxAddressLineIndex(); i++) {
                 stringBuilder.append(", ").append(address.getAddressLine(i));
             }
-            Log.i(TAG, "Address found");
+            Log.i(tag, "Address found");
             return stringBuilder.toString();
         }
 
