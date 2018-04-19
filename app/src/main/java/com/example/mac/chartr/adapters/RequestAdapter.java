@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class RequestAdapter extends RecyclerView.Adapter {
@@ -59,9 +61,16 @@ public class RequestAdapter extends RecyclerView.Adapter {
             Trip trip = tripPair.first;
             String nameRetrieved = tripPair.second;
             name.setText("" + nameRetrieved);
-            startTime.setText("" + trip.getStartTime());
-            start.setText("" + trip.getStartLat());
-            destination.setText("" + trip.getEndLat());
+            startTime.setText(convertLongToDateTime(trip.getStartTime()));
+            start.setText("Start: " + trip.getStartLat());
+            destination.setText("Destination: " + trip.getEndLat());
+        }
+
+        String convertLongToDateTime(long longTime){
+            Date date = new Date(longTime);
+            SimpleDateFormat formatter
+                    = new SimpleDateFormat("yyyy/M/dd 'at' h:mm a zzz");
+            return formatter.format(date);
         }
 
     }

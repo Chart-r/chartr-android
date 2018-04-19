@@ -79,11 +79,9 @@ public class RequestsFragment extends Fragment {
 
     private void getRequestedUsers(){
         Log.d(TAG, "start getRequestedUsers()");
-        ApiInterface apiInterface = ApiClient.getApiInstance();
 
-        Log.d(TAG, "call apiInterface.getAllUserTrips()");
+        ApiInterface apiInterface = ApiClient.getApiInstance();
         Call<List<Trip>> call = apiInterface.getAllUserTrips(uid);
-        Log.d(TAG, "finished apiInterface.getAllUserTrips()");
 
         call.enqueue(new Callback<List<Trip>>() {
             @Override
@@ -108,9 +106,6 @@ public class RequestsFragment extends Fragment {
                 call.cancel();
             }
         });
-
-        Log.d(TAG, "call filterRequestedUsers()");
-        Log.d(TAG, "finished filterRequestedUsers()");
 
         Log.d(TAG, "end getRequestedUsers()");
     }
