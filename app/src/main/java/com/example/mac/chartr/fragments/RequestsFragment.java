@@ -90,7 +90,6 @@ public class RequestsFragment extends Fragment {
 
                 // Sort trips from most earliest to latest
                 List<Trip> allTrips = response.body();
-                Collections.sort(allTrips, comparator);
                 List<Pair<Trip, String>> requestedUsersUids = filterRequestedUsers(allTrips);
 
                 getNamesFromUids(requestedUsersUids);

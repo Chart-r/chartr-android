@@ -107,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/activity_separator_small"
                     android:layout_centerInParent="true"
-                    android:background="@color/reject_button"
+                    android:background="@drawable/button_reject_ripple_effect"
                     android:textColor="@color/white"
                     android:text="@string/reject_button"/>
 
@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/activity_separator_small"
                     android:layout_centerInParent="true"
-                    android:background="@color/accept_button"
+                    android:background="@drawable/button_accept_ripple_effect"
                     android:textColor="@color/white"
                     android:text="@string/accept_button" />
 
