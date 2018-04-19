@@ -7,12 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
@@ -25,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,12 +39,7 @@ public class ListTripsFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<Trip> tripsData = new ArrayList<>();
-    private Comparator<Trip> comparator = new Comparator<Trip>() {
-        @Override
-        public int compare(Trip a, Trip b) {
-            return (int) (b.getStartTime() - a.getStartTime());
-        }
-    };
+    private Comparator<Trip> comparator = (a, b) -> (int) (b.getStartTime() - a.getStartTime());
 
     public ListTripsFragment() {
         // Required empty public constructor
@@ -86,9 +77,6 @@ public class ListTripsFragment extends Fragment {
                 case "Posted":
                     getFilteredTrips("driving");
                     break;
-                case "Requested":
-                    getRequestedTrips();
-                    break;
             }
         }
 
@@ -119,10 +107,6 @@ public class ListTripsFragment extends Fragment {
                 call.cancel();
             }
         });
-    }
-
-    private void getRequestedTrips() {
-
     }
 
     protected String getLocationName(double latitude, double longitude) {
