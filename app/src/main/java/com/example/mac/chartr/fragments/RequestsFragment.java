@@ -16,6 +16,7 @@ import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.adapters.RequestAdapter;
 import com.example.mac.chartr.objects.Trip;
+import com.example.mac.chartr.objects.User;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +32,6 @@ public class RequestsFragment extends Fragment {
     public static final String TAG = RequestsFragment.class.getSimpleName();
     private CommonDependencyProvider provider;
     private String uid;
-    private List<Trip> allTrips;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -89,11 +89,12 @@ public class RequestsFragment extends Fragment {
                 Log.d(TAG, response.code() + "");
 
                 // Sort trips from most earliest to latest
-                allTrips = response.body();
+                List<Trip> allTrips = response.body();
                 Collections.sort(allTrips, comparator);
-                Log.d(TAG, "allTrips: " + allTrips.toString());
-                filterRequestedUsers(allTrips);
-                Log.d(TAG, "requestedUsers: " + requestedUsers.toString());
+                List<Pair<Trip, String>> requestedUsersUids = filterRequestedUsers(allTrips);
+
+                getNamesFromUids(requestedUsersUids);
+
                 adapter = new RequestAdapter(requestedUsers);
                 recyclerView.setAdapter(adapter);
             }
@@ -110,24 +111,62 @@ public class RequestsFragment extends Fragment {
         Log.d(TAG, "end getRequestedUsers()");
     }
 
-    private void filterRequestedUsers(List<Trip> allTrips){
+    private List<Pair<Trip, String>> filterRequestedUsers(List<Trip> allTrips){
         Log.d(TAG, "start filterRequestedUsers()");
-        Log.d(TAG, "allTrips: " + allTrips);
-        requestedUsers.clear();
+
+        List<Pair<Trip, String>> filteredRequestedUsers = new ArrayList<>();
         for (Trip trip : allTrips){
-            Log.d(TAG, "trip: " + trip);
             Map<String, String> allUsers = trip.getUsers();
+
             for (Map.Entry<String, String> user : allUsers.entrySet()){
-                Log.d(TAG, "user: " + user);
-                Log.d(TAG, "user.getValue(): " + user.getValue());
                 if(user.getValue().equals("pending")) {
-                    Log.d(TAG, "user is pending");
                     Pair<Trip, String> requestedUser = new Pair<>(trip, user.getKey());
-                    requestedUsers.add(requestedUser);
+                    filteredRequestedUsers.add(requestedUser);
                 }
             }
+
         }
+
         Log.d(TAG, "end filterRequestedUsers()");
+        return filteredRequestedUsers;
+    }
+
+    private void getNamesFromUids(List<Pair<Trip, String>> requestedUsersUids){
+        Log.d(TAG, "start getNamesFromUids()");
+
+        requestedUsers.clear();
+        for (Pair<Trip, String> requestedUserPair : requestedUsersUids){
+            ApiInterface apiInterface = ApiClient.getApiInstance();
+            Call<User> call = apiInterface.getUserFromUid(requestedUserPair.second);
+
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    Log.d(TAG, response.code() + "");
+
+                    // Sort trips from most earliest to latest
+                    User user = response.body();
+                    Pair<Trip, String> requestedUserNamePair =
+                        new Pair(requestedUserPair.first, user.getName());
+
+                    requestedUsers.add(requestedUserNamePair);
+
+                    adapter = new RequestAdapter(requestedUsers);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Log.d(TAG, "Retrofit failed to get data");
+                    Log.d(TAG, t.getMessage());
+                    t.printStackTrace();
+                    call.cancel();
+                }
+            });
+        }
+
+        Log.d(TAG, "end getNamesFromUids()");
     }
 
     /**
