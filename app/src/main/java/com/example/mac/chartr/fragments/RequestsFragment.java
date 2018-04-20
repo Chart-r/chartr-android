@@ -77,7 +77,7 @@ public class RequestsFragment extends Fragment {
         return root;
     }
 
-    private void getRequestedUsers(){
+    private void getRequestedUsers() {
         Log.d(TAG, "start getRequestedUsers()");
 
         ApiInterface apiInterface = ApiClient.getApiInstance();
@@ -110,15 +110,15 @@ public class RequestsFragment extends Fragment {
         Log.d(TAG, "end getRequestedUsers()");
     }
 
-    private List<Pair<Trip, String>> filterRequestedUsers(List<Trip> allTrips){
+    private List<Pair<Trip, String>> filterRequestedUsers(List<Trip> allTrips) {
         Log.d(TAG, "start filterRequestedUsers()");
 
         List<Pair<Trip, String>> filteredRequestedUsers = new ArrayList<>();
-        for (Trip trip : allTrips){
+        for (Trip trip : allTrips) {
             Map<String, String> allUsers = trip.getUsers();
 
-            for (Map.Entry<String, String> user : allUsers.entrySet()){
-                if(user.getValue().equals("pending")) {
+            for (Map.Entry<String, String> user : allUsers.entrySet()) {
+                if (user.getValue().equals("pending")) {
                     Pair<Trip, String> requestedUser = new Pair<>(trip, user.getKey());
                     filteredRequestedUsers.add(requestedUser);
                 }
@@ -130,11 +130,11 @@ public class RequestsFragment extends Fragment {
         return filteredRequestedUsers;
     }
 
-    private void getUsersFromUids(List<Pair<Trip, String>> requestedUsersUids){
+    private void getUsersFromUids(List<Pair<Trip, String>> requestedUsersUids) {
         Log.d(TAG, "start getNamesFromUids()");
 
         requestedUsers.clear();
-        for (Pair<Trip, String> requestedUserPair : requestedUsersUids){
+        for (Pair<Trip, String> requestedUserPair : requestedUsersUids) {
             ApiInterface apiInterface = ApiClient.getApiInstance();
             Call<User> call = apiInterface.getUserFromUid(requestedUserPair.second);
 

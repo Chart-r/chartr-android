@@ -154,7 +154,8 @@ public class Trip implements Serializable {
 
     private String getTime(long longDate) {
         Date date = new Date(longDate);
-        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a zzz", Locale.getDefault());
+        SimpleDateFormat formatter =
+                new SimpleDateFormat("h:mm a zzz", Locale.getDefault());
         return formatter.format(date);
     }
 
@@ -165,7 +166,8 @@ public class Trip implements Serializable {
     }
 
 
-    private String getLocationName(Context context, double latitude, double longitude, boolean shortName) {
+    private String getLocationName(Context context, double latitude,
+                                   double longitude, boolean shortName) {
         /* testAddTripView was failing on account of this code, specifically:
          * Method getFromLocation in android.location.Geocoder not mocked.
          * Geocoder functionality needs to be extracted to a separate function which
@@ -203,8 +205,7 @@ public class Trip implements Serializable {
                 stringBuilder.append(", ");
                 stringBuilder.append(addressArray[addressArray.length - 2].substring(0, 2));
                 return stringBuilder.toString();
-            }
-            else {
+            } else {
                 stringBuilder.append(address.getAddressLine(0));
                 // Fetch the address lines using getAddressLine
                 for (int i = 1; i <= address.getMaxAddressLineIndex(); i++) {

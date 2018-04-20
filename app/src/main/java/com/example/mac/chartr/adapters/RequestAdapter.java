@@ -35,7 +35,8 @@ public class RequestAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View root = LayoutInflater.from(parent.getContext()).inflate (R.layout.layout_request_container, parent, false);
+        View root = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.layout_request_container, parent, false);
         return new RequestAdapter.RequestViewHolder(root);
     }
 
@@ -83,7 +84,8 @@ public class RequestAdapter extends RecyclerView.Adapter {
             Trip trip = tripPair.first;
             String nameRetrieved = tripPair.second.getName();
             name.setText("" + nameRetrieved);
-            startTime.setText(String.format("%s at %s", trip.getStartDateString(), trip.getStartTimeString()));
+            startTime.setText(String
+                    .format("%s at %s", trip.getStartDateString(), trip.getStartTimeString()));
             start.setText(trip.getStartLocationShortName(itemView.getContext()));
             destination.setText(trip.getEndLocationShortName(itemView.getContext()));
 
@@ -92,7 +94,8 @@ public class RequestAdapter extends RecyclerView.Adapter {
 
     }
 
-    private void setRiderStatus(Context context, int position, Pair<Trip, User> tripUserPair, String status){
+    private void setRiderStatus(Context context, int position, Pair<Trip,
+            User> tripUserPair, String status) {
         ApiInterface apiInterface = ApiClient.getApiInstance();
         Trip trip = tripUserPair.first;
         User user = tripUserPair.second;
@@ -111,8 +114,7 @@ public class RequestAdapter extends RecyclerView.Adapter {
                 if (status.equals("riding")) {
                     CharSequence text = "Accepted " + tripUserPair.second.getName();
                     Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     CharSequence text = "Rejected " + tripUserPair.second.getName();
                     Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 }

@@ -127,7 +127,8 @@ public class SearchFragment extends Fragment {
                     boolean costOfTripWithinRange = priceRangeFrom < currTrip.getPrice()
                             && currTrip.getPrice() < priceRangeTo;
                     boolean hasDriverPreference = !preferredDriverEmail.isEmpty();
-                    boolean isNotDriver = !loggedInUid.equals(currTrip.getDriverFromUsers());                    boolean hasDatePreference = !departureDate.isEmpty();
+                    boolean isNotDriver = !loggedInUid.equals(currTrip.getDriverFromUsers());
+                    boolean hasDatePreference = !departureDate.isEmpty();
                     String currTripDate = getDate(currTrip.getStartTime(), "MM/dd/yyyy");
                     boolean datesMatch = departureDate.equals(currTripDate);
 

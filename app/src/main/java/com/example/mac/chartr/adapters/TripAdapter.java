@@ -43,7 +43,8 @@ public class TripAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View root = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_trip_container, parent, false);
+        View root = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.layout_trip_container, parent, false);
         return new TripViewHolder(root);
     }
 

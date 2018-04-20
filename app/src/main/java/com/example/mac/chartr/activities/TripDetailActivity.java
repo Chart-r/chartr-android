@@ -76,8 +76,7 @@ public class TripDetailActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             });
-        }
-        else {
+        } else {
             submitButton.setText(R.string.request);
             submitButton.setOnClickListener(new View.OnClickListener() {
                 @Override

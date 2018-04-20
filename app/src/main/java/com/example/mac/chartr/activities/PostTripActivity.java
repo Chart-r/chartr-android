@@ -40,8 +40,8 @@ import retrofit2.Response;
 
 public class PostTripActivity extends AppCompatActivity {
     private static final String TAG = PostTripActivity.class.getSimpleName();
-    final int START_PLACE_PICKER = 1;
-    final int DEST_PLACE_PICKER = 2;
+    private static final int START_PLACE_PICKER = 1;
+    private static final int DEST_PLACE_PICKER = 2;
 
 
     private TextView inNumSeats;
@@ -188,7 +188,7 @@ public class PostTripActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode,
                                  int resultCode, Intent data) {
-        if ( (requestCode == START_PLACE_PICKER || requestCode == DEST_PLACE_PICKER)
+        if ((requestCode == START_PLACE_PICKER || requestCode == DEST_PLACE_PICKER)
                 && resultCode == Activity.RESULT_OK) {
             // The user has selected a place. Extract the name and address.
             final Place place = PlacePicker.getPlace(this, data);
@@ -205,24 +205,20 @@ public class PostTripActivity extends AppCompatActivity {
                 startLocationLat = placeCoordinates.longitude;
                 if (place.getPlaceTypes().get(0) == 0) {
                     startLocationEditText.setText(address);
-                }
-                else {
+                } else {
                     startLocationEditText.setText(name);
                 }
-            }
-            else {
+            } else {
                 endLocationLat = placeCoordinates.latitude;
                 endLocationLng = placeCoordinates.longitude;
                 if (place.getPlaceTypes().get(0) == 0) {
                     endLocationEditText.setText(address);
-                }
-                else {
+                } else {
                     endLocationEditText.setText(name);
                 }
             }
 
-        }
-        else {
+        } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -377,14 +373,16 @@ public class PostTripActivity extends AppCompatActivity {
                 provider == null ? new CommonDependencyProvider() : provider;
 
         Trip trip = new Trip(startTime.getTime(), startTime.getTime(), isQuiet, (!noSmoking),
-                endLocationLat, endLocationLng, startLocationLat, startLocationLng, numSeats, 5.0);
+                endLocationLat, endLocationLng, startLocationLat, startLocationLng,
+                numSeats, 5.0);
 
         ApiInterface apiInterface = ApiClient.getApiInstance();
         callApi(apiInterface, trip);
 
         if (willReturn) {
             Trip returnTrip = new Trip(returnTime.getTime(), returnTime.getTime(), isQuiet,
-                    (!noSmoking), startLocationLat, startLocationLng, endLocationLat, endLocationLng, numSeats, 5.0);
+                    (!noSmoking), startLocationLat, startLocationLng, endLocationLat,
+                    endLocationLng, numSeats, 5.0);
             callApi(apiInterface, returnTrip);
         }
 
