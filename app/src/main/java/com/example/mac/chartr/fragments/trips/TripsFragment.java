@@ -26,7 +26,7 @@ public class TripsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_trips, container, false);
-        FragmentTabHost tabHost = (FragmentTabHost) root.findViewById(android.R.id.tabhost);
+        FragmentTabHost tabHost = root.findViewById(android.R.id.tabhost);
         tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
         Bundle arg1 = new Bundle();

@@ -11,6 +11,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -100,7 +101,7 @@ public interface ApiInterface {
      * @param status The new status of the user
      * @return A call to get a list of trips fulfilling the criteria
      */
-    @GET("user/{uid}/trip/{tid}/{status}")
+    @PUT("user/{uid}/trip/{tid}/{status}")
     Call<String> updateTrip(@Path("uid") String uid,
                             @Path("tid") String tid,
                             @Path("status") String status);

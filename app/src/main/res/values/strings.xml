@@ -29,6 +29,7 @@
     <string name="rating_placeholder">Rating</string>
     <string name="seat_number_placeholder">Seats</string>
     <string name="seat_text">Seats Filled</string>
+    <string name="dateTime_placeholder">Date and time</string>
     <string name="start_placeholder">Start</string>
     <string name="destination_placeholder">Destination</string>
     <string name="user_profile_icon">A user uploaded profile image.</string>
@@ -43,4 +44,6 @@
     <string name="searchFragmentButtonSearch">Search</string>
     <string name="back">Back</string>
     <string name="request">Request</string>
+    <string name="accept_button">Accept</string>
+    <string name="reject_button">Reject</string>
 </resources>

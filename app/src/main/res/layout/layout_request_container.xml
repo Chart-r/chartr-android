@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutRequestContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"
+    android:layout_gravity="center"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/edit_text_posted_trip"
+    android:elevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageViewProfileIcon"
+            android:layout_width="@dimen/profile_icon_small"
+            android:layout_height="@dimen/profile_icon_small"
+            android:layout_marginStart="@dimen/activity_separator_small"
+            android:layout_marginTop="@dimen/activity_separator_small"
+            android:contentDescription="@string/user_profile_icon"
+            android:src="@drawable/ic_account_circle_white" />
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_marginStart="@dimen/activity_separator_small"
+            android:layout_marginTop="@dimen/activity_separator_small"
+            android:layout_toEndOf="@+id/imageViewProfileIcon"
+            android:text="@string/name_placeholder"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageView
+            android:id="@+id/imageViewStartIcon"
+            android:layout_width="@dimen/location_icon_small"
+            android:layout_height="@dimen/location_icon_small"
+            android:layout_alignBottom="@+id/textViewStart"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/textViewStart"
+            android:layout_toStartOf="@+id/textViewStart"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_room_black_24dp" />
+
+        <TextView
+            android:id="@+id/textViewTime"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/text_view_medium_height"
+            android:layout_alignStart="@+id/textViewName"
+            android:layout_below="@+id/imageViewProfileIcon"
+            android:layout_marginTop="@dimen/activity_separator_small"
+            android:text="@string/dateTime_placeholder"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textViewStart"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/text_view_medium_height"
+            android:layout_alignStart="@+id/textViewName"
+            android:layout_below="@+id/textViewTime"
+            android:text="@string/start_placeholder"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageView
+            android:id="@+id/imageViewDestinationIcon"
+            android:layout_width="@dimen/location_icon_small"
+            android:layout_height="@dimen/location_icon_small"
+            android:layout_alignBottom="@+id/textViewDestination"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/textViewDestination"
+            android:layout_toStartOf="@+id/textViewDestination"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_room_black_24dp" />
+
+        <TextView
+            android:id="@+id/textViewDestination"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/text_view_medium_height"
+            android:layout_alignStart="@+id/textViewStart"
+            android:layout_below="@+id/textViewStart"
+            android:text="@string/destination_placeholder"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/textViewDestination"
+            android:layout_centerHorizontal="true"
+            android:weightSum="2">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/reject_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_separator_small"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/button_reject_ripple_effect"
+                    android:textColor="@color/white"
+                    android:text="@string/reject_button"/>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/accept_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_separator_small"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/button_accept_ripple_effect"
+                    android:textColor="@color/white"
+                    android:text="@string/accept_button" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
