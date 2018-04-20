@@ -1,10 +1,9 @@
 package com.example.mac.chartr.activities;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +16,6 @@ import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
-import com.example.mac.chartr.objects.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;

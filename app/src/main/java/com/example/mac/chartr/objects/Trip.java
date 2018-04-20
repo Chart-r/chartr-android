@@ -4,7 +4,6 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
-import android.util.Pair;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

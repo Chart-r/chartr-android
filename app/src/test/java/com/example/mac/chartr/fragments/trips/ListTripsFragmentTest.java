@@ -10,7 +10,6 @@ import com.example.mac.chartr.objects.User;
 import junit.framework.Assert;
 
 import org.junit.Test;
-
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;

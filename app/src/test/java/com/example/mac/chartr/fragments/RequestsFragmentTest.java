@@ -4,7 +4,6 @@ import com.example.mac.chartr.AppHelper;
 import com.example.mac.chartr.BuildConfig;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.objects.User;
-import com.example.mac.chartr.objects.UserTest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -7,10 +7,11 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-//import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.mock;
+
+//import org.robolectric.Robolectric;
 
 /**
  * Created by Michael Rush on 3/4/2018.
