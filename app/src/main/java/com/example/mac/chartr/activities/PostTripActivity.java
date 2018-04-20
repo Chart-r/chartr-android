@@ -216,7 +216,7 @@ public class PostTripActivity extends AppCompatActivity {
             }
             else {
                 endLocationLat = placeCoordinates.latitude;
-                endLocationLat = placeCoordinates.longitude;
+                endLocationLng = placeCoordinates.longitude;
                 if (place.getPlaceTypes().get(0) == 0) {
                     endLocationEditText.setText(address);
                 }
