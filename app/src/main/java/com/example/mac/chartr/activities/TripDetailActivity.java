@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class TripDetailActivity extends AppCompatActivity {
     EditText startLocationEditText;
     EditText endLocationEditText;
     TextView numSeatsEditText;
+    Switch smokingSwitch;
     Button submitButton;
 
     @Override
@@ -63,6 +65,9 @@ public class TripDetailActivity extends AppCompatActivity {
 
         numSeatsEditText = findViewById(R.id.textViewSeatValue);
         numSeatsEditText.setText(String.format("%d / %d", trip.getRidingCount(), trip.getSeats()));
+
+        smokingSwitch = findViewById(R.id.switchNoSmoking);
+        smokingSwitch.setChecked(trip.getSmoking());
 
         submitButton = findViewById(R.id.button);
         if (type.equals("mytrips")) {
