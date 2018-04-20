@@ -54,4 +54,12 @@ public class MaskWatcher implements TextWatcher {
 
         isRunning = false;
     }
+
+    boolean isRunning() {
+        return isRunning;
+    }
+
+    boolean isDeleting() {
+        return isDeleting;
+    }
 }

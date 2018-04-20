@@ -1,6 +1,5 @@
 package com.example.mac.chartr.fragments.trips;
 
-
 import android.os.Bundle;
 
 import com.example.mac.chartr.AppHelper;

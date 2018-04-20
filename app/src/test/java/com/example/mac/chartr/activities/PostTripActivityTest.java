@@ -21,16 +21,10 @@ import org.robolectric.RobolectricTestRunner;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Michael Rush on 3/3/2018.
- *
- */
-/*@RunWith(AndroidJUnit4.class)
-@LargeTest*/
 
 @RunWith(RobolectricTestRunner.class)
-public class PostTripTest {
-    private static final String TAG = "PostTripTest";
+public class PostTripActivityTest {
+    private static final String TAG = "PostTripActivityTest";
     private CommonDependencyProvider provider;
 
     @Before
@@ -38,6 +32,23 @@ public class PostTripTest {
         provider = mock(CommonDependencyProvider.class);
     }
 
+
+    @Test
+    public void testInitPickers() {
+        PostTripActivity activity = Robolectric.buildActivity(PostTripActivity.class)
+                .create().get();
+
+
+        EditText departureDate = activity.findViewById(R.id.editTextDepartureDate);
+        EditText departureTime = activity.findViewById(R.id.editTextDepartureTime);
+        EditText returnDate = activity.findViewById(R.id.editTextReturnDate);
+        EditText returnTime = activity.findViewById(R.id.editTextReturnTime);
+
+        Assert.assertEquals(0, departureDate.getFocusable());
+        Assert.assertEquals(0, departureTime.getFocusable());
+        Assert.assertEquals(0, returnDate.getFocusable());
+        Assert.assertEquals(0, returnTime.getFocusable());
+    }
 
     @Test
     public void decrementSeatsTest() {
