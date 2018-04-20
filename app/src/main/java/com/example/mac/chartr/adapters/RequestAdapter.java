@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mac.chartr.ApiClient;
+import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
@@ -18,6 +20,10 @@ import com.example.mac.chartr.objects.User;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RequestAdapter extends RecyclerView.Adapter {
     public static final String TAG = RequestAdapter.class.getSimpleName();
@@ -39,13 +45,14 @@ public class RequestAdapter extends RecyclerView.Adapter {
         Pair<Trip, User> tripUserPair = RequestedUsers.get(position);
         RequestViewHolder placeholder = (RequestViewHolder) holder;
         placeholder.bindData(tripUserPair);
+
         placeholder.acceptButton.setOnClickListener(v -> {
             Log.d(TAG, "accept button pressed");
-            acceptRider(v, tripUserPair);
+            acceptRider(v, position, tripUserPair);
         });
         placeholder.rejectButton.setOnClickListener(v -> {
             Log.d(TAG, "reject button pressed");
-            rejectRider(v, tripUserPair);
+            rejectRider(v, position, tripUserPair);
         });
     }
 
@@ -91,13 +98,61 @@ public class RequestAdapter extends RecyclerView.Adapter {
 
     }
 
-    private void acceptRider(View v, Pair<Trip, User> tripUserPair){
-        CharSequence text = "Accepted " + tripUserPair.second.getName();
-        Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
+    private void acceptRider(View v, int position, Pair<Trip, User> tripUserPair){
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        Trip trip = tripUserPair.first;
+        User user = tripUserPair.second;
+        String uid = user.getUid();
+        String tid = trip.getId();
+        String status = "riding";
+        Call<String> call = apiInterface.updateTrip(uid, tid, status);
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.d(TAG, response.code() + "");
+                notifyItemRemoved(position);
+
+                CharSequence text = "Accepted " + tripUserPair.second.getName();
+                Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d(TAG, "Retrofit failed to get data");
+                Log.d(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
     }
 
-    private void rejectRider(View v, Pair<Trip, User> tripUserPair){
-        CharSequence text = "Rejected " + tripUserPair.second.getName();
-        Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
+    private void rejectRider(View v, int position, Pair<Trip, User> tripUserPair){
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        Trip trip = tripUserPair.first;
+        User user = tripUserPair.second;
+        String uid = user.getUid();
+        String tid = trip.getId();
+        String status = "rejected";
+        Call<String> call = apiInterface.updateTrip(uid, tid, status);
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.d(TAG, response.code() + "");
+                notifyItemRemoved(position);
+
+                CharSequence text = "Rejected " + tripUserPair.second.getName();
+                Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d(TAG, "Retrofit failed to get data");
+                Log.d(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
     }
 }
