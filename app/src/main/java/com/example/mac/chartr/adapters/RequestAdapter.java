@@ -18,8 +18,6 @@ import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,10 +26,10 @@ import retrofit2.Response;
 
 public class RequestAdapter extends RecyclerView.Adapter {
     public static final String TAG = RequestAdapter.class.getSimpleName();
-    private List<Pair<Trip, User>> RequestedUsers;
+    private List<Pair<Trip, User>> requestedUsers;
 
     public RequestAdapter(List<Pair<Trip, User>> data) {
-        RequestedUsers = data;
+        requestedUsers = data;
     }
 
     @NonNull
@@ -43,7 +41,7 @@ public class RequestAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Pair<Trip, User> tripUserPair = RequestedUsers.get(position);
+        Pair<Trip, User> tripUserPair = requestedUsers.get(position);
         RequestViewHolder placeholder = (RequestViewHolder) holder;
         placeholder.bindData(tripUserPair, position);
 
@@ -59,8 +57,8 @@ public class RequestAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        Log.d("Adapter", "" + RequestedUsers.size());
-        return RequestedUsers.size();
+        Log.d("Adapter", "" + requestedUsers.size());
+        return requestedUsers.size();
     }
 
     public static class RequestViewHolder extends RecyclerView.ViewHolder {
@@ -106,7 +104,9 @@ public class RequestAdapter extends RecyclerView.Adapter {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 Log.d(TAG, response.code() + "");
+                requestedUsers.remove(position);
                 notifyItemRemoved(position);
+                notifyItemRangeChanged(position, requestedUsers.size());
 
                 if (status.equals("riding")) {
                     CharSequence text = "Accepted " + tripUserPair.second.getName();
