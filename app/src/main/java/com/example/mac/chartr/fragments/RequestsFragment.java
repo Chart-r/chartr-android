@@ -14,13 +14,11 @@ import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
-<<<<<<< HEAD
 import com.example.mac.chartr.adapters.RequestAdapter;
 import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -39,18 +37,6 @@ public class RequestsFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private List<Pair<Trip, String>> requestedUsers = new ArrayList<>();
     private Comparator<Trip> comparator = (a, b) -> (int) (b.getStartTime() - a.getStartTime());
-=======
-import com.example.mac.chartr.objects.Trip;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-public class RequestsFragment extends Fragment {
-    public static final String TAG = RequestsFragment.class.getSimpleName();
-    private List<Trip> tripData = new ArrayList<Trip>();
-
->>>>>>> d85cbd1dfe1913d5d534f95a960d11d749ba330c
 
     public RequestsFragment() {
         // Required empty public constructor
@@ -66,12 +52,8 @@ public class RequestsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "start onCreate()");
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
         uid = getLoggedInUid();
         Log.d(TAG, "end onCreate()");
-=======
-
->>>>>>> d85cbd1dfe1913d5d534f95a960d11d749ba330c
     }
 
     @Override
@@ -127,7 +109,6 @@ public class RequestsFragment extends Fragment {
         Log.d(TAG, "end getRequestedUsers()");
     }
 
-<<<<<<< HEAD
     private List<Pair<Trip, String>> filterRequestedUsers(List<Trip> allTrips){
         Log.d(TAG, "start filterRequestedUsers()");
 
@@ -193,18 +174,4 @@ public class RequestsFragment extends Fragment {
     private String getLoggedInUid() {
         return provider.getAppHelper().getLoggedInUser().getUid();
     }
-=======
-    public List<Trip> mockAPI() {
-        List<Trip> dummyData = new ArrayList<Trip>();
-        HashMap<String, String> users = new HashMap<>();
-        users.put("User 1", "driving");
-        users.put("User 2", "riding");
-        users.put("User 3", "pending");
-        users.put("User 4", "pending");
-        dummyData.add(new Trip(0, 0, false, false, 1.,1.,
-                2.,2.,5, 5.0, "test", users));
-        return dummyData;
-    }
-
->>>>>>> d85cbd1dfe1913d5d534f95a960d11d749ba330c
 }
