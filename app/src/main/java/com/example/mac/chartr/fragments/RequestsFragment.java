@@ -47,7 +47,6 @@ public class RequestsFragment extends Fragment {
 
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
-        uid = getLoggedInUid();
     }
 
     @Override
