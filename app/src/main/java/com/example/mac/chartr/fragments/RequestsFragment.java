@@ -82,7 +82,7 @@ public class RequestsFragment extends Fragment {
         Log.d(TAG, "start getRequestedUsers()");
 
         ApiInterface apiInterface = ApiClient.getApiInstance();
-        Call<List<Trip>> call = apiInterface.getAllUserTrips(uid);
+        Call<List<Trip>> call = apiInterface.getUserTripsForStatus(uid, "driving");
 
         call.enqueue(new Callback<List<Trip>>() {
             @Override
