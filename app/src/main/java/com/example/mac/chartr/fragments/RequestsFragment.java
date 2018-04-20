@@ -19,6 +19,7 @@ import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,8 @@ public class RequestsFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<Pair<Trip, String>> requestedUsers = new ArrayList<>();
-    private Comparator<Trip> comparator = (a, b) -> (int) (b.getStartTime() - a.getStartTime());
+    private Comparator<Pair<Trip, String>> comparator =
+            (a, b) -> (int) (b.first.getStartTime() - a.first.getStartTime());
 
     public RequestsFragment() {
         // Required empty public constructor
@@ -149,8 +151,11 @@ public class RequestsFragment extends Fragment {
 
                     requestedUsers.add(requestedUserNamePair);
 
+                    Collections.sort(requestedUsers, comparator);
+
                     adapter = new RequestAdapter(requestedUsers);
                     recyclerView.setAdapter(adapter);
+
                     adapter.notifyDataSetChanged();
                 }
 
