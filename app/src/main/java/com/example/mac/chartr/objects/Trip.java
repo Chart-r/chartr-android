@@ -1,12 +1,24 @@
 package com.example.mac.chartr.objects;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.util.Log;
+import android.util.Pair;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
-public class Trip {
+public class Trip implements Serializable {
     private static final String TAG = Trip.class.getSimpleName();
 
     @SerializedName("tid")
@@ -88,6 +100,124 @@ public class Trip {
         this.startLong = startLong;
         this.seats = seats;
         this.price = price;
+    }
+
+    public String getStartTimeString() {
+        return getTime(startTime);
+    }
+
+    public String getEndTimeString() {
+        return getTime(endTime);
+    }
+
+    public String getStartDateString() {
+        return getDate(startTime);
+    }
+
+    public String getEndDateString() {
+        return getDate(endTime);
+    }
+
+    public String getStartLocationShortName(Context context) {
+        return getLocationName(context, startLat, startLong, true);
+    }
+
+    public String getStartLocationLongName(Context context) {
+        return getLocationName(context, startLat, startLong, false);
+    }
+
+    public String getEndLocationShortName(Context context) {
+        return getLocationName(context, endLat, endLong, true);
+    }
+
+    public String getEndLocationLongName(Context context) {
+        return getLocationName(context, endLat, endLong, false);
+    }
+
+    public String getDriverId() {
+        for (String key : users.keySet()) {
+            if (users.get(key).equals("driving")) {
+                return key;
+            }
+        }
+        return "error";
+    }
+
+    public int getRidingCount() {
+        int count = 0;
+        for (String status : users.values()) {
+            if (status.equals("riding")) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private String getTime(long longDate) {
+        Date date = new Date(longDate);
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a zzz", Locale.getDefault());
+        return formatter.format(date);
+    }
+
+    private String getDate(long longDate) {
+        Date date = new Date(longDate);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/M/dd", Locale.getDefault());
+        return formatter.format(date);
+    }
+
+
+    private String getLocationName(Context context, double latitude, double longitude, boolean shortName) {
+        /* testAddTripView was failing on account of this code, specifically:
+         * Method getFromLocation in android.location.Geocoder not mocked.
+         * Geocoder functionality needs to be extracted to a separate function which
+         * receives a geocoder argument that can be mocked and passed in for testing.
+         */
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        List<Address> addresses = null;
+
+        try {
+            addresses = geocoder.getFromLocation(
+                    latitude,
+                    longitude,
+                    1);
+        } catch (IOException ioException) {
+            // Catch network or other I/O problems.
+            Log.e(TAG, ioException.toString());
+        } catch (IllegalArgumentException illegalArgumentException) {
+            // Catch invalid latitude or longitude values.
+            Log.e(TAG, "Lat/Long Error: "
+                    + "Latitude = " + latitude
+                    + ", Longitude = "
+                    + longitude, illegalArgumentException);
+        }
+
+        // Handle case where no address was found.
+        if (addresses == null || addresses.size() == 0) {
+            Log.e(TAG, "No address found");
+        } else {
+            Address address = addresses.get(0);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            if (shortName) {
+                String[] addressArray = address.getAddressLine(0).split(", ");
+                stringBuilder.append(addressArray[addressArray.length - 3]);
+                stringBuilder.append(", ");
+                stringBuilder.append(addressArray[addressArray.length - 2].substring(0, 2));
+                return stringBuilder.toString();
+            }
+            else {
+                stringBuilder.append(address.getAddressLine(0));
+                // Fetch the address lines using getAddressLine
+                for (int i = 1; i <= address.getMaxAddressLineIndex(); i++) {
+                    stringBuilder.append(", ").append(address.getAddressLine(i));
+                }
+                Log.i(TAG, "Address found");
+                return stringBuilder.toString();
+            }
+        }
+
+        // In the case of failure, return location coordinate string
+        return latitude + ", " + longitude;
     }
 
     public long getStartTime() {

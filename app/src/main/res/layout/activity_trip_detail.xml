@@ -26,10 +26,10 @@
         android:layout_below="@+id/textViewLogistics"
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
-        android:hint="Start Location"
-        android:inputType="text"
         android:paddingLeft="@dimen/activity_text_padding"
         android:paddingRight="@dimen/activity_text_padding"
+        android:focusable="false"
+        android:clickable="false"
         android:textSize="@dimen/post_trip_text_size"
         android:textStyle="italic" />
 
@@ -40,8 +40,8 @@
         android:layout_below="@+id/editTextStartLocation"
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_border_selector"
-        android:hint="End Location"
-        android:inputType="text"
+        android:focusable="false"
+        android:clickable="false"
         android:paddingLeft="@dimen/activity_text_padding"
         android:paddingRight="@dimen/activity_text_padding"
         android:textSize="@dimen/post_trip_text_size"
@@ -69,8 +69,8 @@
             android:layout_weight="1"
             android:background="@drawable/text_border_selector"
             android:hint="Departure Date"
-            android:clickable="true"
             android:focusable="false"
+            android:clickable="false"
             android:longClickable="false"
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
@@ -84,56 +84,8 @@
             android:layout_weight="1"
             android:background="@drawable/text_border_selector"
             android:hint="Departure Time"
-            android:clickable="true"
             android:focusable="false"
-            android:longClickable="false"
-            android:paddingLeft="@dimen/activity_text_padding"
-            android:paddingRight="@dimen/activity_text_padding"
-            android:textSize="@dimen/post_trip_text_size"
-            android:textStyle="italic" />
-    </LinearLayout>
-
-    <Switch
-        android:id="@+id/switchReturn"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/activity_text_height_post_trip"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/linearLayoutDepartureTime"
-        android:text="Return?"
-        android:theme="@style/SCBSwitch" />
-
-    <LinearLayout
-        android:id="@+id/linearLayoutReturnTime"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/switchReturn"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <EditText
-            android:id="@+id/editTextReturnDate"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/activity_text_height_post_trip"
-            android:layout_weight="1"
-            android:background="@drawable/text_border_selector"
-            android:hint="Return Date"
-            android:clickable="true"
-            android:focusable="false"
-            android:longClickable="false"
-            android:paddingLeft="@dimen/activity_text_padding"
-            android:paddingRight="@dimen/activity_text_padding"
-            android:textSize="@dimen/post_trip_text_size"
-            android:textStyle="italic" />
-
-        <EditText
-            android:id="@+id/editTextReturnTime"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/activity_text_height_post_trip"
-            android:layout_weight="1"
-            android:background="@drawable/text_border_selector"
-            android:hint="Return Time"
-            android:clickable="true"
-            android:focusable="false"
+            android:clickable="false"
             android:longClickable="false"
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding"
@@ -145,7 +97,7 @@
         android:id="@+id/space3"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_inter_group_separation"
-        android:layout_below="@+id/linearLayoutReturnTime"
+        android:layout_below="@+id/linearLayoutDepartureTime"
         android:layout_centerHorizontal="true" />
 
     <LinearLayout
@@ -209,6 +161,8 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/textViewTripPreferences"
         android:text="No Smoking"
+        android:focusable="false"
+        android:clickable="false"
         android:theme="@style/SCBSwitch" />
 
     <Switch
@@ -217,7 +171,10 @@
         android:layout_height="@dimen/activity_text_height_post_trip"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/switchNoSmoking"
-        android:text="Quite"
+        android:text="Quiet"
+        android:focusable="false"
+        android:clickable="false"
+        android:visibility="gone"
         android:theme="@style/SCBSwitch" />
 
     <Button

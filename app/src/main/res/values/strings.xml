@@ -41,4 +41,6 @@
     <string name="searchFragmentPriceRangeTo">To</string>
     <string name="searchFragmentPriceRangeSeparator">-</string>
     <string name="searchFragmentButtonSearch">Search</string>
+    <string name="back">Back</string>
+    <string name="request">Request</string>
 </resources>
