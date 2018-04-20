@@ -1,7 +1,6 @@
 package com.example.mac.chartr.fragments.trips;
 
 import android.location.Geocoder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +8,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mac.chartr.AppHelper;
+import com.example.mac.chartr.BuildConfig;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
 
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,24 +30,17 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by cygnus on 3/7/18.
- */
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Log.class)
+@RunWith(RobolectricTestRunner.class)
+@Config(constants = BuildConfig.class)
 public class ListTripsFragmentTest {
-    @Mock
-    private Geocoder geocoder;
+    private Geocoder geocoder = mock(Geocoder.class);
 
     private CommonDependencyProvider provider;
     private AppHelper helper;
 
     @Test
     public void testAddTripView() {
-        // Allows for code to contain logs without throwing not mocked errors
-        PowerMockito.mockStatic(Log.class);
-
         provider = mock(CommonDependencyProvider.class);
         helper = mock(AppHelper.class);
 

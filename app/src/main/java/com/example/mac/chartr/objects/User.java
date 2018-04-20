@@ -110,4 +110,48 @@ public class User {
     public void setReviewCount(int reviewCount) {
         this.reviewCount = reviewCount;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        User user = (User) o;
+
+        if (Float.compare(user.rating, rating) != 0) {
+            return false;
+        }
+        if (reviewCount != user.reviewCount) {
+            return false;
+        }
+        if (uid != null ? !uid.equals(user.uid) : user.uid != null) {
+            return false;
+        }
+        if (email != null ? !email.equals(user.email) : user.email != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(user.name) : user.name != null) {
+            return false;
+        }
+        if (birthdate != null ? !birthdate.equals(user.birthdate) : user.birthdate != null) {
+            return false;
+        }
+        return phone != null ? phone.equals(user.phone) : user.phone == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = uid != null ? uid.hashCode() : 0;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (birthdate != null ? birthdate.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (rating != +0.0f ? Float.floatToIntBits(rating) : 0);
+        result = 31 * result + reviewCount;
+        return result;
+    }
 }
