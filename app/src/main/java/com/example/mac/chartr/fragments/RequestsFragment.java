@@ -36,8 +36,8 @@ public class RequestsFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<Pair<Trip, String>> requestedUsers = new ArrayList<>();
-    private Comparator<Pair<Trip, String>> comparator =
+    private List<Pair<Trip, User>> requestedUsers = new ArrayList<>();
+    private Comparator<Pair<Trip, User>> comparator =
             (a, b) -> (int) (b.first.getStartTime() - a.first.getStartTime());
 
     public RequestsFragment() {
@@ -93,7 +93,7 @@ public class RequestsFragment extends Fragment {
                 List<Trip> allTrips = response.body();
                 List<Pair<Trip, String>> requestedUsersUids = filterRequestedUsers(allTrips);
 
-                getNamesFromUids(requestedUsersUids);
+                getUsersFromUids(requestedUsersUids);
 
                 adapter = new RequestAdapter(requestedUsers);
                 recyclerView.setAdapter(adapter);
@@ -131,7 +131,7 @@ public class RequestsFragment extends Fragment {
         return filteredRequestedUsers;
     }
 
-    private void getNamesFromUids(List<Pair<Trip, String>> requestedUsersUids){
+    private void getUsersFromUids(List<Pair<Trip, String>> requestedUsersUids){
         Log.d(TAG, "start getNamesFromUids()");
 
         requestedUsers.clear();
@@ -146,10 +146,10 @@ public class RequestsFragment extends Fragment {
 
                     // Sort trips from most earliest to latest
                     User user = response.body();
-                    Pair<Trip, String> requestedUserNamePair =
-                        new Pair(requestedUserPair.first, user.getName());
+                    Pair<Trip, User> tripUserPair =
+                        new Pair(requestedUserPair.first, user);
 
-                    requestedUsers.add(requestedUserNamePair);
+                    requestedUsers.add(tripUserPair);
 
                     Collections.sort(requestedUsers, comparator);
 

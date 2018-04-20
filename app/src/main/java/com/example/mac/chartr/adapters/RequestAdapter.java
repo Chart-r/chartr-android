@@ -7,19 +7,23 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
+import com.example.mac.chartr.objects.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 public class RequestAdapter extends RecyclerView.Adapter {
-    private List<Pair<Trip, String>> RequestedUsers;
+    public static final String TAG = RequestAdapter.class.getSimpleName();
+    private List<Pair<Trip, User>> RequestedUsers;
 
-    public RequestAdapter(List<Pair<Trip, String>> data) {
+    public RequestAdapter(List<Pair<Trip, User>> data) {
         RequestedUsers = data;
     }
 
@@ -32,9 +36,17 @@ public class RequestAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Pair<Trip, String> tripPair = RequestedUsers.get(position);
+        Pair<Trip, User> tripUserPair = RequestedUsers.get(position);
         RequestViewHolder placeholder = (RequestViewHolder) holder;
-        placeholder.bindData(tripPair);
+        placeholder.bindData(tripUserPair);
+        placeholder.acceptButton.setOnClickListener(v -> {
+            Log.d(TAG, "accept button pressed");
+            acceptRider(v, tripUserPair);
+        });
+        placeholder.rejectButton.setOnClickListener(v -> {
+            Log.d(TAG, "reject button pressed");
+            rejectRider(v, tripUserPair);
+        });
     }
 
     @Override
@@ -48,6 +60,8 @@ public class RequestAdapter extends RecyclerView.Adapter {
         TextView startTime;
         TextView start;
         TextView destination;
+        Button acceptButton;
+        Button rejectButton;
 
         RequestViewHolder(View itemView) {
             super(itemView);
@@ -55,11 +69,13 @@ public class RequestAdapter extends RecyclerView.Adapter {
             startTime = itemView.findViewById(R.id.textViewTime);
             start = itemView.findViewById(R.id.textViewStart);
             destination = itemView.findViewById(R.id.textViewDestination);
+            acceptButton = itemView.findViewById(R.id.accept_button);
+            rejectButton = itemView.findViewById(R.id.reject_button);
         }
 
-        void bindData(Pair<Trip, String> tripPair) {
+        void bindData(Pair<Trip, User> tripPair) {
             Trip trip = tripPair.first;
-            String nameRetrieved = tripPair.second;
+            String nameRetrieved = tripPair.second.getName();
             name.setText("" + nameRetrieved);
             startTime.setText(convertLongToDateTime(trip.getStartTime()));
             start.setText("Start: " + trip.getStartLat());
@@ -73,5 +89,15 @@ public class RequestAdapter extends RecyclerView.Adapter {
             return formatter.format(date);
         }
 
+    }
+
+    private void acceptRider(View v, Pair<Trip, User> tripUserPair){
+        CharSequence text = "Accepted " + tripUserPair.second.getName();
+        Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    private void rejectRider(View v, Pair<Trip, User> tripUserPair){
+        CharSequence text = "Rejected " + tripUserPair.second.getName();
+        Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 }
