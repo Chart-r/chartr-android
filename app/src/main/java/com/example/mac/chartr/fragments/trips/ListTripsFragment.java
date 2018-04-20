@@ -1,7 +1,5 @@
 package com.example.mac.chartr.fragments.trips;
 
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,12 +16,8 @@ import com.example.mac.chartr.R;
 import com.example.mac.chartr.adapters.TripAdapter;
 import com.example.mac.chartr.objects.Trip;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
