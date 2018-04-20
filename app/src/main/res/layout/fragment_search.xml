@@ -67,11 +67,45 @@
             android:layout_below="@+id/searchFragmentEditTextEndLocation"
             android:layout_centerHorizontal="true" />
 
+        <TextView
+            android:id="@+id/searchFragmentTextViewDateExample"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_inter_group_separation2"
+            android:layout_below="@+id/searchFragmentSpace2"
+            android:layout_centerHorizontal="true"
+            android:hint="@string/searchFragmentDateExample"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:textSize="10sp"
+            android:textStyle="italic" />
+
+
+        <EditText
+            android:id="@+id/searchFragmentEditTextDate"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:layout_below="@+id/searchFragmentTextViewDateExample"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/text_border_selector"
+            android:hint="@string/searchFragmentDepartureDate"
+            android:inputType="date"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:textSize="@dimen/post_trip_text_size"
+            android:textStyle="italic" />
+
+        <Space
+            android:id="@+id/searchFragmentSpace3"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_inter_group_separation"
+            android:layout_below="@+id/searchFragmentEditTextDate"
+            android:layout_centerHorizontal="true" />
+
         <LinearLayout
             android:id="@+id/searchFragmentLinearLayoutDriver"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/searchFragmentSpace2"
+            android:layout_below="@id/searchFragmentSpace3"
             android:orientation="horizontal"
             android:weightSum="8">
 
@@ -102,7 +136,7 @@
         </LinearLayout>
 
         <Space
-            android:id="@+id/searchFragmentSpace3"
+            android:id="@+id/searchFragmentSpace4"
             android:layout_width="match_parent"
             android:layout_height="@dimen/activity_inter_group_separation"
             android:layout_below="@+id/searchFragmentLinearLayoutDriver"
@@ -112,7 +146,7 @@
             android:id="@+id/searchFragmentLinearLayoutPriceRange"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/searchFragmentSpace3"
+            android:layout_below="@id/searchFragmentSpace4"
             android:orientation="horizontal"
             android:weightSum="8">
 
@@ -137,7 +171,6 @@
                 android:inputType="numberDecimal"
                 android:paddingLeft="@dimen/activity_text_padding"
                 android:paddingRight="@dimen/activity_text_padding"
-
                 android:textSize="@dimen/post_trip_text_size"
                 android:textStyle="italic" />
             <TextView
@@ -166,7 +199,7 @@
         </LinearLayout>
 
         <Space
-            android:id="@+id/searchFragmentSpace4"
+            android:id="@+id/searchFragmentSpace5"
             android:layout_width="match_parent"
             android:layout_height="@dimen/activity_inter_group_separation"
             android:layout_below="@+id/searchFragmentLinearLayoutPriceRange"
@@ -176,7 +209,7 @@
             android:id="@+id/searchFragmentButtonSearch"
             android:layout_width="match_parent"
             android:layout_height="@dimen/activity_text_height_post_trip"
-            android:layout_below="@id/searchFragmentSpace4"
+            android:layout_below="@id/searchFragmentSpace5"
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_selector"
             android:backgroundTint="@color/grey_700"
