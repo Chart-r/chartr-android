@@ -82,6 +82,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     Button submitSearchButton;
 
+    // Search radius in meters
+    float searchRadius;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -202,6 +204,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 ? 0.0f : Float.valueOf(priceMinEditText.getText().toString());
         priceMax = priceMinEditText.getText().toString().isEmpty()
                 ? Float.MAX_VALUE : Float.valueOf(priceMinEditText.getText().toString());
+        searchRadius = 5000f;
 
         String departureDateString = departureDateEditText.getText().toString();
         Date departureDate;
@@ -250,7 +253,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                     }
 
                     if (isNotInTrip && costOfTripWithinRange
-                            && endDistance < 5000f && startDistance < 5000f) {
+                            && endDistance < searchRadius && startDistance < searchRadius) {
                         if (!hasDriverPreference
                                 || currTrip.getDriverFromUsers().contains(preferredDriver)) {
                             if (!hasDatePreference || dateAfter) {
