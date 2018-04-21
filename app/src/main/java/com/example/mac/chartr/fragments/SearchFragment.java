@@ -226,6 +226,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         call.enqueue(new Callback<List<Trip>>() {
             @Override
             public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
+                Log.d(TAG, "Getting trips in search.");
                 Log.d(TAG, response.code() + "");
 
                 List<Trip> tripList = response.body();
@@ -237,6 +238,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                             && currTrip.getPrice() < priceMax;
                     boolean hasDriverPreference = !preferredDriver.isEmpty();
                     boolean isNotInTrip = !currTrip.containsUser(uid);
+                    boolean isNotFull = !currTrip.isFull();
                     boolean hasDatePreference = !(departureDate.getTime() < 1);
                     long currTripDate = currTrip.getStartTime();
                     boolean dateAfter = departureDate.getTime() >= currTripDate;
@@ -252,7 +254,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                                 currTrip.getEndLat(), currTrip.getEndLong());
                     }
 
-                    if (isNotInTrip && costOfTripWithinRange
+                    if (isNotInTrip && isNotFull && costOfTripWithinRange
                             && endDistance < searchRadius && startDistance < searchRadius) {
                         if (!hasDriverPreference
                                 || currTrip.getDriverFromUsers().contains(preferredDriver)) {
@@ -327,6 +329,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
         } else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (searchLayout.getVisibility() == View.GONE) {
+            searchTrips();
         }
     }
 

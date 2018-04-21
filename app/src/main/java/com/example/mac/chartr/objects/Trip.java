@@ -142,6 +142,10 @@ public class Trip implements Serializable {
         return users.containsKey(uid);
     }
 
+    /**
+     * Gets the uid of the driver
+     * @return Driver's uid
+     */
     public String getDriverId() {
         for (String key : users.keySet()) {
             if (users.get(key).equals("driving")) {
@@ -151,6 +155,10 @@ public class Trip implements Serializable {
         return "error";
     }
 
+    /**
+     * Gets the number of users with the riding status in the trip.
+     * @return The number of users riding
+     */
     public int getRidingCount() {
         int count = 0;
         for (String status : users.values()) {
@@ -159,6 +167,14 @@ public class Trip implements Serializable {
             }
         }
         return count;
+    }
+
+    /**
+     * Returns true if the trip is full
+     * @return True if the number of riders is enough to fill the seats
+     */
+    public boolean isFull() {
+        return getRidingCount() >= seats;
     }
 
     private String getTime(long longDate) {
@@ -328,6 +344,10 @@ public class Trip implements Serializable {
         users.put(email, role);
     }
 
+    /**
+     * Gets the uid of the user with the status driving.
+     * @return The driver's uid
+     */
     public String getDriverFromUsers() {
         // No user map
         if (users == null) {
@@ -345,7 +365,12 @@ public class Trip implements Serializable {
         return "";
     }
 
-    public String getUserStatus(String userEmail) {
+    /**
+     * Gets the status of the specified user
+     * @param uid The user's uid
+     * @return The user's status can be driving, pending, riding, or rejected
+     */
+    public String getUserStatus(String uid) {
         // No user map
         if (users == null) {
             return "";
@@ -353,7 +378,7 @@ public class Trip implements Serializable {
 
         for (Object o : users.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
-            if (pair.getKey().equals(userEmail)) {
+            if (pair.getKey().equals(uid)) {
                 return pair.getValue().toString();
             }
         }

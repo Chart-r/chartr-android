@@ -93,7 +93,6 @@ public class TripDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     requestTrip(v.getContext(), trip);
-                    onBackPressed();
                 }
             });
         }
@@ -111,10 +110,13 @@ public class TripDetailActivity extends AppCompatActivity {
             public void onResponse(Call<String> call, Response<String> response) {
                 CharSequence text = "Requested";
                 Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                onBackPressed();
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
+                CharSequence text = "Request failed";
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
                 call.cancel();
             }
