@@ -97,6 +97,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uid = provider.getAppHelper().getLoggedInUser().getUid();
+
+        // TODO: Call api and filter for nearby trips
     }
 
     @Override
@@ -115,7 +117,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     private void initViews(View root) {
         departureDateEditText = root.findViewById(R.id.searchFragmentEditTextDate);
+        // TODO: Use a date picker
         preferredDriverEditText = root.findViewById(R.id.searchFragmentEditTextPreferredDriver);
+        // TODO: Filter by driver
         priceMinEditText = root.findViewById(R.id.searchFragmentEditPriceRangeFrom);
         priceMaxEditText = root.findViewById(R.id.searchFragmentEditPriceRangeTo);
         startLocationEditText = root.findViewById(R.id.searchFragmentEditTextStartLocation);
