@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,13 +35,21 @@ public class TripDetailActivity extends AppCompatActivity {
     TextView numSeatsEditText;
     Switch smokingSwitch;
     Button submitButton;
+    String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_detail);
         trip = (Trip) getIntent().getSerializableExtra("trip");
-        type = getIntent().getStringExtra("type");
+        //type = getIntent().getStringExtra("type");
+        uid =  new CommonDependencyProvider().getAppHelper().getLoggedInUser().getUid();
+        Log.d(TAG, uid);
+        if (trip.getUsers().containsKey(uid)) {
+            type = "mytrips";
+        } else {
+            type = "requests";
+        }
         initViews();
 
     }
@@ -91,7 +100,7 @@ public class TripDetailActivity extends AppCompatActivity {
 
     private void requestTrip(Context context, Trip trip) {
         ApiInterface apiInterface = ApiClient.getApiInstance();
-        String uid =  new CommonDependencyProvider().getAppHelper().getCurrUser();
+        //String uid =  new CommonDependencyProvider().getAppHelper().getCurrUser();
         String tid = trip.getId();
         String status = "pending";
         Call<String> call = apiInterface.updateTrip(uid, tid, status);
