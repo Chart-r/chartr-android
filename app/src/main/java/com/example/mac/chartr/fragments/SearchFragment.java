@@ -233,7 +233,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                     boolean costOfTripWithinRange = priceMin < currTrip.getPrice()
                             && currTrip.getPrice() < priceMax;
                     boolean hasDriverPreference = !preferredDriver.isEmpty();
-                    boolean isNotDriver = !uid.equals(currTrip.getDriverFromUsers());
+                    boolean isNotInTrip = !currTrip.containsUser(uid);
                     boolean hasDatePreference = !(departureDate.getTime() < 1);
                     long currTripDate = currTrip.getStartTime();
                     boolean dateAfter = departureDate.getTime() >= currTripDate;
@@ -249,7 +249,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                                 currTrip.getEndLat(), currTrip.getEndLong());
                     }
 
-                    if (isNotDriver && costOfTripWithinRange
+                    if (isNotInTrip && costOfTripWithinRange
                             && endDistance < 5000f && startDistance < 5000f) {
                         if (!hasDriverPreference
                                 || currTrip.getDriverFromUsers().contains(preferredDriver)) {

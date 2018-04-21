@@ -45,7 +45,7 @@ public class TripDetailActivity extends AppCompatActivity {
         //type = getIntent().getStringExtra("type");
         uid =  new CommonDependencyProvider().getAppHelper().getLoggedInUser().getUid();
         Log.d(TAG, uid);
-        if (trip.getUsers().containsKey(uid)) {
+        if (trip.containsUser(uid)) {
             type = "mytrips";
         } else {
             type = "requests";
@@ -93,6 +93,7 @@ public class TripDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     requestTrip(v.getContext(), trip);
+                    onBackPressed();
                 }
             });
         }

@@ -133,6 +133,15 @@ public class Trip implements Serializable {
         return getLocationName(context, endLat, endLong, false);
     }
 
+    /**
+     * Checks if a user is already on a given trip
+     * @param uid The user's id
+     * @return true if the trip contains the user in any state, false otherwise
+     */
+    public boolean containsUser(String uid) {
+        return users.containsKey(uid);
+    }
+
     public String getDriverId() {
         for (String key : users.keySet()) {
             if (users.get(key).equals("driving")) {
@@ -164,7 +173,6 @@ public class Trip implements Serializable {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/M/dd", Locale.getDefault());
         return formatter.format(date);
     }
-
 
     private String getLocationName(Context context, double latitude,
                                    double longitude, boolean shortName) {
