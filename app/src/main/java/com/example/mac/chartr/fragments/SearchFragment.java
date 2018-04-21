@@ -2,6 +2,7 @@ package com.example.mac.chartr.fragments;
 
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.location.Geocoder;
 import android.location.Location;
@@ -71,6 +72,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     Double endLocationLng;
 
     EditText departureDateEditText;
+    DatePickerDialog.OnDateSetListener departureDate;
+    Calendar departureCalendar = Calendar.getInstance();
 
     EditText preferredDriverEditText;
     String preferredDriver;
@@ -116,8 +119,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initViews(View root) {
-        departureDateEditText = root.findViewById(R.id.searchFragmentEditTextDate);
-        // TODO: Use a date picker
+        initDatePicker(root);
         preferredDriverEditText = root.findViewById(R.id.searchFragmentEditTextPreferredDriver);
         // TODO: Filter by driver
         priceMinEditText = root.findViewById(R.id.searchFragmentEditPriceRangeFrom);
@@ -156,6 +158,40 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 recyclerView.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    /**
+     * Initialize the departure date picker based off:
+     * https://stackoverflow.com/questions/14933330/
+     * datepicker-how-to-popup-datepicker-when-click-on-edittext
+     *
+     * https://stackoverflow.com/questions/17901946/timepicker-dialog-from-clicking-edittext
+     *
+     * @param root the root view.
+     */
+    private void initDatePicker(View root) {
+        departureDateEditText = root.findViewById(R.id.searchFragmentEditTextDate);
+        departureDateEditText.setFocusable(false);
+        departureDateEditText.setClickable(true);
+        departureDateEditText.setLongClickable(false);
+        departureDate = (view, year, monthOfYear, dayOfMonth) -> {
+            departureCalendar.set(Calendar.YEAR, year);
+            departureCalendar.set(Calendar.MONTH, monthOfYear);
+            departureCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateDepartureDateLabel();
+        };
+        departureDateEditText.setOnClickListener(v -> {
+            new DatePickerDialog(getActivity(), departureDate, departureCalendar
+                    .get(Calendar.YEAR), departureCalendar.get(Calendar.MONTH),
+                    departureCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+    }
+
+    private void updateDepartureDateLabel() {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        departureDateEditText.setText(sdf.format(departureCalendar.getTime()));
     }
 
     public void searchTrips() {
