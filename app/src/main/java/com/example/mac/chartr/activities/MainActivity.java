@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Setting visibility of buttons when first logged in
         findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-        findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
 
         setupTopToolbar();
         setupBottomNavigation();
@@ -140,15 +139,6 @@ public class MainActivity extends AppCompatActivity {
                     if (topOfBackstack >= 0) {
                         title = getSupportFragmentManager()
                                 .getBackStackEntryAt(topOfBackstack).getName();
-                    }
-
-                    // Show or hide search button or title
-                    if (title == "Search") {
-                        getSupportActionBar().setTitle("");
-                        findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
-                    } else {
-                        getSupportActionBar().setTitle(title);
-                        findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                     }
 
                     // Show or hide plus button
@@ -270,17 +260,15 @@ public class MainActivity extends AppCompatActivity {
                     int itemId = item.getItemId();
                     switch (itemId) {
                         case R.id.ic_search:
-                            getSupportActionBar().setTitle("");
+                            getSupportActionBar().setTitle("Explore Trips");
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new SearchFragment())
                                     .addToBackStack("Search").commit();
                             break;
                         case R.id.ic_trips:
-                            getSupportActionBar().setTitle("Trips");
+                            getSupportActionBar().setTitle("My Trips");
                             findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new TripsFragment())
                                     .addToBackStack("Trips").commit();
@@ -288,7 +276,6 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.ic_requests:
                             getSupportActionBar().setTitle("Requests");
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new RequestsFragment())
                                     .addToBackStack("Requests").commit();
@@ -296,7 +283,6 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.ic_profile:
                             getSupportActionBar().setTitle("Profile");
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new ProfileFragment())
                                     .addToBackStack("Profile").commit();
@@ -357,21 +343,5 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             super.onBackPressed();
         }
-    }
-
-    public void searchLayout(View view) {
-        RelativeLayout searchParameterLayout = findViewById(R.id.relativeLayoutSearchParameters);
-        RecyclerView searchRecycler = findViewById(R.id.recyclerViewSearch);
-        if (searchParameterLayout.getVisibility() == View.VISIBLE) {
-            searchParameterLayout.setVisibility(View.GONE);
-        } else if (searchParameterLayout.getVisibility() == View.GONE) {
-            searchParameterLayout.setVisibility(View.VISIBLE);
-            searchRecycler.setVisibility(View.GONE);
-        }
-    }
-
-    public void search(View view) {
-        SearchFragment helper = new SearchFragment();
-        helper.searchTrips(view);
     }
 }

@@ -146,7 +146,7 @@ public class RequestsFragment extends Fragment {
                     // Sort trips from most earliest to latest
                     User user = response.body();
                     Pair<Trip, User> tripUserPair =
-                        new Pair(requestedUserPair.first, user);
+                        new Pair<>(requestedUserPair.first, user);
 
                     requestedUsers.add(tripUserPair);
 

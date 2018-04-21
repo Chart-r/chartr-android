@@ -46,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements View.OnClickListener {
     public static final String TAG = SearchFragment.class.getSimpleName();
     private static final int START_PLACE_PICKER = 1;
     private static final int DEST_PLACE_PICKER = 2;
@@ -60,6 +60,7 @@ public class SearchFragment extends Fragment {
     private List<Trip> tripsData = new ArrayList<>();
 
     private RelativeLayout searchLayout;
+    private Button filterButton;
 
     EditText startLocationEditText;
     Double startLocationLat;
@@ -109,8 +110,6 @@ public class SearchFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new TripAdapter(tripsData);
         recyclerView.setAdapter(adapter);
-        recyclerView.setVisibility(View.GONE);
-
         return root;
     }
 
@@ -122,34 +121,42 @@ public class SearchFragment extends Fragment {
         startLocationEditText = root.findViewById(R.id.searchFragmentEditTextStartLocation);
         startLocationEditText.setFocusable(false);
         startLocationEditText.setClickable(true);
-        startLocationEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPickButtonClick(START_PLACE_PICKER);
-            }
-        });
+        startLocationEditText.setOnClickListener(this);
         endLocationEditText = root.findViewById(R.id.searchFragmentEditTextEndLocation);
         endLocationEditText.setFocusable(false);
         endLocationEditText.setClickable(true);
-        endLocationEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPickButtonClick(DEST_PLACE_PICKER);
-            }
-        });
+        endLocationEditText.setOnClickListener(this);
 
+        filterButton = root.findViewById(R.id.filterButton);
+        filterButton.setOnClickListener(this);
         searchLayout = root.findViewById(R.id.relativeLayoutSearchParameters);
         submitSearchButton = root.findViewById(R.id.buttonSubmitSearch);
-        submitSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchTrips(root.findViewById(R.id.search_parent_layout));
-            }
-        });
+        submitSearchButton.setOnClickListener(this);
     }
 
-    public void searchTrips(final View view) {
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.buttonSubmitSearch:
+                searchTrips();
+                break;
+            case R.id.searchFragmentEditTextEndLocation:
+                onPickButtonClick(DEST_PLACE_PICKER);
+                break;
+            case R.id.searchFragmentEditTextStartLocation:
+                onPickButtonClick(START_PLACE_PICKER);
+                break;
+            case R.id.filterButton:
+                searchLayout.setVisibility(View.VISIBLE);
+                filterButton.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    public void searchTrips() {
         searchLayout.setVisibility(View.GONE);
+        filterButton.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
 
         String startLocation = startLocationEditText.getText().toString();
@@ -168,14 +175,12 @@ public class SearchFragment extends Fragment {
                 departureDate = dfDate.parse(departureDateString);
             } catch (ParseException error) {
                 Log.e(TAG, "Error Parsing date/time.");
-                makeLongToast("Departure Date invalid.");
+                Toast.makeText(getContext(),"Departure Date invalid.", Toast.LENGTH_SHORT);
                 return;
             }
         } else {
             departureDate = new Date(0);
         }
-
-
 
         ApiInterface apiInterface = ApiClient.getApiInstance();
         Call<List<Trip>> call = apiInterface.getAllCurrentTrips();
@@ -314,15 +319,6 @@ public class SearchFragment extends Fragment {
     }
 
     /**
-     * Report a message to the user via a long toast.
-     * @param message The message to report
-     */
-    protected void makeLongToast(String message) {
-        Toast.makeText(getContext(), message,
-                Toast.LENGTH_LONG).show();
-    }
-
-    /**
      * Computes the distance between two coordinate points.
      * @param lat1 first point latitude
      * @param lng1 first point longitude
@@ -334,52 +330,6 @@ public class SearchFragment extends Fragment {
         float[] distance = new float[1];
         Location.distanceBetween(lat1, lng1, lat2, lng2, distance);
         return distance[0];
-    }
-
-    /**
-     * Adds an individual trip view to the linear layout passed in.
-     *
-     * @param parentLayout The layout to which a trip view is to be added
-     * @param trip         The trip details to be added
-     */
-    public void addTripView(LinearLayout parentLayout, Trip trip) {
-        //create a view to inflate the layout_item (the xml with the textView created before)
-        View tripContainer = getLayoutInflater().inflate(R.layout.layout_trip_container,
-                parentLayout, false);
-
-        // Set TextViews with appropriate data
-        String name = trip.getDriverFromUsers();
-        String rating = "rating";
-        String seats = (trip.getUsers().size() - 1) + "/" + trip.getSeats();
-        String start = getLocationName(trip.getStartLat(), trip.getStartLong());
-        String destination = getLocationName(trip.getEndLat(), trip.getEndLong());
-
-        ((TextView) tripContainer.findViewById(R.id.textViewName)).setText(name);
-        ((TextView) tripContainer.findViewById(R.id.textViewRating)).setText(rating);
-        ((TextView) tripContainer.findViewById(R.id.textViewSeats)).setText(seats);
-        ((TextView) tripContainer.findViewById(R.id.textViewStart)).setText(start);
-        ((TextView) tripContainer.findViewById(R.id.textViewDestination)).setText(destination);
-
-        parentLayout.addView(tripContainer);
-    }
-
-    protected String getLocationName(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-        return LocationNameProvider.getLocationName(latitude, longitude, geocoder, TAG);
-    }
-
-    /**
-     * Return date in specified format.
-     * @param milliSeconds Date in milliseconds
-     * @param dateFormat Date format
-     * @return String representing the date in the given format
-     */
-    public static String getDate(long milliSeconds, String dateFormat) {
-        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(milliSeconds);
-        return formatter.format(calendar.getTime());
     }
 
 }
