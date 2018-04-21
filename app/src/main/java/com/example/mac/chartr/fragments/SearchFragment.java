@@ -1,11 +1,14 @@
 package com.example.mac.chartr.fragments;
 
 
-import android.location.Address;
+import android.app.Activity;
+import android.content.Intent;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,19 +16,29 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.LocationNameProvider;
 import com.example.mac.chartr.R;
+import com.example.mac.chartr.adapters.TripAdapter;
 import com.example.mac.chartr.objects.Trip;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 
-import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,52 +48,189 @@ import retrofit2.Response;
 
 public class SearchFragment extends Fragment {
     public static final String TAG = SearchFragment.class.getSimpleName();
+    private static final int START_PLACE_PICKER = 1;
+    private static final int DEST_PLACE_PICKER = 2;
+
+    private CommonDependencyProvider provider;
+    private String uid;
+
+    private RecyclerView recyclerView;
+    private TripAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private List<Trip> tripsData = new ArrayList<>();
+
+    private RelativeLayout searchLayout;
+
+    EditText startLocationEditText;
+    Double startLocationLat;
+    Double startLocationLng;
+
+    EditText endLocationEditText;
+    Double endLocationLat;
+    Double endLocationLng;
+
+    EditText departureDateEditText;
+
+    EditText preferredDriverEditText;
+    String preferredDriver;
+
+    EditText priceMinEditText;
+    float priceMin;
+
+    EditText priceMaxEditText;
+    float priceMax;
+
+    Button submitSearchButton;
 
 
     public SearchFragment() {
         // Required empty public constructor
+        setCommonDependencyProvider(new CommonDependencyProvider());
+    }
+
+    public void setCommonDependencyProvider(CommonDependencyProvider provider) {
+        this.provider = provider;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        uid = provider.getAppHelper().getLoggedInUser().getUid();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_search, container, false);
-        view.findViewById(R.id.search_relative_layout).setVisibility(View.GONE);
-        Button search = (Button) view.findViewById(R.id.searchFragmentButtonSearch);
-        search.setOnClickListener(new View.OnClickListener() {
+        View root = inflater.inflate(R.layout.fragment_search, container, false);
+        initViews(root);
+        recyclerView = root.findViewById(R.id.recyclerViewSearch);
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new TripAdapter(tripsData);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setVisibility(View.GONE);
+
+        return root;
+    }
+
+    private void initViews(View root) {
+        departureDateEditText = root.findViewById(R.id.searchFragmentEditTextDate);
+        preferredDriverEditText = root.findViewById(R.id.searchFragmentEditTextPreferredDriver);
+        priceMinEditText = root.findViewById(R.id.searchFragmentEditPriceRangeFrom);
+        priceMaxEditText = root.findViewById(R.id.searchFragmentEditPriceRangeTo);
+        startLocationEditText = root.findViewById(R.id.searchFragmentEditTextStartLocation);
+        startLocationEditText.setFocusable(false);
+        startLocationEditText.setClickable(true);
+        startLocationEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchTrips(view.findViewById(R.id.search_parent_layout));
+                onPickButtonClick(START_PLACE_PICKER);
+            }
+        });
+        endLocationEditText = root.findViewById(R.id.searchFragmentEditTextEndLocation);
+        endLocationEditText.setFocusable(false);
+        endLocationEditText.setClickable(true);
+        endLocationEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPickButtonClick(DEST_PLACE_PICKER);
             }
         });
 
-        return view;
+        searchLayout = root.findViewById(R.id.relativeLayoutSearchParameters);
+        submitSearchButton = root.findViewById(R.id.buttonSubmitSearch);
+        submitSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchTrips(root.findViewById(R.id.search_parent_layout));
+            }
+        });
     }
 
     public void searchTrips(final View view) {
-        view.findViewById(R.id.search_relative_layout).setVisibility(View.GONE);
+        searchLayout.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
 
-        String startLocation =
-                getStringFromEditText(view, R.id.searchFragmentEditTextStartLocation);
-        String endLocation = getStringFromEditText(view, R.id.searchFragmentEditTextEndLocation);
-        final String departureDate = getStringFromEditText(view, R.id.searchFragmentEditTextDate);
-        final String preferredDriverEmail =
-                getStringFromEditText(view, R.id.searchFragmentEditPreferredDriver);
-        final float priceRangeFrom =
-                getFloatFromEditText(view, R.id.searchFragmentEditPriceRangeFrom, 0f);
-        final float priceRangeTo = getFloatFromEditText(
-                view, R.id.searchFragmentEditPriceRangeTo, Float.MAX_VALUE);
+        String startLocation = startLocationEditText.getText().toString();
+        String endLocation = endLocationEditText.getText().toString();
+        preferredDriver = preferredDriverEditText.getText().toString();
+        priceMin = priceMinEditText.getText().toString().isEmpty()
+                ? 0.0f : Float.valueOf(priceMinEditText.getText().toString());
+        priceMax = priceMinEditText.getText().toString().isEmpty()
+                ? Float.MAX_VALUE : Float.valueOf(priceMinEditText.getText().toString());
 
-        final double startLat;
-        final double startLng;
-        final double endLat;
-        final double endLng;
+        String departureDateString = departureDateEditText.getText().toString();
+        Date departureDate;
+        if (!departureDateString.isEmpty()) {
+            DateFormat dfDate = new SimpleDateFormat("MM/dd/yy", Locale.US);
+            try {
+                departureDate = dfDate.parse(departureDateString);
+            } catch (ParseException error) {
+                Log.e(TAG, "Error Parsing date/time.");
+                makeLongToast("Departure Date invalid.");
+                return;
+            }
+        } else {
+            departureDate = new Date(0);
+        }
+
+
+
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        Call<List<Trip>> call = apiInterface.getAllCurrentTrips();
+        call.enqueue(new Callback<List<Trip>>() {
+            @Override
+            public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
+                Log.d(TAG, response.code() + "");
+
+                List<Trip> tripList = response.body();
+                List<Trip> result = new ArrayList<Trip>();
+                for (int i = 0; i < tripList.size(); i++) {
+                    Trip currTrip = tripList.get(i);
+
+                    boolean costOfTripWithinRange = priceMin < currTrip.getPrice()
+                            && currTrip.getPrice() < priceMax;
+                    boolean hasDriverPreference = !preferredDriver.isEmpty();
+                    boolean isNotDriver = !uid.equals(currTrip.getDriverFromUsers());
+                    boolean hasDatePreference = !(departureDate.getTime() < 1);
+                    long currTripDate = currTrip.getStartTime();
+                    boolean dateAfter = departureDate.getTime() >= currTripDate;
+
+                    float startDistance = 0.0f;
+                    float endDistance = 0.0f;
+                    if (!startLocation.isEmpty()) {
+                        startDistance = computeDistanceBetween(startLocationLat, startLocationLng,
+                                currTrip.getStartLat(), currTrip.getStartLong());
+                    }
+                    if (!endLocation.isEmpty()) {
+                        endDistance = computeDistanceBetween(endLocationLat, endLocationLng,
+                                currTrip.getEndLat(), currTrip.getEndLong());
+                    }
+
+                    if (isNotDriver && costOfTripWithinRange
+                            && endDistance < 5000f && startDistance < 5000f) {
+                        if (!hasDriverPreference
+                                || currTrip.getDriverFromUsers().contains(preferredDriver)) {
+                            if (!hasDatePreference || dateAfter) {
+                                result.add(currTrip);
+                            }
+                        }
+                    }
+                }
+                adapter.addItems(result);
+            }
+
+            @Override
+            public void onFailure(Call<List<Trip>> call, Throwable t) {
+                Log.d(TAG, "Retrofit failed to get data");
+                Log.d(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
+
+        /* Geocoder code in case we switch back.
         try {
             Geocoder geocoder = new Geocoder(this.getContext());
             List<Address> addresses;
@@ -105,104 +255,72 @@ public class SearchFragment extends Fragment {
             Log.e(TAG, "Error getting location coordinates for: " + startLocation);
             return;
         }
+        */
+    }
 
-        ApiInterface apiInterface = ApiClient.getApiInstance();
-        Call<List<Trip>> call = apiInterface.getAllCurrentTrips();
-        call.enqueue(new Callback<List<Trip>>() {
-            @Override
-            public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
-                Log.d(TAG, response.code() + "");
+    public void onPickButtonClick(int key) {
+        // Construct an intent for the place picker
+        try {
+            PlacePicker.IntentBuilder intentBuilder =
+                    new PlacePicker.IntentBuilder();
+            Intent intent = intentBuilder.build(getActivity());
+            // Start the intent by requesting a result,
+            // identified by a request code.
+            startActivityForResult(intent, key);
 
-                CommonDependencyProvider commonDependencyProvider = new CommonDependencyProvider();
-                String loggedInUid =
-                        commonDependencyProvider.getAppHelper().getLoggedInUser().getUid();
+        } catch (GooglePlayServicesRepairableException e) {
+            // ...
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // ...
+        }
+    }
 
-                LinearLayout tripsLayout = view.findViewById(R.id.searchTripsLinearLayout);
-
-                List<Trip> tripList = response.body();
-                List<Trip> result = new ArrayList<Trip>();
-                for (int i = 0; i < tripList.size(); i++) {
-                    Trip currTrip = tripList.get(i);
-
-                    boolean costOfTripWithinRange = priceRangeFrom < currTrip.getPrice()
-                            && currTrip.getPrice() < priceRangeTo;
-                    boolean hasDriverPreference = !preferredDriverEmail.isEmpty();
-                    boolean isNotDriver = !loggedInUid.equals(currTrip.getDriverFromUsers());
-                    boolean hasDatePreference = !departureDate.isEmpty();
-                    String currTripDate = getDate(currTrip.getStartTime(), "MM/dd/yyyy");
-                    boolean datesMatch = departureDate.equals(currTripDate);
-
-
-
-                    float startDistance = computeDistanceBetween(startLat, startLng,
-                            currTrip.getStartLat(), currTrip.getStartLong());
-                    float endDistance = computeDistanceBetween(endLat, endLng,
-                            currTrip.getEndLat(), currTrip.getEndLong());
-
-                    if (isNotDriver && costOfTripWithinRange
-                            && endDistance < 5000f && startDistance < 5000f) {
-                        if (!hasDriverPreference
-                                || currTrip.getDriverFromUsers().contains(preferredDriverEmail)) {
-                            if (!hasDatePreference || datesMatch) {
-                            result.add(currTrip);
-                            }
-
-                        }
-                    }
-                }
-
-                displayTrips(result, tripsLayout);
+    @Override
+    public void onActivityResult(int requestCode,
+                                 int resultCode, Intent data) {
+        if ((requestCode == START_PLACE_PICKER || requestCode == DEST_PLACE_PICKER)
+                && resultCode == Activity.RESULT_OK) {
+            // The user has selected a place. Extract the name and address.
+            final Place place = PlacePicker.getPlace(getActivity(), data);
+            final CharSequence name = place.getName();
+            final CharSequence address = place.getAddress();
+            LatLng placeCoordinates = place.getLatLng();
+            String attributions = PlacePicker.getAttributions(data);
+            if (attributions == null) {
+                attributions = "";
             }
 
-                @Override
-                public void onFailure(Call<List<Trip>> call, Throwable t) {
-                    Log.d(TAG, "Retrofit failed to get data");
-                    Log.d(TAG, t.getMessage());
-                    t.printStackTrace();
-                    call.cancel();
+            if (requestCode == START_PLACE_PICKER) {
+                startLocationLat = placeCoordinates.latitude;
+                startLocationLng = placeCoordinates.longitude;
+                if (place.getPlaceTypes().get(0) == 0) {
+                    startLocationEditText.setText(address);
+                } else {
+                    startLocationEditText.setText(name);
                 }
-        });
-    }
+            } else {
+                endLocationLat = placeCoordinates.latitude;
+                endLocationLng = placeCoordinates.longitude;
+                if (place.getPlaceTypes().get(0) == 0) {
+                    endLocationEditText.setText(address);
+                } else {
+                    endLocationEditText.setText(name);
+                }
+            }
 
-    public void displayTrips(List<Trip> trips, LinearLayout layout) {
-
-        if (trips.isEmpty()) {
-            TextView noTrips = new TextView(this.getContext());
-            String temp = "No trips are currently available with the specified fields";
-            noTrips.setText(temp);
-            layout.addView(noTrips);
-        }
-        for (Trip trip: trips) {
-            addTripView(layout, trip);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
     /**
-     * Gets the string from an EditText
-     * @param view The view to look in
-     * @param id The id of the EditText
-     * @return The String contents of the EditText
+     * Report a message to the user via a long toast.
+     * @param message The message to report
      */
-    protected String getStringFromEditText(View view, int id) {
-        EditText editText = view.findViewById(id);
-        return editText.getText().toString();
+    protected void makeLongToast(String message) {
+        Toast.makeText(getContext(), message,
+                Toast.LENGTH_LONG).show();
     }
-
-    /**
-     * Gets an integer from an EditText
-     * @param view The view to look in
-     * @param id The id of the EditText
-     * @param defaultVal The default value to use in case of an empty EditText
-     * @return The int contents of the EditText or the default value
-     */
-    protected float getFloatFromEditText(View view, int id, float defaultVal) {
-        EditText editText = view.findViewById(id);
-        float result = editText.getText().toString().isEmpty()
-                ? defaultVal : Float.valueOf(editText.getText().toString());
-        return result;
-    }
-
-
 
     /**
      * Computes the distance between two coordinate points.
@@ -217,8 +335,6 @@ public class SearchFragment extends Fragment {
         Location.distanceBetween(lat1, lng1, lat2, lng2, distance);
         return distance[0];
     }
-
-
 
     /**
      * Adds an individual trip view to the linear layout passed in.

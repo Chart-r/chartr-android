@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -359,11 +360,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void searchLayout(View view) {
-        RelativeLayout r = findViewById(R.id.search_relative_layout);
-        if (r.getVisibility() == View.VISIBLE) {
-            r.setVisibility(View.GONE);
-        } else if (r.getVisibility() == View.GONE) {
-            r.setVisibility(View.VISIBLE);
+        RelativeLayout searchParameterLayout = findViewById(R.id.relativeLayoutSearchParameters);
+        RecyclerView searchRecycler = findViewById(R.id.recyclerViewSearch);
+        if (searchParameterLayout.getVisibility() == View.VISIBLE) {
+            searchParameterLayout.setVisibility(View.GONE);
+        } else if (searchParameterLayout.getVisibility() == View.GONE) {
+            searchParameterLayout.setVisibility(View.VISIBLE);
+            searchRecycler.setVisibility(View.GONE);
         }
     }
 

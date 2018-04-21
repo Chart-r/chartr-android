@@ -106,14 +106,17 @@ public class PostTripActivity extends AppCompatActivity {
         });
     }
 
-    //https://stackoverflow.com/questions/14933330/
-    // datepicker-how-to-popup-datepicker-when-click-on-edittext
-    //
-    //https://stackoverflow.com/questions/17901946/timepicker-dialog-from-clicking-edittext
-    private void initPickers() {
-    /*
-    SETUP DEPARTURE DATE PICKER
+    /**
+     * Initializes the date and time pickers.  Based off:
+     * https://stackoverflow.com/questions/14933330/
+     * datepicker-how-to-popup-datepicker-when-click-on-edittext
+     *
+     * https://stackoverflow.com/questions/17901946/timepicker-dialog-from-clicking-edittext
      */
+    private void initPickers() {
+        /*
+        SETUP DEPARTURE DATE PICKER
+         */
         departureEditText = (EditText) findViewById(R.id.editTextDepartureDate);
         departureDate  = (view, year, monthOfYear, dayOfMonth) -> {
             departureCalendar.set(Calendar.YEAR, year);
@@ -202,7 +205,7 @@ public class PostTripActivity extends AppCompatActivity {
 
             if (requestCode == START_PLACE_PICKER) {
                 startLocationLat = placeCoordinates.latitude;
-                startLocationLat = placeCoordinates.longitude;
+                startLocationLng = placeCoordinates.longitude;
                 if (place.getPlaceTypes().get(0) == 0) {
                     startLocationEditText.setText(address);
                 } else {

@@ -11,7 +11,7 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:weightSum="3"
-        android:id="@+id/search_relative_layout"
+        android:id="@+id/relativeLayoutSearchParameters"
         android:orientation="vertical">
 
         <Space
@@ -120,7 +120,7 @@
                 android:textSize="@dimen/post_trip_text_size"
                 android:textStyle="bold" />
             <EditText
-                android:id="@+id/searchFragmentEditPreferredDriver"
+                android:id="@+id/searchFragmentEditTextPreferredDriver"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/activity_text_height_post_trip"
                 android:background="@drawable/text_border_selector"
@@ -206,7 +206,7 @@
             android:layout_centerHorizontal="true" />
 
         <Button
-            android:id="@+id/searchFragmentButtonSearch"
+            android:id="@+id/buttonSubmitSearch"
             android:layout_width="match_parent"
             android:layout_height="@dimen/activity_text_height_post_trip"
             android:layout_below="@id/searchFragmentSpace5"
@@ -220,20 +220,12 @@
 
     </RelativeLayout>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/searchTripScroll"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewSearch"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:layout_below="@id/search_relative_layout">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/searchTripsLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
-
-    </ScrollView>
+    </android.support.v7.widget.RecyclerView>
 
 
 </RelativeLayout>

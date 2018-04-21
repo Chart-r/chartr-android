@@ -22,6 +22,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TripDetailActivity extends AppCompatActivity {
+    public static final String TAG = TripDetailActivity.class.getSimpleName();
+
     private Trip trip;
     private String type;
 
