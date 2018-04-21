@@ -4,7 +4,6 @@ package com.example.mac.chartr.fragments;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,15 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
-import com.example.mac.chartr.LocationNameProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.adapters.TripAdapter;
 import com.example.mac.chartr.objects.Trip;
@@ -215,7 +211,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 departureDate = dfDate.parse(departureDateString);
             } catch (ParseException error) {
                 Log.e(TAG, "Error Parsing date/time.");
-                Toast.makeText(getContext(),"Departure Date invalid.", Toast.LENGTH_SHORT);
+                Toast.makeText(getContext(), "Departure Date invalid.", Toast.LENGTH_SHORT);
                 return;
             }
         } else {
@@ -274,33 +270,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 call.cancel();
             }
         });
-
-        /* Geocoder code in case we switch back.
-        try {
-            Geocoder geocoder = new Geocoder(this.getContext());
-            List<Address> addresses;
-
-            addresses = geocoder.getFromLocationName(startLocation, 1);
-            if (addresses.size() > 0) {
-                startLat = addresses.get(0).getLatitude();
-                startLng = addresses.get(0).getLongitude();
-            } else {
-                return;
-            }
-
-            addresses = geocoder.getFromLocationName(endLocation, 1);
-            if (addresses.size() > 0) {
-                endLat = addresses.get(0).getLatitude();
-                endLng = addresses.get(0).getLongitude();
-            } else {
-                return;
-            }
-
-        } catch (IOException error) {
-            Log.e(TAG, "Error getting location coordinates for: " + startLocation);
-            return;
-        }
-        */
     }
 
     public void onPickButtonClick(int key) {
