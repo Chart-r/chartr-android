@@ -1,7 +1,6 @@
 package com.example.mac.chartr.activities;
 
 import android.content.Intent;
-import android.os.Bundle;
 
 import com.example.mac.chartr.objects.Trip;
 

@@ -25,9 +25,9 @@ public class RequestAdapterTest {
 
     private List<Pair<Trip, User>> pairList;
 
-    private Trip trip1 = new Trip(1234l, 1234l, true, false,
+    private Trip trip1 = new Trip(1234L, 1234L, true, false,
             12.4, 12.5, 15.4, 14.5, 5, 500);
-    private Trip trip2 = new Trip(1234l, 1234l, true, false,
+    private Trip trip2 = new Trip(1234L, 1234L, true, false,
             12.4, 12.5, 15.4, 14.5, 5, 200);
 
     private User user1 = new User("email@email.com", "Name Name",
