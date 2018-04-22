@@ -110,7 +110,7 @@
                     android:layout_centerInParent="true"
                     android:background="@drawable/button_reject_ripple_effect"
                     android:textColor="@color/white"
-                    android:text="@string/reject_button"/>
+                    android:text="@string/button_reject"/>
 
             </RelativeLayout>
 
@@ -128,7 +128,7 @@
                     android:layout_centerInParent="true"
                     android:background="@drawable/button_accept_ripple_effect"
                     android:textColor="@color/white"
-                    android:text="@string/accept_button" />
+                    android:text="@string/button_accept" />
 
             </RelativeLayout>
         </LinearLayout>

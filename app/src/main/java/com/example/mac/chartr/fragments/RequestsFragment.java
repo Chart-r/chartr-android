@@ -43,7 +43,6 @@ public class RequestsFragment extends Fragment {
             (a, b) -> (int) (b.first.getStartTime() - a.first.getStartTime());
 
     public RequestsFragment() {
-        // Required empty public constructor
         setCommonDependencyProvider(new CommonDependencyProvider());
     }
 
@@ -91,7 +90,6 @@ public class RequestsFragment extends Fragment {
             public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
                 Log.d(TAG, response.code() + "");
 
-                // Sort trips from most earliest to latest
                 List<Trip> allTrips = response.body();
                 List<Pair<Trip, String>> requestedUsersUids = filterRequestedUsers(allTrips);
 

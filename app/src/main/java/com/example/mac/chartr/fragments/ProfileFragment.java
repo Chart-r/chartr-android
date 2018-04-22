@@ -1,27 +1,45 @@
 package com.example.mac.chartr.fragments;
 
-import android.content.Intent;
-import android.os.Bundle;
+import  android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 
+import com.example.mac.chartr.ApiClient;
+import com.example.mac.chartr.ApiInterface;
+import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
-import com.example.mac.chartr.activities.LoginActivity;
-import com.example.mac.chartr.activities.MainActivity;
+import com.example.mac.chartr.objects.User;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
     public static final String TAG = ProfileFragment.class.getSimpleName();
+    private CommonDependencyProvider provider;
+    private String uid;
+
+    private TextView textViewName;
+    private User user;
 
     public ProfileFragment() {
-        // Required empty public constructor
+        setCommonDependencyProvider(new CommonDependencyProvider());
+    }
+
+    public void setCommonDependencyProvider(CommonDependencyProvider provider) {
+        this.provider = provider;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "start onCreate()");
         super.onCreate(savedInstanceState);
+        uid = getLoggedInUid();
+        Log.d(TAG, "end onCreate()");
     }
 
     @Override
@@ -29,21 +47,37 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
-        Button logoutButton = (Button) root.findViewById(R.id.logout_button);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
+
+        textViewName = root.findViewById(R.id.textViewName);
+
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        Call<User> call = apiInterface.getUserFromUid(uid);
+
+        call.enqueue(new Callback<User>() {
             @Override
-            public void onClick(View v) {
-                logout(v);
+            public void onResponse(Call<User> call, Response<User> response) {
+                Log.d(TAG, response.code() + "");
+                user = response.body();
+                textViewName.setText(user.getName());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d(TAG, "Retrofit failed to get data");
+                Log.d(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
             }
         });
 
         return root;
     }
 
-    public void logout(View view) {
-        Intent intent = new Intent(this.getActivity().getApplicationContext(), LoginActivity.class);
-        ((MainActivity) getActivity()).signOut();
-        startActivity(intent);
+    /**
+     * Gets the logged in user from the provider
+     * @return logged in user
+     */
+    private String getLoggedInUid() {
+        return provider.getAppHelper().getLoggedInUser().getUid();
     }
-
 }

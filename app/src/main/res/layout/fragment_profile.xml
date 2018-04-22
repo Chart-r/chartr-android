@@ -4,17 +4,34 @@
     android:layout_height="match_parent"
     tools:context="com.example.mac.chartr.fragments.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Profile Fragment" />
+    <ImageView
+        android:id="@+id/imageViewProfileIcon"
+        android:layout_width="@dimen/profile_icon_small"
+        android:layout_height="@dimen/profile_icon_small"
+        android:layout_marginStart="@dimen/activity_separator_small"
+        android:layout_marginTop="@dimen/activity_separator_small"
+        android:contentDescription="@string/user_profile_icon"
+        android:src="@drawable/ic_account_circle_white" />
 
-    <Button
-        android:id="@+id/logout_button"
+    <TextView
+        android:id="@+id/textViewName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Logout" />
+        android:maxLines="1"
+        android:layout_marginStart="@dimen/activity_separator_small"
+        android:layout_marginTop="@dimen/activity_separator_small"
+        android:layout_toEndOf="@+id/imageViewProfileIcon"
+        android:layout_toStartOf="@+id/textViewSeats"
+        android:text="@string/name_placeholder"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/textViewRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewName"
+        android:layout_marginStart="@dimen/activity_separator_small"
+        android:layout_toEndOf="@+id/imageViewProfileIcon"
+        android:text="@string/rating_placeholder" />
 
 </RelativeLayout>
