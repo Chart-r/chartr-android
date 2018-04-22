@@ -48,5 +48,8 @@
     <string name="reject_button">Reject</string>
     <string name="searchFragmentDepartureDate">Departure date</string>
     <string name="searchFragmentDateExample">eg: mm/dd/yyyy</string>
-    <string name="no_requests">There are no pending requests</string>
+    <string name="no_requests">There are no pending requests.</string>
+    <string name="no_confirmed_trips">You currently have no confirmed trips.</string>
+    <string name="no_pending_trips">You currently have no pending trips.</string>
+    <string name="no_posted_trips">You currently have no posted trips.</string>
 </resources>

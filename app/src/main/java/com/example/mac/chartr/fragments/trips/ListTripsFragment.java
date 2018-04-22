@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
@@ -29,6 +30,7 @@ public class ListTripsFragment extends Fragment {
     private CommonDependencyProvider provider;
     private String uid;
 
+    private TextView textViewNoTrips;
     private RecyclerView recyclerView;
     private TripAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -54,6 +56,7 @@ public class ListTripsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_list_trips, container, false);
+        textViewNoTrips = root.findViewById(R.id.textViewNoTrips);
         recyclerView = root.findViewById(R.id.recyclerViewTrips);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -62,12 +65,15 @@ public class ListTripsFragment extends Fragment {
         if (getArguments() != null) {
             switch (getArguments().getString(ListTripsFragment.TRIP_TYPE_KEY)) {
                 case "Confirmed":
+                    textViewNoTrips.setText(R.string.no_confirmed_trips);
                     getFilteredTrips("riding");
                     break;
                 case "Pending":
+                    textViewNoTrips.setText(R.string.no_pending_trips);
                     getFilteredTrips("pending");
                     break;
                 case "Posted":
+                    textViewNoTrips.setText(R.string.no_posted_trips);
                     getFilteredTrips("driving");
                     break;
             }
@@ -84,9 +90,10 @@ public class ListTripsFragment extends Fragment {
             public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
                 Log.d(TAG, response.code() + "");
 
-                // Sort trips from most earliest to latest
                 tripsData = response.body();
                 Log.d(TAG, tripsData.toString());
+                if (!tripsData.isEmpty())
+                    textViewNoTrips.setVisibility(View.GONE);
                 adapter.addItems(tripsData);
             }
 
