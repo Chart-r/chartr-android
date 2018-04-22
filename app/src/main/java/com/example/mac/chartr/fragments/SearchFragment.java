@@ -292,12 +292,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     private void displayNearbyTrips() {
         try {
-            Log.d("TAG", "Trying to get the last location");
+            Log.d(TAG, "Trying to get the last location");
             mFusedLocationClient.getLastLocation()
                     .addOnSuccessListener((Activity) getContext(), new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            Log.d("TAG", "Successfully retrieved current location");
+                            Log.d(TAG, "Successfully retrieved current location");
                             if (location == null) {
                                searchTrips();
                                return;
@@ -409,7 +409,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         if (searchLayout.getVisibility() == View.GONE) {
-            searchTrips();
+            displayNearbyTrips();
         }
     }
 
