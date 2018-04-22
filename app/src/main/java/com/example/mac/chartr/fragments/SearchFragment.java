@@ -94,7 +94,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         uid = provider.getAppHelper().getLoggedInUser().getUid();
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
         Log.d("TAG", "Displaying all nearby trips");
-        displayNearbyTrips();
+        displayAllTrips();
         // TODO: Call api and filter for nearby trips
     }
 
@@ -273,6 +273,28 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    private void displayAllTrips() {
+
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        Call<List<Trip>> call = apiInterface.getAllCurrentTrips();
+        call.enqueue(new Callback<List<Trip>>() {
+            @Override
+            public void onResponse(Call<List<Trip>> call,
+                                   Response<List<Trip>> response) {
+                Log.d(TAG, response.code() + "");
+
+                List<Trip> tripList = response.body();
+                adapter.addItems(tripList);
+            }
+
+            @Override
+            public void onFailure(Call<List<Trip>> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
+    }
     private void displayNearbyTrips() {
         try {
             Log.d(TAG, "Trying to get the last location");

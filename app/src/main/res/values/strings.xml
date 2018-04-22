@@ -48,4 +48,7 @@
     <string name="reject_button">Reject</string>
     <string name="searchFragmentDepartureDate">Departure date</string>
     <string name="searchFragmentDateExample">eg: mm/dd/yyyy</string>
+    <string name="trip_container_date">Date</string>
+    <string name="trip_container_to">To:</string>
+    <string name="trip_container_from">From:</string>
 </resources>
