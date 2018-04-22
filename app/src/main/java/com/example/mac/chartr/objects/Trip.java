@@ -224,7 +224,11 @@ public class Trip implements Serializable {
             StringBuilder stringBuilder = new StringBuilder();
 
             if (shortName) {
-                String[] addressArray = address.getAddressLine(1).split(", ");
+                String addressLine = address.getAddressLine(1);
+                if (addressLine == null) {
+                    addressLine = address.getAddressLine(0);
+                }
+                String[] addressArray = addressLine.split(", ");
                 stringBuilder.append(addressArray[addressArray.length - 2]);
                 stringBuilder.append(", ");
                 stringBuilder.append(addressArray[addressArray.length - 1].substring(0, 2));
