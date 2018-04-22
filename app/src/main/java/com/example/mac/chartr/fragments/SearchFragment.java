@@ -23,7 +23,9 @@ import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.Trip;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -67,6 +69,7 @@ public class SearchFragment extends Fragment {
         String startLocation =
                 getStringFromEditText(view, R.id.searchFragmentEditTextStartLocation);
         String endLocation = getStringFromEditText(view, R.id.searchFragmentEditTextEndLocation);
+        final String departureDate = getStringFromEditText(view, R.id.searchFragmentEditTextDate);
         final String preferredDriverEmail =
                 getStringFromEditText(view, R.id.searchFragmentEditPreferredDriver);
         final float priceRangeFrom =
@@ -125,6 +128,11 @@ public class SearchFragment extends Fragment {
                             && currTrip.getPrice() < priceRangeTo;
                     boolean hasDriverPreference = !preferredDriverEmail.isEmpty();
                     boolean isNotDriver = !loggedInUid.equals(currTrip.getDriverFromUsers());
+                    boolean hasDatePreference = !departureDate.isEmpty();
+                    String currTripDate = getDate(currTrip.getStartTime(), "MM/dd/yyyy");
+                    boolean datesMatch = departureDate.equals(currTripDate);
+
+
 
                     float startDistance = computeDistanceBetween(startLat, startLng,
                             currTrip.getStartLat(), currTrip.getStartLong());
@@ -135,7 +143,10 @@ public class SearchFragment extends Fragment {
                             && endDistance < 5000f && startDistance < 5000f) {
                         if (!hasDriverPreference
                                 || currTrip.getDriverFromUsers().contains(preferredDriverEmail)) {
+                            if (!hasDatePreference || datesMatch) {
                             result.add(currTrip);
+                            }
+
                         }
                     }
                 }
@@ -154,6 +165,13 @@ public class SearchFragment extends Fragment {
     }
 
     public void displayTrips(List<Trip> trips, LinearLayout layout) {
+
+        if (trips.isEmpty()) {
+            TextView noTrips = new TextView(this.getContext());
+            String temp = "No trips are currently available with the specified fields";
+            noTrips.setText(temp);
+            layout.addView(noTrips);
+        }
         for (Trip trip: trips) {
             addTripView(layout, trip);
         }
@@ -184,6 +202,8 @@ public class SearchFragment extends Fragment {
         return result;
     }
 
+
+
     /**
      * Computes the distance between two coordinate points.
      * @param lat1 first point latitude
@@ -197,6 +217,8 @@ public class SearchFragment extends Fragment {
         Location.distanceBetween(lat1, lng1, lat2, lng2, distance);
         return distance[0];
     }
+
+
 
     /**
      * Adds an individual trip view to the linear layout passed in.
@@ -229,4 +251,19 @@ public class SearchFragment extends Fragment {
         Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
         return LocationNameProvider.getLocationName(latitude, longitude, geocoder, TAG);
     }
+
+    /**
+     * Return date in specified format.
+     * @param milliSeconds Date in milliseconds
+     * @param dateFormat Date format
+     * @return String representing the date in the given format
+     */
+    public static String getDate(long milliSeconds, String dateFormat) {
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliSeconds);
+        return formatter.format(calendar.getTime());
+    }
+
 }

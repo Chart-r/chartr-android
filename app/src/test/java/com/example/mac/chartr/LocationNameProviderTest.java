@@ -4,7 +4,6 @@ package com.example.mac.chartr;
 import android.location.Address;
 import android.location.Geocoder;
 
-
 import org.junit.Test;
 
 import java.io.IOException;

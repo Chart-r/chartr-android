@@ -12,18 +12,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.LoginActivity">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCAnBelsk6hmmJiaj0PEOOKj0f8b3ctus0" />
+
+        <activity
+            android:name=".activities.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.RegisterActivity" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activities.ConfirmRegisterActivity" />
-        <activity android:name=".activities.PostTripActivity" />
+        <activity
+            android:name=".activities.PostTripActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.TripDetailActivity"></activity>
     </application>
 
 </manifest>

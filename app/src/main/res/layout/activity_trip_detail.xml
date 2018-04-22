@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.mac.chartr.activities.PostTripActivity">
+
+    <TextView
+        android:id="@+id/textViewLogistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:ems="20"
+        android:text="@string/title_logistics"
+        android:textColor="@color/grey_700"
+        android:textSize="@dimen/post_trip_text_size"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextStartLocation"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_text_height_post_trip"
+        android:layout_below="@+id/textViewLogistics"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/text_border_selector"
+        android:paddingLeft="@dimen/activity_text_padding"
+        android:paddingRight="@dimen/activity_text_padding"
+        android:focusable="false"
+        android:clickable="false"
+        android:textSize="@dimen/post_trip_text_size"
+        android:textStyle="italic" />
+
+    <EditText
+        android:id="@+id/editTextEndLocation"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_text_height_post_trip"
+        android:layout_below="@+id/editTextStartLocation"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/text_border_selector"
+        android:focusable="false"
+        android:clickable="false"
+        android:paddingLeft="@dimen/activity_text_padding"
+        android:paddingRight="@dimen/activity_text_padding"
+        android:textSize="@dimen/post_trip_text_size"
+        android:textStyle="italic" />
+
+    <Space
+        android:id="@+id/space1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_inter_group_separation"
+        android:layout_below="@+id/editTextEndLocation"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutDepartureTime"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space1"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <EditText
+            android:id="@+id/editTextDepartureDate"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:layout_weight="1"
+            android:background="@drawable/text_border_selector"
+            android:hint="Departure Date"
+            android:focusable="false"
+            android:clickable="false"
+            android:longClickable="false"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:textSize="@dimen/post_trip_text_size"
+            android:textStyle="italic" />
+
+        <EditText
+            android:id="@+id/editTextDepartureTime"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:layout_weight="1"
+            android:background="@drawable/text_border_selector"
+            android:hint="Departure Time"
+            android:focusable="false"
+            android:clickable="false"
+            android:longClickable="false"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:textSize="@dimen/post_trip_text_size"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+    <Space
+        android:id="@+id/space3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_inter_group_separation"
+        android:layout_below="@+id/linearLayoutDepartureTime"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutSeating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space3"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <TextView
+            android:id="@+id/textViewSeating"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="4"
+            android:ems="20"
+            android:gravity="center_vertical"
+            android:text="Seating"
+            android:textColor="@color/grey_700"
+            android:textSize="@dimen/post_trip_text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewSeatValue"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/activity_text_height_post_trip"
+            android:layout_gravity="end"
+            android:layout_weight="2"
+            android:background="@drawable/text_border_selector"
+            android:gravity="center"
+            android:paddingLeft="@dimen/activity_text_padding"
+            android:paddingRight="@dimen/activity_text_padding"
+            android:text="1" />
+
+    </LinearLayout>
+
+    <Space
+        android:id="@+id/space5"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_inter_group_separation"
+        android:layout_below="@+id/linearLayoutSeating"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textViewTripPreferences"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/space5"
+        android:ems="20"
+        android:text="Trip Preferences"
+        android:textColor="@color/grey_700"
+        android:textSize="@dimen/post_trip_text_size"
+        android:textStyle="bold" />
+
+    <Switch
+        android:id="@+id/switchNoSmoking"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_text_height_post_trip"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textViewTripPreferences"
+        android:text="No Smoking"
+        android:focusable="false"
+        android:clickable="false"
+        android:theme="@style/SCBSwitch" />
+
+    <Switch
+        android:id="@+id/switchQuite"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_text_height_post_trip"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/switchNoSmoking"
+        android:text="Quiet"
+        android:focusable="false"
+        android:clickable="false"
+        android:visibility="gone"
+        android:theme="@style/SCBSwitch" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_selector"
+        android:backgroundTint="@color/grey_700"
+        android:onClick="postTrip"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/activity_button_text_size" />
+
+</RelativeLayout>
