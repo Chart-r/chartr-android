@@ -129,8 +129,9 @@ public class RequestsFragment extends Fragment {
 
         }
 
-        if (!filteredRequestedUsers.isEmpty())
+        if (!filteredRequestedUsers.isEmpty()) {
             noRequestsTextView.setVisibility(View.GONE);
+        }
 
         Log.d(TAG, "end filterRequestedUsers()");
         return filteredRequestedUsers;

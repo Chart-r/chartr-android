@@ -92,8 +92,9 @@ public class ListTripsFragment extends Fragment {
 
                 tripsData = response.body();
                 Log.d(TAG, tripsData.toString());
-                if (!tripsData.isEmpty())
+                if (!tripsData.isEmpty()) {
                     textViewNoTrips.setVisibility(View.GONE);
+                }
                 adapter.addItems(tripsData);
             }
 
