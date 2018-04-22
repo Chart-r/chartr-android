@@ -1,11 +1,14 @@
 package com.example.mac.chartr.fragments;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,9 +29,13 @@ import com.example.mac.chartr.adapters.TripAdapter;
 import com.example.mac.chartr.objects.Trip;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -42,6 +49,7 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 public class SearchFragment extends Fragment implements View.OnClickListener {
     public static final String TAG = SearchFragment.class.getSimpleName();
@@ -85,6 +93,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     // Search radius in meters
     float searchRadius;
 
+    private FusedLocationProviderClient mFusedLocationClient;
+
+
     public SearchFragment() {
         // Required empty public constructor
         setCommonDependencyProvider(new CommonDependencyProvider());
@@ -98,7 +109,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uid = provider.getAppHelper().getLoggedInUser().getUid();
-
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+        Log.d("TAG", "Displaying all nearby trips");
+        displayNearbyTrips();
         // TODO: Call api and filter for nearby trips
     }
 
@@ -275,6 +288,66 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 call.cancel();
             }
         });
+    }
+
+    private void displayNearbyTrips() {
+        try {
+            Log.d("TAG", "Trying to get the last location");
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener((Activity) getContext(), new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            Log.d("TAG", "Successfully retrieved current location");
+                            if (location == null) {
+                               searchTrips();
+                               return;
+                            }
+                            double currLat=location.getLatitude();
+                            double currLong=location.getLongitude();
+
+                            ApiInterface apiInterface=ApiClient.getApiInstance();
+                            Call<List<Trip>>call=apiInterface.getAllCurrentTrips();
+                            call.enqueue(new Callback<List<Trip>>(){
+                                @Override
+                                public void onResponse(Call<List<Trip>>call,Response<List<Trip>>response){
+                                    Log.d(TAG,response.code()+"");
+
+                                    List<Trip>tripList=response.body();
+                                    List<Trip>result=new ArrayList<Trip>();
+
+                                    for(int i=0;i<tripList.size();i++){
+                                        Trip currTrip=tripList.get(i);
+
+                                        boolean withinDistance=
+                                                computeDistanceBetween(currLat,currLong,
+                                                        currTrip.getStartLat(),currTrip.getStartLong())<5000f;
+
+                                        if(withinDistance){
+                                            result.add(currTrip);
+                                        }
+                                    }
+                                    adapter.addItems(result);
+                                }
+
+                                @Override
+                                public void onFailure(Call<List<Trip>>call,Throwable t){
+                                    Log.d(TAG,t.getMessage());
+                                    t.printStackTrace();
+                                    call.cancel();
+                                }
+                            });
+
+
+
+                        }
+                    });
+
+        } catch (SecurityException e) {
+            Log.d("TAG", "Permission denied; all trips displayed");
+            searchTrips();
+        }
+
+
     }
 
     public void onPickButtonClick(int key) {
