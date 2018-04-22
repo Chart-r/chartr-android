@@ -1,14 +1,11 @@
 package com.example.mac.chartr.fragments;
 
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,8 +31,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
-
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -55,44 +50,32 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public static final String TAG = SearchFragment.class.getSimpleName();
     private static final int START_PLACE_PICKER = 1;
     private static final int DEST_PLACE_PICKER = 2;
-
+    EditText startLocationEditText;
+    Double startLocationLat;
+    Double startLocationLng;
+    EditText endLocationEditText;
+    Double endLocationLat;
+    Double endLocationLng;
+    EditText departureDateEditText;
+    DatePickerDialog.OnDateSetListener departureDate;
+    Calendar departureCalendar = Calendar.getInstance();
+    EditText preferredDriverEditText;
+    String preferredDriver;
+    EditText priceMinEditText;
+    float priceMin;
+    EditText priceMaxEditText;
+    float priceMax;
+    Button submitSearchButton;
+    // Search radius in meters
+    float searchRadius;
     private CommonDependencyProvider provider;
     private String uid;
-
     private RecyclerView recyclerView;
     private TripAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<Trip> tripsData = new ArrayList<>();
-
     private RelativeLayout searchLayout;
     private Button filterButton;
-
-    EditText startLocationEditText;
-    Double startLocationLat;
-    Double startLocationLng;
-
-    EditText endLocationEditText;
-    Double endLocationLat;
-    Double endLocationLng;
-
-    EditText departureDateEditText;
-    DatePickerDialog.OnDateSetListener departureDate;
-    Calendar departureCalendar = Calendar.getInstance();
-
-    EditText preferredDriverEditText;
-    String preferredDriver;
-
-    EditText priceMinEditText;
-    float priceMin;
-
-    EditText priceMaxEditText;
-    float priceMax;
-
-    Button submitSearchButton;
-
-    // Search radius in meters
-    float searchRadius;
-
     private FusedLocationProviderClient mFusedLocationClient;
 
 
@@ -175,7 +158,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
      * Initialize the departure date picker based off:
      * https://stackoverflow.com/questions/14933330/
      * datepicker-how-to-popup-datepicker-when-click-on-edittext
-     *
+     * <p>
      * https://stackoverflow.com/questions/17901946/timepicker-dialog-from-clicking-edittext
      *
      * @param root the root view.
@@ -294,52 +277,50 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         try {
             Log.d(TAG, "Trying to get the last location");
             mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener((Activity) getContext(), new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            Log.d(TAG, "Successfully retrieved current location");
-                            if (location == null) {
-                               searchTrips();
-                               return;
-                            }
-                            double currLat=location.getLatitude();
-                            double currLong=location.getLongitude();
-
-                            ApiInterface apiInterface=ApiClient.getApiInstance();
-                            Call<List<Trip>>call=apiInterface.getAllCurrentTrips();
-                            call.enqueue(new Callback<List<Trip>>(){
-                                @Override
-                                public void onResponse(Call<List<Trip>>call,Response<List<Trip>>response){
-                                    Log.d(TAG,response.code()+"");
-
-                                    List<Trip>tripList=response.body();
-                                    List<Trip>result=new ArrayList<Trip>();
-
-                                    for(int i=0;i<tripList.size();i++){
-                                        Trip currTrip=tripList.get(i);
-
-                                        boolean withinDistance=
-                                                computeDistanceBetween(currLat,currLong,
-                                                        currTrip.getStartLat(),currTrip.getStartLong())<5000f;
-
-                                        if(withinDistance){
-                                            result.add(currTrip);
-                                        }
-                                    }
-                                    adapter.addItems(result);
-                                }
-
-                                @Override
-                                public void onFailure(Call<List<Trip>>call,Throwable t){
-                                    Log.d(TAG,t.getMessage());
-                                    t.printStackTrace();
-                                    call.cancel();
-                                }
-                            });
-
-
-
+                    .addOnSuccessListener((Activity) getContext(), location -> {
+                        Log.d(TAG, "Successfully retrieved current location");
+                        if (location == null) {
+                            searchTrips();
+                            return;
                         }
+                        double currLat = location.getLatitude();
+                        double currLong = location.getLongitude();
+
+                        ApiInterface apiInterface = ApiClient.getApiInstance();
+                        Call<List<Trip>> call = apiInterface.getAllCurrentTrips();
+                        call.enqueue(new Callback<List<Trip>>() {
+                            @Override
+                            public void onResponse(Call<List<Trip>> call,
+                                                   Response<List<Trip>> response) {
+                                Log.d(TAG, response.code() + "");
+
+                                List<Trip> tripList = response.body();
+                                List<Trip> result = new ArrayList<Trip>();
+
+                                for (int i = 0; i < tripList.size(); i++) {
+                                    Trip currTrip = tripList.get(i);
+
+                                    boolean withinDistance =
+                                            computeDistanceBetween(currLat, currLong,
+                                                    currTrip.getStartLat(),
+                                                    currTrip.getStartLong()) < 5000f;
+
+                                    if (withinDistance) {
+                                        result.add(currTrip);
+                                    }
+                                }
+                                adapter.addItems(result);
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<Trip>> call, Throwable t) {
+                                Log.d(TAG, t.getMessage());
+                                t.printStackTrace();
+                                call.cancel();
+                            }
+                        });
+
+
                     });
 
         } catch (SecurityException e) {
@@ -415,6 +396,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     /**
      * Computes the distance between two coordinate points.
+     *
      * @param lat1 first point latitude
      * @param lng1 first point longitude
      * @param lat2 second point latitude

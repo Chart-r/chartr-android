@@ -91,7 +91,6 @@ Severity: HARD
             <property name="max" value="100" />
             <!-- ignore lines like "$File: //depot/... $" -->
             <property name="ignorePattern" value="\$File.*\$" />
-            <property name="severity" value="info" />
         </module>
         <module name="MethodLength" />
         <!--<module name="ParameterNumber" />-->
