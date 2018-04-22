@@ -48,4 +48,5 @@
     <string name="reject_button">Reject</string>
     <string name="searchFragmentDepartureDate">Departure date</string>
     <string name="searchFragmentDateExample">eg: mm/dd/yyyy</string>
+    <string name="no_requests">There are no pending requests</string>
 </resources>

@@ -9,6 +9,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
@@ -33,6 +34,7 @@ public class RequestsFragment extends Fragment {
     private CommonDependencyProvider provider;
     private String uid;
 
+    private TextView noRequestsTextView;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -63,6 +65,7 @@ public class RequestsFragment extends Fragment {
         Log.d(TAG, "start onCreateView()");
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_requests, container, false);
+        noRequestsTextView = root.findViewById(R.id.textViewNoRequests);
         recyclerView = root.findViewById(R.id.recyclerViewRequests);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -126,6 +129,9 @@ public class RequestsFragment extends Fragment {
 
         }
 
+        if (!filteredRequestedUsers.isEmpty())
+            noRequestsTextView.setVisibility(View.GONE);
+
         Log.d(TAG, "end filterRequestedUsers()");
         return filteredRequestedUsers;
     }
@@ -143,7 +149,6 @@ public class RequestsFragment extends Fragment {
                 public void onResponse(Call<User> call, Response<User> response) {
                     Log.d(TAG, response.code() + "");
 
-                    // Sort trips from most earliest to latest
                     User user = response.body();
                     Pair<Trip, User> tripUserPair =
                         new Pair(requestedUserPair.first, user);
