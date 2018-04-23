@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tripsScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        tools:context="com.example.mac.chartr.activities.LoginActivity">
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_inter_group_separation3"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ImageView
             android:id="@+id/imageViewAppMainCognitoIcon"
@@ -23,54 +26,36 @@
             android:background="@color/colorPrimaryDark"
             android:scaleType="fitXY" />
 
-        <Space
-            android:id="@+id/space_1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_inter_group_separation"
-            android:layout_below="@+id/imageViewAppMainCognitoIcon"
-            android:layout_centerHorizontal="true" />
-
         <TextView
             android:id="@+id/textViewAppMainTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/space_1"
+            android:layout_below="@+id/imageViewAppMainCognitoIcon"
             android:layout_centerHorizontal="true"
-            android:text="Chartr"
+            android:layout_marginTop="@dimen/activity_inter_group_separation"
+            android:text="@string/app_name"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="30sp" />
 
-        <Space
-            android:id="@+id/space"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_inter_group_separation"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/textViewAppMainTitle" />
-
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewSecondaryTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/space"
+            android:layout_below="@+id/textViewAppMainTitle"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/activity_inter_group_separation"
             android:gravity="center"
-            android:text="A new way to ride"
+            android:text="@string/app_slogan"
             android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <Space
-            android:id="@+id/space2"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_text_size_big"
-            android:layout_below="@+id/textView"
-            android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/textViewUserIdLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/space2"
+            android:layout_below="@+id/textViewSecondaryTitle"
             android:layout_centerHorizontal="true"
-            android:text=" "
+            android:layout_marginTop="50dp"
+            android:text="@string/space"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="@dimen/activity_text_size_small" />
 
@@ -81,7 +66,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/textViewUserIdLabel"
             android:background="@drawable/text_border_selector"
-            android:hint="Email"
+            android:hint="@string/Username"
             android:inputType="textPersonName"
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding" />
@@ -92,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/editTextUserId"
             android:layout_centerHorizontal="true"
-            android:text=" "
+            android:text="@string/space"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/alert"
             android:textSize="@dimen/activity_text_padding" />
@@ -103,8 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewUserIdMessage"
             android:layout_centerHorizontal="true"
-            android:height="@dimen/zero_spacing"
-            android:text=" "
+            android:text="@string/space"
             android:textSize="@dimen/activity_text_size_small" />
 
         <EditText
@@ -130,65 +114,47 @@
             android:textColor="@color/alert"
             android:textSize="@dimen/activity_text_padding" />
 
-        <Space
-            android:id="@+id/space4"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_intra_group_separation"
-            android:layout_below="@+id/textViewUserPasswordMessage"
-            android:layout_centerHorizontal="true" />
-
         <Button
             android:id="@+id/buttonLogIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/space4"
+            android:layout_below="@+id/textViewUserPasswordMessage"
+            android:layout_marginTop="@dimen/activity_inter_group_separation2"
             android:background="@drawable/button_selector"
             android:onClick="logIn"
-            android:text="Sign In"
+            android:text="@string/sign_in"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/activity_button_text_size" />
-
-        <Space
-            android:id="@+id/space5"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_intra_group_separation"
-            android:layout_below="@+id/buttonLogIn"
-            android:layout_centerHorizontal="true" />
-
-        <Space
-            android:id="@+id/space6"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_intra_group_separation"
-            android:layout_below="@+id/space5"
-            android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/textViewUserForgotPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/space6"
+            android:layout_below="@+id/buttonLogIn"
+            android:layout_marginTop="@dimen/activity_inter_group_separation3"
             android:clickable="true"
             android:focusable="true"
             android:onClick="forgotPassword"
-            android:text="Forgot password"
+            android:text="@string/forgot_password"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/textViewUserSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/space6"
+            android:layout_below="@+id/buttonLogIn"
+            android:layout_marginTop="@dimen/activity_inter_group_separation2"
             android:clickable="true"
             android:focusable="true"
             android:onClick="signUp"
-            android:text="Sign up"
+            android:text="@string/sign_up"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="15sp" />
-
     </RelativeLayout>
 </ScrollView>
