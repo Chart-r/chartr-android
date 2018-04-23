@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mac.chartr.ApiClient;
@@ -66,6 +67,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     EditText priceMaxEditText;
     float priceMax;
     Button submitSearchButton;
+    TextView textViewNoTrips;
     // Search radius in meters
     float searchRadius;
     private CommonDependencyProvider provider;
@@ -132,6 +134,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         searchLayout = root.findViewById(R.id.relativeLayoutSearchParameters);
         submitSearchButton = root.findViewById(R.id.buttonSubmitSearch);
         submitSearchButton.setOnClickListener(this);
+
+        textViewNoTrips = root.findViewById(R.id.textViewSearchNoTrips);
     }
 
     @Override
@@ -150,6 +154,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 searchLayout.setVisibility(View.VISIBLE);
                 filterButton.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.GONE);
+                textViewNoTrips.setVisibility(View.GONE);
                 break;
         }
     }
@@ -192,6 +197,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         searchLayout.setVisibility(View.GONE);
         filterButton.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
+        textViewNoTrips.setVisibility(View.GONE);
 
         String startLocation = startLocationEditText.getText().toString();
         String endLocation = endLocationEditText.getText().toString();
@@ -260,6 +266,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                 }
+                if (result.isEmpty()) {
+                    textViewNoTrips.setVisibility(View.VISIBLE);
+                }
                 adapter.addItems(result);
             }
 
@@ -294,6 +303,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                     if (isNotInTrip && isNotFull) {
                         result.add(currTrip);
                     }
+                }
+                if (result.isEmpty()) {
+                    textViewNoTrips.setVisibility(View.VISIBLE);
                 }
                 adapter.addItems(result);
             }
@@ -343,6 +355,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                                     if (withinDistance && isNotInTrip && isNotFull) {
                                         result.add(currTrip);
                                     }
+                                }
+                                if (result.isEmpty()) {
+                                    textViewNoTrips.setVisibility(View.VISIBLE);
                                 }
                                 adapter.addItems(result);
                             }
