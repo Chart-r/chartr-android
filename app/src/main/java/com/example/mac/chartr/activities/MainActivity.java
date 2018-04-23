@@ -140,11 +140,17 @@ public class MainActivity extends AppCompatActivity {
                                 .getBackStackEntryAt(topOfBackstack).getName();
                     }
 
-                    // Show or hide plus button
+                    // Show or hide plus button and set toolbar title
                     if (title.equals("Trips")) {
+                        getSupportActionBar().setTitle("My Trips");
                         findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
                     } else {
                         findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                        if (title.equals("Search")) {
+                            getSupportActionBar().setTitle("Explore Trips");
+                        } else {
+                            getSupportActionBar().setTitle(title);
+                        }
                     }
 
                     if (title.equals("")) {
@@ -168,9 +174,6 @@ public class MainActivity extends AppCompatActivity {
         user.signOut();
         exit();
         startActivity(intent);
-    }
-
-    public void signOut() {
     }
 
     public void editProfile(View view) {
@@ -248,7 +251,6 @@ public class MainActivity extends AppCompatActivity {
                             getSupportActionBar().setTitle("Explore Trips");
                             findViewById(R.id.toolbarProfile).setVisibility(View.GONE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
                             findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
@@ -259,7 +261,6 @@ public class MainActivity extends AppCompatActivity {
                             getSupportActionBar().setTitle("My Trips");
                             findViewById(R.id.toolbarProfile).setVisibility(View.GONE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
                             findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
@@ -270,7 +271,6 @@ public class MainActivity extends AppCompatActivity {
                             getSupportActionBar().setTitle("Requests");
                             findViewById(R.id.toolbarProfile).setVisibility(View.GONE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
                             findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
@@ -281,7 +281,6 @@ public class MainActivity extends AppCompatActivity {
                             getSupportActionBar().setTitle("");
                             findViewById(R.id.toolbarProfile).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             findViewById(R.id.buttonLogOut).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonEditProfile).setVisibility(View.VISIBLE);
                             getSupportFragmentManager().beginTransaction()
