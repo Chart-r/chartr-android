@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
@@ -98,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Setting visibility of buttons when first logged in
+        findViewById(R.id.toolbarProfile).setVisibility(View.GONE);
+        findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
+        findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
         findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
         findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
 
@@ -117,7 +121,11 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.topToolBar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
+        Button logoutButton = findViewById(R.id.buttonLogOut);
+        Button editProfileButton = findViewById(R.id.buttonEditProfile);
         Button goToCreateTrip = findViewById(R.id.buttonAddTrip);
+        logoutButton.setOnClickListener(v -> logout(v));
+        editProfileButton.setOnClickListener(v -> editProfile(v));
         goToCreateTrip.setOnClickListener(v -> {
             Intent intent = new Intent(context, PostTripActivity.class);
             startActivity(intent);
@@ -142,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     // Show or hide search button or title
-                    if (title == "Search") {
+                    if (title.equals("Search")) {
                         getSupportActionBar().setTitle("");
                         findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
                     } else {
@@ -151,10 +159,20 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     // Show or hide plus button
-                    if (title == "Trips") {
+                    if (title.equals("Trips")) {
                         findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
                     } else {
                         findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                    }
+
+                    if (title.equals("")) {
+                        findViewById(R.id.toolbarProfile).setVisibility(View.VISIBLE);
+                        findViewById(R.id.buttonEditProfile).setVisibility(View.VISIBLE);
+                        findViewById(R.id.buttonLogOut).setVisibility(View.VISIBLE);
+                    } else {
+                        findViewById(R.id.toolbarProfile).setVisibility(View.GONE);
+                        findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
+                        findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
                     }
                 });
     }
@@ -163,9 +181,20 @@ public class MainActivity extends AppCompatActivity {
         this.provider = provider;
     }
 
-    public void signOut() {
+    public void logout(View view) {
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         user.signOut();
         exit();
+        startActivity(intent);
+    }
+
+    public void signOut() {
+    }
+
+    public void editProfile(View view) {
+        //TODO
+        CharSequence text = "to be implemented";
+        Toast.makeText(view.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -270,35 +299,47 @@ public class MainActivity extends AppCompatActivity {
                     switch (itemId) {
                         case R.id.ic_search:
                             getSupportActionBar().setTitle("");
+                            findViewById(R.id.toolbarProfile).setVisibility(View.GONE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                             findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
+                            findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
+                            findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new SearchFragment())
                                     .addToBackStack("Search").commit();
                             break;
                         case R.id.ic_trips:
                             getSupportActionBar().setTitle("Trips");
+                            findViewById(R.id.toolbarProfile).setVisibility(View.GONE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
+                            findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
+                            findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new TripsFragment())
                                     .addToBackStack("Trips").commit();
                             break;
                         case R.id.ic_requests:
                             getSupportActionBar().setTitle("Requests");
+                            findViewById(R.id.toolbarProfile).setVisibility(View.GONE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                             findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
+                            findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
+                            findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new RequestsFragment())
                                     .addToBackStack("Requests").commit();
                             break;
                         case R.id.ic_profile:
-                            getSupportActionBar().setTitle("Profile");
+                            getSupportActionBar().setTitle("");
+                            findViewById(R.id.toolbarProfile).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
                             findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
+                            findViewById(R.id.buttonLogOut).setVisibility(View.VISIBLE);
+                            findViewById(R.id.buttonEditProfile).setVisibility(View.VISIBLE);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content, new ProfileFragment())
-                                    .addToBackStack("Profile").commit();
+                                    .addToBackStack("").commit();
                             break;
                     }
                     return true;

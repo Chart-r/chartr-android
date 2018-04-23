@@ -13,6 +13,15 @@
             android:background="@color/colorPrimary"
             app:titleTextAppearance="@style/Toolbar.TitleText"></android.support.v7.widget.Toolbar>
 
+        <TextView
+            android:id="@+id/toolbarProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/Toolbar.TitleText"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="@string/toolbar_profile_text"/>
+
         <Button
             android:id="@+id/buttonAddTrip"
             android:layout_width="wrap_content"
@@ -21,7 +30,7 @@
             android:layout_alignParentEnd="true"
             android:backgroundTint="@color/colorPrimary"
             android:fontFamily="serif"
-            android:text="+"
+            android:text="@string/button_add"
             android:textColor="@color/grey_100"
             android:textSize="50sp" />
 
@@ -35,9 +44,27 @@
             android:onClick="searchLayout"
             android:textAllCaps="false"
             android:textStyle="italic"
-            android:text="@string/Button_search" />
+            android:text="@string/button_search" />
 
+        <Button
+            android:id="@+id/buttonLogOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/button_logout"
+            android:textColor="@color/grey_100" />
 
+        <Button
+            android:id="@+id/buttonEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/button_edit_profile"
+            android:textColor="@color/grey_100" />
 
     </RelativeLayout>
 
