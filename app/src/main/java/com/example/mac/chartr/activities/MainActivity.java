@@ -19,20 +19,13 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
-import com.example.mac.chartr.ApiClient;
-import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.fragments.ProfileFragment;
 import com.example.mac.chartr.fragments.RequestsFragment;
 import com.example.mac.chartr.fragments.SearchFragment;
 import com.example.mac.chartr.fragments.trips.TripsFragment;
-import com.example.mac.chartr.objects.User;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
