@@ -24,9 +24,9 @@ import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
-import com.example.mac.chartr.fragments.SearchFragment;
 import com.example.mac.chartr.fragments.ProfileFragment;
 import com.example.mac.chartr.fragments.RequestsFragment;
+import com.example.mac.chartr.fragments.SearchFragment;
 import com.example.mac.chartr.fragments.trips.TripsFragment;
 import com.example.mac.chartr.objects.User;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void callGetUserApi(ApiInterface apiInterface, String username) {
         Call<User> call;
-        call = apiInterface.getUser(username);
+        call = apiInterface.getUserFromEmail(username);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
