@@ -435,9 +435,17 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 startLocationLat = placeCoordinates.latitude;
                 startLocationLng = placeCoordinates.longitude;
                 if (place.getPlaceTypes().get(0) == 0) {
-                    startLocationEditText.setText(address);
+                    if (address.length() == 0) {
+                        startLocationEditText.setText(placeCoordinates.toString());
+                    } else {
+                        startLocationEditText.setText(address);
+                    }
                 } else {
-                    startLocationEditText.setText(name);
+                    if (name.length() == 0) {
+                        startLocationEditText.setText(placeCoordinates.toString());
+                    } else {
+                        startLocationEditText.setText(name);
+                    }
                 }
             } else {
                 endLocationLat = placeCoordinates.latitude;
@@ -476,5 +484,4 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         Location.distanceBetween(lat1, lng1, lat2, lng2, distance);
         return distance[0];
     }
-
 }
