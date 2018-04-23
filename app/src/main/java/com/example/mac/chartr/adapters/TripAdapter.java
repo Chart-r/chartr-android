@@ -71,6 +71,7 @@ public class TripAdapter extends RecyclerView.Adapter {
         TextView seatsText;
         TextView start;
         TextView destination;
+        TextView departureDate;
 
         TripViewHolder(View itemView) {
             super(itemView);
@@ -80,6 +81,8 @@ public class TripAdapter extends RecyclerView.Adapter {
             seatsText = itemView.findViewById(R.id.textViewSeatsText);
             start = itemView.findViewById(R.id.textViewStart);
             destination = itemView.findViewById(R.id.textViewDestination);
+            departureDate = itemView.findViewById(R.id.textViewDate);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -96,6 +99,7 @@ public class TripAdapter extends RecyclerView.Adapter {
             seats.setText(String.format("%d / %d", trip.getRidingCount(), trip.getSeats()));
             start.setText(trip.getStartLocationShortName(itemView.getContext()));
             destination.setText(trip.getEndLocationShortName(itemView.getContext()));
+            departureDate.setText(trip.getStartDateString());
 
             ApiInterface apiInterface = ApiClient.getApiInstance();
             Call<User> call = apiInterface.getUserFromUid(trip.getDriverId());

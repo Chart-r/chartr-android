@@ -96,7 +96,7 @@ public class RequestAdapter extends RecyclerView.Adapter {
 
     }
 
-    private void setRiderStatus(Context context, int position, Pair<Trip,
+    public void setRiderStatus(Context context, int position, Pair<Trip,
             User> tripUserPair, String status) {
         ApiInterface apiInterface = ApiClient.getApiInstance();
         Trip trip = tripUserPair.first;

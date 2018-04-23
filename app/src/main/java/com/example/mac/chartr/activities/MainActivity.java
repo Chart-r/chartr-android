@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
@@ -21,20 +20,13 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
-import com.example.mac.chartr.ApiClient;
-import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.fragments.ProfileFragment;
 import com.example.mac.chartr.fragments.RequestsFragment;
 import com.example.mac.chartr.fragments.SearchFragment;
 import com.example.mac.chartr.fragments.trips.TripsFragment;
-import com.example.mac.chartr.objects.User;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -103,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
         findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
         findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-        findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
 
         setupTopToolbar();
         setupBottomNavigation();
@@ -149,20 +140,17 @@ public class MainActivity extends AppCompatActivity {
                                 .getBackStackEntryAt(topOfBackstack).getName();
                     }
 
-                    // Show or hide search button or title
-                    if (title.equals("Search")) {
-                        getSupportActionBar().setTitle("");
-                        findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
-                    } else {
-                        getSupportActionBar().setTitle(title);
-                        findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
-                    }
-
-                    // Show or hide plus button
+                    // Show or hide plus button and set toolbar title
                     if (title.equals("Trips")) {
+                        getSupportActionBar().setTitle("My Trips");
                         findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
                     } else {
                         findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                        if (title.equals("Search")) {
+                            getSupportActionBar().setTitle("Explore Trips");
+                        } else {
+                            getSupportActionBar().setTitle(title);
+                        }
                     }
 
                     if (title.equals("")) {
@@ -188,9 +176,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void signOut() {
-    }
-
     public void editProfile(View view) {
         //TODO
         CharSequence text = "to be implemented";
@@ -202,41 +187,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void getDetails() {
         provider.getAppHelper().getPool().getUser(username).getDetailsInBackground(detailsHandler);
-
-        ApiInterface apiInterface = ApiClient.getApiInstance();
-        callGetUserApi(apiInterface, username);
-    }
-
-    /**
-     * Calls api to get a user with given username.
-     *
-     * @param apiInterface Contains api calls
-     * @param username the username (email) of the user
-     */
-    private void callGetUserApi(ApiInterface apiInterface, String username) {
-        Call<User> call;
-        call = apiInterface.getUserFromEmail(username);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                int code = response.code();
-                if (code == 200) {
-                    Log.d(TAG, "User gotten successfully.");
-                    provider.getAppHelper().setLoggedInUser(response.body());
-                } else {
-                    Log.d(TAG, "Retrofit failed to get user, response code: "
-                            + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.d(TAG, "Retrofit failed to get user.");
-                Log.e(TAG, t.getMessage());
-                t.printStackTrace();
-                call.cancel();
-            }
-        });
     }
 
     private void handleTrustedDevice() {
@@ -298,10 +248,9 @@ public class MainActivity extends AppCompatActivity {
                     int itemId = item.getItemId();
                     switch (itemId) {
                         case R.id.ic_search:
-                            getSupportActionBar().setTitle("");
+                            getSupportActionBar().setTitle("Explore Trips");
                             findViewById(R.id.toolbarProfile).setVisibility(View.GONE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
                             findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
@@ -309,10 +258,9 @@ public class MainActivity extends AppCompatActivity {
                                     .addToBackStack("Search").commit();
                             break;
                         case R.id.ic_trips:
-                            getSupportActionBar().setTitle("Trips");
+                            getSupportActionBar().setTitle("My Trips");
                             findViewById(R.id.toolbarProfile).setVisibility(View.GONE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
                             findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
@@ -323,7 +271,6 @@ public class MainActivity extends AppCompatActivity {
                             getSupportActionBar().setTitle("Requests");
                             findViewById(R.id.toolbarProfile).setVisibility(View.GONE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
                             findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction()
@@ -334,7 +281,6 @@ public class MainActivity extends AppCompatActivity {
                             getSupportActionBar().setTitle("");
                             findViewById(R.id.toolbarProfile).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
-                            findViewById(R.id.buttonSearchTrips).setVisibility(View.GONE);
                             findViewById(R.id.buttonLogOut).setVisibility(View.VISIBLE);
                             findViewById(R.id.buttonEditProfile).setVisibility(View.VISIBLE);
                             getSupportFragmentManager().beginTransaction()
@@ -397,19 +343,5 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             super.onBackPressed();
         }
-    }
-
-    public void searchLayout(View view) {
-        RelativeLayout r = findViewById(R.id.search_relative_layout);
-        if (r.getVisibility() == View.VISIBLE) {
-            r.setVisibility(View.GONE);
-        } else if (r.getVisibility() == View.GONE) {
-            r.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void search(View view) {
-        SearchFragment helper = new SearchFragment();
-        helper.searchTrips(view);
     }
 }

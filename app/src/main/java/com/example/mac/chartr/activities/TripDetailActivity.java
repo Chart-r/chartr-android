@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TripDetailActivity extends AppCompatActivity {
+    public static final String TAG = TripDetailActivity.class.getSimpleName();
+
     private Trip trip;
     private String type;
 
@@ -32,13 +35,26 @@ public class TripDetailActivity extends AppCompatActivity {
     TextView numSeatsEditText;
     Switch smokingSwitch;
     Button submitButton;
+    String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_detail);
         trip = (Trip) getIntent().getSerializableExtra("trip");
-        type = getIntent().getStringExtra("type");
+        //type = getIntent().getStringExtra("type");
+        try {
+            uid =  new CommonDependencyProvider().getAppHelper().getLoggedInUser().getUid();
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+            uid = "-1";
+        }
+        Log.d(TAG, uid);
+        if (trip.containsUser(uid)) {
+            type = "mytrips";
+        } else {
+            type = "requests";
+        }
         initViews();
 
     }
@@ -89,7 +105,7 @@ public class TripDetailActivity extends AppCompatActivity {
 
     private void requestTrip(Context context, Trip trip) {
         ApiInterface apiInterface = ApiClient.getApiInstance();
-        String uid =  new CommonDependencyProvider().getAppHelper().getCurrUser();
+        //String uid =  new CommonDependencyProvider().getAppHelper().getCurrUser();
         String tid = trip.getId();
         String status = "pending";
         Call<String> call = apiInterface.updateTrip(uid, tid, status);
@@ -99,10 +115,13 @@ public class TripDetailActivity extends AppCompatActivity {
             public void onResponse(Call<String> call, Response<String> response) {
                 CharSequence text = "Requested";
                 Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                onBackPressed();
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
+                CharSequence text = "Request failed";
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
                 call.cancel();
             }
