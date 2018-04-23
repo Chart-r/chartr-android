@@ -158,13 +158,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buttonSubmitSearch:
-                // Check if no view has focus:
-                View view = getActivity().getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) getActivity().
-                            getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
+                hideKeyboard();
                 searchTrips();
                 break;
             case R.id.searchFragmentEditTextEndLocation:
@@ -218,6 +212,20 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         departureDateEditText.setText(sdf.format(departureCalendar.getTime()));
+    }
+
+    /**
+     * hide soft keyboard code from:
+     * https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard
+      */
+    private void hideKeyboard() {
+        // Check if no view has focus
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     public void searchTrips() {
