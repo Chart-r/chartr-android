@@ -29,12 +29,7 @@ import static com.example.mac.chartr.activities.MainActivity.TAG;
 public class TripAdapter extends RecyclerView.Adapter {
     private List<Trip> tripsData;
 
-    private Comparator<Trip> comparator = new Comparator<Trip>() {
-        @Override
-        public int compare(Trip a, Trip b) {
-            return (int) (b.getStartTime() - a.getStartTime());
-        }
-    };
+    private Comparator<Trip> comparator = (a, b) -> (int) (b.getStartTime() - a.getStartTime());
 
     public TripAdapter(List<Trip> data) {
        tripsData = data;

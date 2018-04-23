@@ -22,9 +22,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Michael Rush on 3/13/2018.
- */
 
 @RunWith(RobolectricTestRunner.class)
 public class RegisterActivityTest {
