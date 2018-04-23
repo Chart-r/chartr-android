@@ -4,20 +4,17 @@
     android:layout_height="match_parent"
     tools:context="com.example.mac.chartr.fragments.trips.ListTripsFragment">
 
-    <!-- Container for trips which are added dynamically -->
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/tripsScroll"
+    <TextView
+        android:id="@+id/textViewNoTrips"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:visibility="gone"/>
 
-        <LinearLayout
-            android:id="@+id/tripsLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"></LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewTrips"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    </ScrollView>
+    </android.support.v7.widget.RecyclerView>
 
 </FrameLayout>

@@ -1,12 +1,23 @@
 package com.example.mac.chartr.objects;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.util.Log;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
-public class Trip {
+public class Trip implements Serializable {
     private static final String TAG = Trip.class.getSimpleName();
 
     @SerializedName("tid")
@@ -59,8 +70,8 @@ public class Trip {
         users = new HashMap<>();
     }
 
-    public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, float endLat,
-                float endLong, float startLat, float startLong, int seats, float price,
+    public Trip(long startTime, long endTime, Boolean quiet, Boolean smoking, double endLat,
+                double endLong, double startLat, double startLong, int seats, double price,
                 String tid, Map<String, String> users) {
         this.startTime = startTime;
         this.endTime = endTime;
@@ -88,6 +99,159 @@ public class Trip {
         this.startLong = startLong;
         this.seats = seats;
         this.price = price;
+    }
+
+    public String getStartTimeString() {
+        return getTime(startTime);
+    }
+
+    public String getEndTimeString() {
+        return getTime(endTime);
+    }
+
+    public String getStartDateString() {
+        return getDate(startTime);
+    }
+
+    public String getEndDateString() {
+        return getDate(endTime);
+    }
+
+    public String getStartLocationShortName(Context context) {
+        return getLocationName(context, startLat, startLong, true);
+    }
+
+    public String getStartLocationLongName(Context context) {
+        return getLocationName(context, startLat, startLong, false);
+    }
+
+    public String getEndLocationShortName(Context context) {
+        return getLocationName(context, endLat, endLong, true);
+    }
+
+    public String getEndLocationLongName(Context context) {
+        return getLocationName(context, endLat, endLong, false);
+    }
+
+    /**
+     * Checks if a user is already on a given trip
+     * @param uid The user's id
+     * @return true if the trip contains the user in any state, false otherwise
+     */
+    public boolean containsUser(String uid) {
+        return users.containsKey(uid);
+    }
+
+    /**
+     * Gets the uid of the driver
+     * @return Driver's uid
+     */
+    public String getDriverId() {
+        for (String key : users.keySet()) {
+            if (users.get(key).equals("driving")) {
+                return key;
+            }
+        }
+        return "error";
+    }
+
+    /**
+     * Gets the number of users with the riding status in the trip.
+     * @return The number of users riding
+     */
+    public int getRidingCount() {
+        int count = 0;
+        for (String status : users.values()) {
+            if (status.equals("riding")) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Returns true if the trip is full
+     * @return True if the number of riders is enough to fill the seats
+     */
+    public boolean isFull() {
+        return getRidingCount() >= seats;
+    }
+
+    private String getTime(long longDate) {
+        Date date = new Date(longDate);
+        SimpleDateFormat formatter =
+                new SimpleDateFormat("h:mm a zzz", Locale.getDefault());
+        return formatter.format(date);
+    }
+
+    private String getDate(long longDate) {
+        Date date = new Date(longDate);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/M/dd", Locale.getDefault());
+        return formatter.format(date);
+    }
+
+    private String getLocationName(Context context, double latitude,
+                                   double longitude, boolean shortName) {
+        /* testAddTripView was failing on account of this code, specifically:
+         * Method getFromLocation in android.location.Geocoder not mocked.
+         * Geocoder functionality needs to be extracted to a separate function which
+         * receives a geocoder argument that can be mocked and passed in for testing.
+         */
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        List<Address> addresses = null;
+
+        try {
+            addresses = geocoder.getFromLocation(
+                    latitude,
+                    longitude,
+                    1);
+        } catch (IOException ioException) {
+            // Catch network or other I/O problems.
+            Log.e(TAG, ioException.toString());
+        } catch (IllegalArgumentException illegalArgumentException) {
+            // Catch invalid latitude or longitude values.
+            Log.e(TAG, "Lat/Long Error: "
+                    + "Latitude = " + latitude
+                    + ", Longitude = "
+                    + longitude, illegalArgumentException);
+        }
+
+        // Handle case where no address was found.
+        if (addresses == null || addresses.size() == 0) {
+            Log.e(TAG, "No address found");
+        } else {
+            Address address = addresses.get(0);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            if (shortName) {
+                String addressLine = address.getAddressLine(1);
+                if (addressLine == null) {
+                    addressLine = address.getAddressLine(0);
+
+                    String[] addressArray = addressLine.split(", ");
+                    stringBuilder.append(addressArray[addressArray.length - 3]);
+                    stringBuilder.append(", ");
+                    stringBuilder.append(addressArray[addressArray.length - 2].substring(0, 2));
+                } else {
+                    String[] addressArray = addressLine.split(", ");
+                    stringBuilder.append(addressArray[addressArray.length - 2]);
+                    stringBuilder.append(", ");
+                    stringBuilder.append(addressArray[addressArray.length - 1].substring(0, 2));
+                }
+                return stringBuilder.toString();
+            } else {
+                stringBuilder.append(address.getAddressLine(0));
+                // Fetch the address lines using getAddressLine
+                for (int i = 1; i <= address.getMaxAddressLineIndex(); i++) {
+                    stringBuilder.append(", ").append(address.getAddressLine(i));
+                }
+                Log.i(TAG, "Address found");
+                return stringBuilder.toString();
+            }
+        }
+
+        // In the case of failure, return location coordinate string
+        return latitude + ", " + longitude;
     }
 
     public long getStartTime() {
@@ -190,6 +354,10 @@ public class Trip {
         users.put(email, role);
     }
 
+    /**
+     * Gets the uid of the user with the status driving.
+     * @return The driver's uid
+     */
     public String getDriverFromUsers() {
         // No user map
         if (users == null) {
@@ -207,7 +375,12 @@ public class Trip {
         return "";
     }
 
-    public String getUserStatus(String userEmail) {
+    /**
+     * Gets the status of the specified user
+     * @param uid The user's uid
+     * @return The user's status can be driving, pending, riding, or rejected
+     */
+    public String getUserStatus(String uid) {
         // No user map
         if (users == null) {
             return "";
@@ -215,7 +388,7 @@ public class Trip {
 
         for (Object o : users.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
-            if (pair.getKey().equals(userEmail)) {
+            if (pair.getKey().equals(uid)) {
                 return pair.getValue().toString();
             }
         }

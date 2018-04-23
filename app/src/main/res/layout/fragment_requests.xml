@@ -4,10 +4,17 @@
     android:layout_height="match_parent"
     tools:context="com.example.mac.chartr.fragments.RequestsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/textViewNoRequests"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Requests Fragment" />
+        android:text="@string/no_requests"
+        android:visibility="gone"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewRequests"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
 
 </FrameLayout>

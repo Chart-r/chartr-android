@@ -24,11 +24,17 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Mult
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.NewPasswordContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.ForgotPasswordHandler;
+import com.example.mac.chartr.ApiClient;
+import com.example.mac.chartr.ApiInterface;
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 import com.example.mac.chartr.objects.User;
 
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -79,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
             provider.getAppHelper().newDevice(device);
             provider.getAppHelper().setLoggedInUser(new User(username, "Person", (float) 4.5));
             closeWaitDialog();
+            getAndLaunchUser();
             launchUser();
         }
 
@@ -267,6 +274,38 @@ public class LoginActivity extends AppCompatActivity {
 //        confirmActivity.putExtra("source","main");
 //        startActivityForResult(confirmActivity, 2);
 
+    }
+
+    /**
+     * Calls api to get a user details from dynamoDB with given username then launches the user.
+     */
+    private void getAndLaunchUser() {
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        Call<User> call;
+        call = apiInterface.getUserFromEmail(username);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                int code = response.code();
+                if (code == 200) {
+                    Log.d(TAG, "User gotten successfully.");
+                    provider.getAppHelper().setLoggedInUser(response.body());
+                } else {
+                    Log.d(TAG, "Retrofit failed to get user, response code: "
+                            + response.code());
+                }
+                launchUser();
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d(TAG, "Retrofit failed to get user.");
+                Log.e(TAG, t.getMessage());
+                t.printStackTrace();
+                launchUser();
+                call.cancel();
+            }
+        });
     }
 
     private void launchUser() {

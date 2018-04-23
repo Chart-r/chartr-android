@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.mock;
@@ -54,6 +55,16 @@ public class AppHelperTest {
         Assert.assertTrue(appHelper.isEmailVerified());
         Assert.assertTrue(appHelper.isPhoneAvailable());
         Assert.assertTrue(appHelper.isPhoneVerified());
+    }
+
+    @Test
+    public void testFormatException() {
+        AppHelper appHelper = mock(AppHelper.class);
+        when(appHelper.formatException(any(Exception.class))).thenCallRealMethod();
+
+        String ret = appHelper.formatException(new Exception("This SUCKS"));
+
+        assertTrue(ret.contains("This SUCKS"));
     }
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/relativeLayoutContainer"
     android:layout_width="match_parent"
     android:layout_height="124dp"
@@ -14,94 +14,129 @@
     android:background="@drawable/edit_text_posted_trip"
     android:elevation="4dp">
 
-    <ImageView
-        android:id="@+id/imageViewProfileIcon"
-        android:layout_width="@dimen/profile_icon_small"
-        android:layout_height="@dimen/profile_icon_small"
-        android:layout_marginStart="@dimen/activity_separator_small"
-        android:layout_marginTop="@dimen/activity_separator_small"
-        android:contentDescription="@string/user_profile_icon"
-        android:src="@drawable/ic_account_circle_white" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textViewName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:layout_marginStart="@dimen/activity_separator_small"
-        android:layout_marginTop="@dimen/activity_separator_small"
-        android:layout_toEndOf="@+id/imageViewProfileIcon"
-        android:layout_toStartOf="@+id/textViewSeats"
-        android:text="@string/name_placeholder"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <ImageView
+            android:id="@+id/imageViewProfileIcon"
+            android:layout_width="@dimen/profile_icon_small"
+            android:layout_height="@dimen/profile_icon_small"
+            android:layout_marginStart="@dimen/activity_separator_small"
+            android:layout_marginTop="@dimen/activity_separator_small"
+            android:contentDescription="@string/user_profile_icon"
+            android:src="@drawable/ic_account_circle_white" />
 
-    <TextView
-        android:id="@+id/textViewRating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewName"
-        android:layout_marginStart="@dimen/activity_separator_small"
-        android:layout_toEndOf="@+id/imageViewProfileIcon"
-        android:text="@string/rating_placeholder" />
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_marginStart="@dimen/activity_separator_small"
+            android:layout_marginTop="@dimen/activity_separator_small"
+            android:layout_toEndOf="@+id/imageViewProfileIcon"
+            android:layout_toStartOf="@+id/textViewSeats"
+            android:text="@string/name_placeholder"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/textViewSeats"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="@dimen/activity_separator_small"
-        android:layout_marginTop="@dimen/activity_separator_small"
-        android:text="@string/seat_number_placeholder"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:id="@+id/textViewRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewName"
+            android:layout_marginStart="@dimen/activity_separator_small"
+            android:layout_toEndOf="@+id/imageViewProfileIcon"
+            android:text="@string/rating_placeholder" />
 
-    <TextView
-        android:id="@+id/textViewSeatsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/textViewSeats"
-        android:layout_marginEnd="@dimen/activity_separator_small"
-        android:text="@string/seat_text" />
+        <TextView
+            android:id="@+id/textViewSeats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/activity_separator_small"
+            android:layout_marginTop="@dimen/activity_separator_small"
+            android:text="@string/seat_number_placeholder"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <ImageView
-        android:id="@+id/imageViewStartIcon"
-        android:layout_width="@dimen/location_icon_small"
-        android:layout_height="@dimen/location_icon_small"
-        android:layout_alignBottom="@+id/textViewStart"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/textViewStart"
-        android:layout_toStartOf="@+id/textViewStart"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_room_black_24dp" />
+        <TextView
+            android:id="@+id/textViewSeatsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/textViewSeats"
+            android:layout_marginEnd="@dimen/activity_separator_small"
+            android:text="@string/seat_text" />
 
-    <TextView
-        android:id="@+id/textViewStart"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/text_view_medium_height"
-        android:layout_alignStart="@+id/textViewName"
-        android:layout_below="@+id/textViewRating"
-        android:layout_marginTop="@dimen/activity_separator_small"
-        android:text="@string/start_placeholder"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <ImageView
+            android:id="@+id/imageViewStartIcon"
+            android:layout_width="@dimen/location_icon_small"
+            android:layout_height="@dimen/location_icon_small"
+            android:layout_alignBottom="@+id/textViewStart"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/textViewStart"
+            android:layout_toStartOf="@+id/textViewFrom"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_room_black_24dp" />
 
-    <ImageView
-        android:id="@+id/imageViewDestinationIcon"
-        android:layout_width="@dimen/location_icon_small"
-        android:layout_height="@dimen/location_icon_small"
-        android:layout_alignBottom="@+id/textViewDestination"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/textViewDestination"
-        android:layout_toStartOf="@+id/textViewDestination"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_room_black_24dp" />
+        <TextView
+            android:id="@+id/textViewFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/text_view_medium_height"
+            android:layout_alignStart="@+id/textViewName"
+            android:layout_below="@+id/textViewRating"
+            android:layout_marginTop="@dimen/activity_separator_small"
+            android:text="@string/trip_container_from"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/textViewDestination"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/text_view_medium_height"
-        android:layout_alignStart="@+id/textViewStart"
-        android:layout_below="@+id/textViewStart"
-        android:text="@string/destination_placeholder"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/textViewStart"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/text_view_medium_height"
+            android:layout_toRightOf="@+id/textViewFrom"
+            android:layout_below="@+id/textViewRating"
+            android:layout_marginTop="@dimen/activity_separator_small"
+            android:text="@string/start_placeholder"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageView
+            android:id="@+id/imageViewDestinationIcon"
+            android:layout_width="@dimen/location_icon_small"
+            android:layout_height="@dimen/location_icon_small"
+            android:layout_alignBottom="@+id/textViewDestination"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/textViewDestination"
+            android:layout_toStartOf="@+id/textViewTo"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_room_black_24dp" />
+
+        <TextView
+            android:id="@+id/textViewTo"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/text_view_medium_height"
+            android:layout_alignStart="@+id/textViewName"
+            android:layout_below="@+id/textViewStart"
+            android:text="@string/trip_container_to"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textViewDestination"
+            android:layout_width="120dp"
+            android:layout_height="@dimen/text_view_medium_height"
+            android:layout_below="@+id/textViewStart"
+            android:layout_alignStart="@id/textViewStart"
+            android:text="@string/destination_placeholder"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textViewDate"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/text_view_medium_height"
+            android:layout_alignEnd="@+id/textViewSeats"
+            android:layout_below="@+id/textViewStart"
+            android:text="@string/trip_container_date"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
