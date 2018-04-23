@@ -162,41 +162,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void getDetails() {
         provider.getAppHelper().getPool().getUser(username).getDetailsInBackground(detailsHandler);
-
-        ApiInterface apiInterface = ApiClient.getApiInstance();
-        callGetUserApi(apiInterface, username);
-    }
-
-    /**
-     * Calls api to get a user with given username.
-     *
-     * @param apiInterface Contains api calls
-     * @param username the username (email) of the user
-     */
-    private void callGetUserApi(ApiInterface apiInterface, String username) {
-        Call<User> call;
-        call = apiInterface.getUserFromEmail(username);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                int code = response.code();
-                if (code == 200) {
-                    Log.d(TAG, "User gotten successfully.");
-                    provider.getAppHelper().setLoggedInUser(response.body());
-                } else {
-                    Log.d(TAG, "Retrofit failed to get user, response code: "
-                            + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.d(TAG, "Retrofit failed to get user.");
-                Log.e(TAG, t.getMessage());
-                t.printStackTrace();
-                call.cancel();
-            }
-        });
     }
 
     private void handleTrustedDevice() {

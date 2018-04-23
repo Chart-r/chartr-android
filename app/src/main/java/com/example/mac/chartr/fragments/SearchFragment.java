@@ -284,7 +284,18 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 Log.d(TAG, response.code() + "");
 
                 List<Trip> tripList = response.body();
-                adapter.addItems(tripList);
+                List<Trip> result = new ArrayList<Trip>();
+
+                for (int i = 0; i < tripList.size(); i++) {
+                    Trip currTrip = tripList.get(i);
+                    boolean isNotInTrip = !currTrip.containsUser(uid);
+                    boolean isNotFull = !currTrip.isFull();
+
+                    if (isNotInTrip && isNotFull) {
+                        result.add(currTrip);
+                    }
+                }
+                adapter.addItems(result);
             }
 
             @Override
@@ -326,8 +337,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                                             computeDistanceBetween(currLat, currLong,
                                                     currTrip.getStartLat(),
                                                     currTrip.getStartLong()) < 5000f;
+                                    boolean isNotInTrip = !currTrip.containsUser(uid);
+                                    boolean isNotFull = !currTrip.isFull();
 
-                                    if (withinDistance) {
+                                    if (withinDistance && isNotInTrip && isNotFull) {
                                         result.add(currTrip);
                                     }
                                 }
