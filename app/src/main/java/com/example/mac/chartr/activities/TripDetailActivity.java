@@ -43,7 +43,12 @@ public class TripDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_trip_detail);
         trip = (Trip) getIntent().getSerializableExtra("trip");
         //type = getIntent().getStringExtra("type");
-        uid =  new CommonDependencyProvider().getAppHelper().getLoggedInUser().getUid();
+        try {
+            uid =  new CommonDependencyProvider().getAppHelper().getLoggedInUser().getUid();
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+            uid = "-1";
+        }
         Log.d(TAG, uid);
         if (trip.containsUser(uid)) {
             type = "mytrips";
