@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,12 +53,15 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     private static final int START_PLACE_PICKER = 1;
     private static final int DEST_PLACE_PICKER = 2;
     EditText startLocationEditText;
+    ImageView startLocationImageView;
     Double startLocationLat;
     Double startLocationLng;
     EditText endLocationEditText;
+    ImageView endLocationImageView;
     Double endLocationLat;
     Double endLocationLng;
     EditText departureDateEditText;
+    ImageView departureDateImageView;
     DatePickerDialog.OnDateSetListener departureDate;
     Calendar departureCalendar = Calendar.getInstance();
     EditText preferredDriverEditText;
@@ -120,14 +124,24 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         // TODO: Filter by driver
         priceMinEditText = root.findViewById(R.id.searchFragmentEditPriceRangeFrom);
         priceMaxEditText = root.findViewById(R.id.searchFragmentEditPriceRangeTo);
+
         startLocationEditText = root.findViewById(R.id.searchFragmentEditTextStartLocation);
         startLocationEditText.setFocusable(false);
         startLocationEditText.setClickable(true);
         startLocationEditText.setOnClickListener(this);
+        startLocationImageView = root.findViewById(R.id.searchFragmentImageViewStartLocation);
+        startLocationImageView.setOnClickListener(v -> {
+            startLocationEditText.setText("");
+        });
+
         endLocationEditText = root.findViewById(R.id.searchFragmentEditTextEndLocation);
         endLocationEditText.setFocusable(false);
         endLocationEditText.setClickable(true);
         endLocationEditText.setOnClickListener(this);
+        endLocationImageView = root.findViewById(R.id.searchFragmentImageViewEndLocation);
+        endLocationImageView.setOnClickListener(v -> {
+            endLocationEditText.setText("");
+        });
 
         filterButton = root.findViewById(R.id.filterButton);
         filterButton.setOnClickListener(this);
@@ -183,6 +197,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             new DatePickerDialog(getActivity(), departureDate, departureCalendar
                     .get(Calendar.YEAR), departureCalendar.get(Calendar.MONTH),
                     departureCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+        departureDateImageView = root.findViewById(R.id.searchFragmentImageViewDate);
+        departureDateImageView.setOnClickListener(v -> {
+            departureDateEditText.setText("");
         });
     }
 
