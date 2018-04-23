@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">20dp</dimen>
     <dimen name="activity_vertical_margin">60dp</dimen>
     <dimen name="activity_vertical_margin_medium">30dp</dimen>
-    <dimen name="activity_intra_group_separation">10dp</dimen>
+    <dimen name="activity_intra_group_separation">8dp</dimen>
     <dimen name="activity_inter_group_separation">10dp</dimen>
     <dimen name="activity_inter_group_separation_with_button">65dp</dimen>
     <dimen name="activity_inter_group_separation2">15dp</dimen>

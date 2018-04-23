@@ -133,6 +133,19 @@ public class Trip implements Serializable {
         return getLocationName(context, endLat, endLong, false);
     }
 
+    /**
+     * Checks if a user is already on a given trip
+     * @param uid The user's id
+     * @return true if the trip contains the user in any state, false otherwise
+     */
+    public boolean containsUser(String uid) {
+        return users.containsKey(uid);
+    }
+
+    /**
+     * Gets the uid of the driver
+     * @return Driver's uid
+     */
     public String getDriverId() {
         for (String key : users.keySet()) {
             if (users.get(key).equals("driving")) {
@@ -142,6 +155,10 @@ public class Trip implements Serializable {
         return "error";
     }
 
+    /**
+     * Gets the number of users with the riding status in the trip.
+     * @return The number of users riding
+     */
     public int getRidingCount() {
         int count = 0;
         for (String status : users.values()) {
@@ -150,6 +167,14 @@ public class Trip implements Serializable {
             }
         }
         return count;
+    }
+
+    /**
+     * Returns true if the trip is full
+     * @return True if the number of riders is enough to fill the seats
+     */
+    public boolean isFull() {
+        return getRidingCount() >= seats;
     }
 
     private String getTime(long longDate) {
@@ -164,7 +189,6 @@ public class Trip implements Serializable {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/M/dd", Locale.getDefault());
         return formatter.format(date);
     }
-
 
     private String getLocationName(Context context, double latitude,
                                    double longitude, boolean shortName) {
@@ -200,10 +224,20 @@ public class Trip implements Serializable {
             StringBuilder stringBuilder = new StringBuilder();
 
             if (shortName) {
-                String[] addressArray = address.getAddressLine(0).split(", ");
-                stringBuilder.append(addressArray[addressArray.length - 3]);
-                stringBuilder.append(", ");
-                stringBuilder.append(addressArray[addressArray.length - 2].substring(0, 2));
+                String addressLine = address.getAddressLine(1);
+                if (addressLine == null) {
+                    addressLine = address.getAddressLine(0);
+
+                    String[] addressArray = addressLine.split(", ");
+                    stringBuilder.append(addressArray[addressArray.length - 3]);
+                    stringBuilder.append(", ");
+                    stringBuilder.append(addressArray[addressArray.length - 2].substring(0, 2));
+                } else {
+                    String[] addressArray = addressLine.split(", ");
+                    stringBuilder.append(addressArray[addressArray.length - 2]);
+                    stringBuilder.append(", ");
+                    stringBuilder.append(addressArray[addressArray.length - 1].substring(0, 2));
+                }
                 return stringBuilder.toString();
             } else {
                 stringBuilder.append(address.getAddressLine(0));
@@ -320,6 +354,10 @@ public class Trip implements Serializable {
         users.put(email, role);
     }
 
+    /**
+     * Gets the uid of the user with the status driving.
+     * @return The driver's uid
+     */
     public String getDriverFromUsers() {
         // No user map
         if (users == null) {
@@ -337,7 +375,12 @@ public class Trip implements Serializable {
         return "";
     }
 
-    public String getUserStatus(String userEmail) {
+    /**
+     * Gets the status of the specified user
+     * @param uid The user's uid
+     * @return The user's status can be driving, pending, riding, or rejected
+     */
+    public String getUserStatus(String uid) {
         // No user map
         if (users == null) {
             return "";
@@ -345,7 +388,7 @@ public class Trip implements Serializable {
 
         for (Object o : users.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
-            if (pair.getKey().equals(userEmail)) {
+            if (pair.getKey().equals(uid)) {
                 return pair.getValue().toString();
             }
         }

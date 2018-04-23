@@ -86,15 +86,17 @@ public class RequestAdapter extends RecyclerView.Adapter {
             name.setText("" + nameRetrieved);
             startTime.setText(String
                     .format("%s at %s", trip.getStartDateString(), trip.getStartTimeString()));
-            start.setText(trip.getStartLocationShortName(itemView.getContext()));
-            destination.setText(trip.getEndLocationShortName(itemView.getContext()));
+            start.setText(String.format("From: %s",
+                    trip.getStartLocationShortName(itemView.getContext())));
+            destination.setText(String.format("To: %s",
+                    trip.getEndLocationShortName(itemView.getContext())));
 
 
         }
 
     }
 
-    private void setRiderStatus(Context context, int position, Pair<Trip,
+    public void setRiderStatus(Context context, int position, Pair<Trip,
             User> tripUserPair, String status) {
         ApiInterface apiInterface = ApiClient.getApiInstance();
         Trip trip = tripUserPair.first;
