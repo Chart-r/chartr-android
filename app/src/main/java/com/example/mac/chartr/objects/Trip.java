@@ -227,11 +227,17 @@ public class Trip implements Serializable {
                 String addressLine = address.getAddressLine(1);
                 if (addressLine == null) {
                     addressLine = address.getAddressLine(0);
+
+                    String[] addressArray = addressLine.split(", ");
+                    stringBuilder.append(addressArray[addressArray.length - 3]);
+                    stringBuilder.append(", ");
+                    stringBuilder.append(addressArray[addressArray.length - 2].substring(0, 2));
+                } else {
+                    String[] addressArray = addressLine.split(", ");
+                    stringBuilder.append(addressArray[addressArray.length - 2]);
+                    stringBuilder.append(", ");
+                    stringBuilder.append(addressArray[addressArray.length - 1].substring(0, 2));
                 }
-                String[] addressArray = addressLine.split(", ");
-                stringBuilder.append(addressArray[addressArray.length - 2]);
-                stringBuilder.append(", ");
-                stringBuilder.append(addressArray[addressArray.length - 1].substring(0, 2));
                 return stringBuilder.toString();
             } else {
                 stringBuilder.append(address.getAddressLine(0));
