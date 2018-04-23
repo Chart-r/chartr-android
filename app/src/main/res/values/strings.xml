@@ -1,23 +1,17 @@
 <resources>
     <string name="app_name">Chartr</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="app_main_screen">Sign in</string>
-    <string name="app_main_screen_title">Cognito Identity</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
     <string name="app_main_desc">A sample app to showcase Cognito Identity and the SDK for Android.</string>
     <string name="nav_drawer_open">Open navigation drawer</string>
     <string name="nav_drawer_close">Close navigation drawer</string>
     <string name="title_activity_user">UserActivity</string>
-    <string name="Username">Username</string>
+    <string name="Username">Email</string>
     <string name="Password">Password</string>
+    <string name="forgot_password">Forgot Password</string>
     <string name="Menu">Menu</string>
-    <string name="pick_MFA">MFA Options</string>
-    <string name="title_activity_about_app">AboutApp</string>
-    <string name="more_info">This is a sample app to showcase Cognito Identity and the SDK for Android.</string>
     <string name="title_activity_sign_up_confirm">SignUpConfirm</string>
-    <string name="title_activity_mfa">MFAActivity</string>
-    <string name="title_activity_choose_mfa">ChooseMFA</string>
     <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="title_activity_change_password">ChangePasswordActivity</string>
@@ -48,4 +42,6 @@
     <string name="reject_button">Reject</string>
     <string name="searchFragmentDepartureDate">Departure date</string>
     <string name="searchFragmentDateExample">eg: mm/dd/yyyy</string>
+    <string name="app_slogan">A new way to ride</string>
+    <string name="space">" "</string>
 </resources>

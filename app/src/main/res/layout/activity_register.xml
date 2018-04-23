@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewRegMessage"
             android:layout_centerHorizontal="true"
-            android:text=" "
+            android:text="@string/space"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="@dimen/activity_text_size_small" />
 
@@ -54,7 +54,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/editTextRegEmail"
             android:color="@color/alert"
-            android:text=" "
+            android:text="@string/space"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/alert"
             android:textSize="@dimen/activity_text_padding" />
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewRegEmailMessage"
             android:layout_centerHorizontal="true"
-            android:text=" "
+            android:text="@string/space"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="@dimen/activity_text_size_small" />
 
@@ -76,7 +76,7 @@
             android:layout_below="@+id/textViewRegUserPasswordLabel"
             android:layout_centerHorizontal="true"
             android:background="@drawable/text_border_selector"
-            android:hint="Password"
+            android:hint="@string/Password"
             android:inputType="textPassword"
             android:paddingLeft="@dimen/activity_text_padding"
             android:paddingRight="@dimen/activity_text_padding" />
@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/editTextRegUserPassword"
             android:layout_centerHorizontal="true"
-            android:text=" "
+            android:text="@string/space"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/alert"
             android:textSize="@dimen/activity_text_padding" />
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewUserRegPasswordMessage"
             android:layout_centerHorizontal="true"
-            android:text=" "
+            android:text="@string/space"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="@dimen/activity_text_size_small" />
 
@@ -120,7 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/editTextRegGivenName"
             android:layout_centerHorizontal="true"
-            android:text=" "
+            android:text="@string/space"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/alert"
             android:textSize="@dimen/activity_text_padding" />
@@ -131,7 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/textViewRegGivenNameMessage"
             android:layout_centerHorizontal="true"
-            android:text=" "
+            android:text="@string/space"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="@dimen/activity_text_size_small" />
 
@@ -154,7 +154,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/editTextRegBirthday"
             android:layout_centerHorizontal="true"
-            android:text=" "
+            android:text="@string/space"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/alert"
             android:textSize="@dimen/activity_text_padding" />
@@ -165,7 +165,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/textViewRegBirthdayMessage"
             android:layout_centerHorizontal="true"
-            android:text=" "
+            android:text="@string/space"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="@dimen/activity_text_size_small" />
 
@@ -188,7 +188,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/editTextRegPhone"
             android:layout_centerHorizontal="true"
-            android:text=" "
+            android:text="@string/space"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/alert"
             android:textSize="@dimen/activity_text_padding" />
@@ -206,7 +206,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:background="@drawable/button_selector"
-            android:text="Sign up"
+            android:text="@string/sign_up"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/activity_button_text_size" />
