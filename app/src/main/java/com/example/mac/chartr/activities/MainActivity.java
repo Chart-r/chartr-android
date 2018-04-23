@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     // Show or hide search button or title
-                    if (title == "Search") {
+                    if (title.equals("Search")) {
                         getSupportActionBar().setTitle("");
                         findViewById(R.id.buttonSearchTrips).setVisibility(View.VISIBLE);
                     } else {
@@ -159,10 +159,20 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     // Show or hide plus button
-                    if (title == "Trips") {
+                    if (title.equals("Trips")) {
                         findViewById(R.id.buttonAddTrip).setVisibility(View.VISIBLE);
                     } else {
                         findViewById(R.id.buttonAddTrip).setVisibility(View.GONE);
+                    }
+
+                    if (title.equals("")) {
+                        findViewById(R.id.toolbarProfile).setVisibility(View.VISIBLE);
+                        findViewById(R.id.buttonEditProfile).setVisibility(View.VISIBLE);
+                        findViewById(R.id.buttonLogOut).setVisibility(View.VISIBLE);
+                    } else {
+                        findViewById(R.id.toolbarProfile).setVisibility(View.GONE);
+                        findViewById(R.id.buttonEditProfile).setVisibility(View.GONE);
+                        findViewById(R.id.buttonLogOut).setVisibility(View.GONE);
                     }
                 });
     }
