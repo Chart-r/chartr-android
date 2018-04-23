@@ -32,6 +32,9 @@
     <string name="dateTime_placeholder">Date and time</string>
     <string name="start_placeholder">Start</string>
     <string name="destination_placeholder">Destination</string>
+    <string name="email_placeholder">Email</string>
+    <string name="phone_placeholder">Phone Number</string>
+    <string name="review_count_placeholder">Review Count</string>
     <string name="user_profile_icon">A user uploaded profile image.</string>
     <string name="button_search">Where do you want to go?</string>
     <string name="button_accept">Accept</string>

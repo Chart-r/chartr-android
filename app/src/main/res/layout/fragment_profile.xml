@@ -34,4 +34,30 @@
         android:layout_toEndOf="@+id/imageViewProfileIcon"
         android:text="@string/rating_placeholder" />
 
+    <TextView
+        android:id="@+id/textViewReviewCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewName"
+        android:layout_marginStart="@dimen/activity_separator_small"
+        android:layout_toEndOf="@+id/textViewRating"
+        android:text="@string/review_count_placeholder" />
+
+    <TextView
+        android:id="@+id/textViewEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageViewProfileIcon"
+        android:layout_marginStart="@dimen/activity_separator_small"
+        android:text="@string/email_placeholder" />
+
+
+    <TextView
+        android:id="@+id/textViewPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewEmail"
+        android:layout_marginStart="@dimen/activity_separator_small"
+        android:text="@string/phone_placeholder" />
+
 </RelativeLayout>

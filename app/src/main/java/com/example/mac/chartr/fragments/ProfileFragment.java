@@ -23,8 +23,12 @@ public class ProfileFragment extends Fragment {
     private CommonDependencyProvider provider;
     private String uid;
 
-    private TextView textViewName;
     private User user;
+    private TextView textViewName;
+    private TextView textViewRating;
+    private TextView textViewReviewCount;
+    private TextView textViewEmail;
+    private TextView textViewPhone;
 
     public ProfileFragment() {
         setCommonDependencyProvider(new CommonDependencyProvider());
@@ -49,6 +53,10 @@ public class ProfileFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
 
         textViewName = root.findViewById(R.id.textViewName);
+        textViewRating = root.findViewById(R.id.textViewRating);
+        textViewReviewCount = root.findViewById(R.id.textViewReviewCount);
+        textViewEmail = root.findViewById(R.id.textViewEmail);
+        textViewPhone = root.findViewById(R.id.textViewPhone);
 
         ApiInterface apiInterface = ApiClient.getApiInstance();
         Call<User> call = apiInterface.getUserFromUid(uid);
@@ -59,6 +67,10 @@ public class ProfileFragment extends Fragment {
                 Log.d(TAG, response.code() + "");
                 user = response.body();
                 textViewName.setText(user.getName());
+                textViewRating.setText("Rating: " + Float.toString(user.getRating()));
+                textViewReviewCount.setText(Integer.toString(user.getReviewCount()) + " reviews");
+                textViewEmail.setText("email: " + user.getEmail());
+                textViewPhone.setText("Phone number: " + user.getPhone());
             }
 
             @Override
