@@ -3,6 +3,7 @@ package com.example.mac.chartr.fragments;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,10 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,7 +83,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     private TripAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<Trip> tripsData = new ArrayList<>();
-    private RelativeLayout searchLayout;
+    private ScrollView searchLayout;
     private Button filterButton;
     private FusedLocationProviderClient mFusedLocationClient;
 
@@ -145,7 +148,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
         filterButton = root.findViewById(R.id.filterButton);
         filterButton.setOnClickListener(this);
-        searchLayout = root.findViewById(R.id.relativeLayoutSearchParameters);
+        searchLayout = root.findViewById(R.id.scrollViewSearchParameters);
         submitSearchButton = root.findViewById(R.id.buttonSubmitSearch);
         submitSearchButton.setOnClickListener(this);
 
@@ -156,6 +159,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buttonSubmitSearch:
+                // Check if no view has focus:
+                View view = getActivity().getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm =(InputMethodManager) getActivity().
+                            getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
                 searchTrips();
                 break;
             case R.id.searchFragmentEditTextEndLocation:
