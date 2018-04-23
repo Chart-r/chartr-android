@@ -231,6 +231,14 @@
         android:textStyle="italic"
         android:text="Filter Trips" />
 
+    <TextView
+        android:id="@+id/textViewSearchNoTrips"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/filterButton"
+        android:text="@string/no_search_trips"
+        android:visibility="gone"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewSearch"
         android:layout_below="@id/filterButton"
@@ -238,6 +246,5 @@
         android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
-
 
 </RelativeLayout>

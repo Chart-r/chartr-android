@@ -51,4 +51,5 @@
     <string name="trip_container_date">Date</string>
     <string name="trip_container_to">To:</string>
     <string name="trip_container_from">From:</string>
+    <string name="no_search_trips">No available trips match your search.</string>
 </resources>
