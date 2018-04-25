@@ -117,11 +117,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void authenticationChallenge(ChallengeContinuation continuation) {
-            /**
-             * For Custom authentication challenge, implement your logic
-             * to present challenge to the
-             * user and pass the user's responses to the continuation.
-             */
             if ("NEW_PASSWORD_REQUIRED".equals(continuation.getChallengeName())) {
                 // This is the first sign-in attempt for an admin created user
                 newPasswordContinuation = (NewPasswordContinuation) continuation;
@@ -130,6 +125,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Method inherited from the Activity class that defines behavior when the activity is created
+     *
+     * @param savedInstanceState Bundle of the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,10 +142,23 @@ public class LoginActivity extends AppCompatActivity {
         findCurrent();
     }
 
+    /**
+     * Allows the common dependency provider to be set to a mock for testing purposes
+     *
+     * @param provider An initialized or mocked CommonDependencyProvider
+     */
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
     }
 
+    /**
+     * Captures results from the activity and forwards the intent data and result code
+     * to the appropriate method
+     *
+     * @param requestCode Code used to decide which method to call
+     * @param resultCode Result code from the activity invocation
+     * @param data Intent data from the activity invocation
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -169,8 +182,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    /*
-        TODO: GIVE A BETTER NAME. I have no clue what code "4" means
+    /**
+     * Consume results of activity of the user going back
+     *
+     * Needs further clarification on exact functions.
+     *
+     * @param resultCode Result from the registration activity
+     * @param data The Intent data
      */
     protected void userBack(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -185,6 +203,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Allows users to reset their password be capturing the intent data from the
+     * password reset.
+     *
+     * @param resultCode From the password reset
+     * @param data Intent data from the password reset
+     */
     protected void forgotPassword(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             String newPass = data.getStringExtra("newPass");
@@ -200,6 +225,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method can be used to fill out the username of a user who has registered
+     * @param resultCode Result from the registration activity
+     * @param data Intent data from the registration activity
+     */
     protected void confirmRegisterUser(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             String name = data.getStringExtra("name");
@@ -211,6 +241,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Registers the user in the based on if all of the results are OK
+     *
+     * @param resultCode Result code indicating the status of the forms
+     * @param data Data Intent to get the information from
+     */
     protected void registerUser(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             String name = data.getStringExtra("name");
@@ -233,14 +269,23 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // App methods
-    // Register user - start process
+    /**
+     * Starts up the sign-up activity to allow the user to sign up for the service
+     *
+     * @param view Current view
+     */
     public void signUp(View view) {
         Intent registerActivity = new Intent(this, RegisterActivity.class);
         startActivityForResult(registerActivity, 1);
     }
 
-    // Login if a user is already present
+
+    /**
+     * Login if a user is already present. Simple matter of getting the username and password
+     * and verifying it through the AppHelper
+     *
+     * @param view Current view
+     */
     public void logIn(View view) {
         username = inUsername.getText().toString();
         if (username == null || username.length() < 1) {
@@ -266,6 +311,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // Forgot password processing
+
+    /**
+     * Stub currently, used in the future to allow users to reset their passwords
+     *
+     * @param view Current view
+     */
     public void forgotPassword(View view) {
     }
 
@@ -431,6 +482,12 @@ public class LoginActivity extends AppCompatActivity {
         waitDialog.show();
     }
 
+    /**
+     * Shows a message dialog to the user with the following parameters
+     *
+     * @param title Title of the message
+     * @param body Body of the message
+     */
     protected void showDialogMessage(String title, String body) {
         final AlertDialog.Builder builder = provider.getAlertDialogBuilder(this);
         builder.setTitle(title).setMessage(body).setNeutralButton("OK",

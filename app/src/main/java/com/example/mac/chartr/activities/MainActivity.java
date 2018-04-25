@@ -70,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Method inherited from the Activity class that is called upon creation of the activity
+     *
+     * @param savedInstanceState Bundle of the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,10 +170,20 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Sets the common dependency provider to allow mocks to be inserted
+     *
+     * @param provider Instantiated or mocked CommonDependencyProvider
+     */
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
     }
 
+    /**
+     * Method that will invoke a new activity to sign the user out
+     *
+     * @param view Current view
+     */
     public void logout(View view) {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         user.signOut();
@@ -176,6 +191,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Method that would allow the user to edit their profile. Currently, unused.
+     *
+     * @param view Current view
+     */
     public void editProfile(View view) {
         //TODO
         CharSequence text = "to be implemented";
@@ -338,6 +358,9 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * From the Activity class, allows for back stack navigation
+     */
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
