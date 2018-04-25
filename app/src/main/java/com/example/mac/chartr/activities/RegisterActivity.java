@@ -140,6 +140,11 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sets the common dependency provider to allow for injection during testing
+     *
+     * @param provider Instantiated or mocked CommonDependencyProvider
+     */
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
     }
@@ -541,6 +546,13 @@ public class RegisterActivity extends AppCompatActivity {
         startActivityForResult(intent, 10);
     }
 
+    /**
+     * Method that handles the results of the activity
+     *
+     * @param requestCode Request code from the activity
+     * @param resultCode Result from the invocation
+     * @param data Data stored in the intent
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 10) {
@@ -554,6 +566,13 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Show a message dialog with the given title and body
+     *
+     * @param title Title of the message
+     * @param body Body of the message
+     * @param exit Boolean to indicate whether the activity should exit
+     */
     protected void showDialogMessage(String title, String body, final boolean exit) {
         final AlertDialog.Builder builder = provider.getAlertDialogBuilder(this);
         builder.setTitle(title).setMessage(body).setNeutralButton("OK",
