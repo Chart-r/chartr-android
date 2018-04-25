@@ -3,6 +3,10 @@ package com.example.mac.chartr.objects;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * POJO for the Reviews that are taken from the server. Currently
+ * Chartr does not include reviews, but this is included for future development.
+ */
 public class Review {
     private static final String TAG = Trip.class.getSimpleName();
 

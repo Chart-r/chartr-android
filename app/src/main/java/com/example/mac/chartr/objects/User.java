@@ -3,6 +3,10 @@ package com.example.mac.chartr.objects;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * POJO for a User on Chartr representing all information that we have about
+ * each user. Can be serialized back and forth in order to send to or receive from the database.
+ */
 public class User {
     @SerializedName("uid")
     @Expose
