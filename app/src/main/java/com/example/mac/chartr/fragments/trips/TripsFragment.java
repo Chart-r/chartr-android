@@ -16,11 +16,24 @@ public class TripsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Method inherited from the Fragment class that is called upon creation of the fragment
+     *
+     * @param savedInstanceState Bundle of the saved instance state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Method inherited from the Fragment class that returns a view that has been inflated
+     * with the container argument
+     * @param inflater Used to inflate the returned object
+     * @param container The viewGroup used in the inflation of the returned object
+     * @param savedInstanceState Bundle of the saved instance state
+     * @return the inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
