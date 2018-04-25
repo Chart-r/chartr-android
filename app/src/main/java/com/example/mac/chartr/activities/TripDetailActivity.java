@@ -37,6 +37,12 @@ public class TripDetailActivity extends AppCompatActivity {
     Button submitButton;
     String uid;
 
+    /**
+     * Inherited class from the Activity class that handles what happens
+     * when the activity starts up
+     *
+     * @param savedInstanceState Bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

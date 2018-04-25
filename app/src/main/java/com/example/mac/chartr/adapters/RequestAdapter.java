@@ -24,6 +24,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Adapter for a RecyclerView to view the Requests to join a trip
+ */
 public class RequestAdapter extends RecyclerView.Adapter {
     public static final String TAG = RequestAdapter.class.getSimpleName();
     private List<Pair<Trip, User>> requestedUsers;
@@ -32,6 +35,13 @@ public class RequestAdapter extends RecyclerView.Adapter {
         requestedUsers = data;
     }
 
+    /**
+     * Creates a ViewHolder that will hold the requests to join trips
+     *
+     * @param parent Parent ViewGroup for the RecyclerView
+     * @param viewType The View Type, typically 0
+     * @return A ViewHolder, which holds a single trip
+     */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,6 +50,12 @@ public class RequestAdapter extends RecyclerView.Adapter {
         return new RequestAdapter.RequestViewHolder(root);
     }
 
+    /**
+     * Method to bind a created view holder to a trip request
+     *
+     * @param holder ViewHolder on which to insert the trip request card
+     * @param position Position of the ViewHolder in the RecyclerView
+     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Pair<Trip, User> tripUserPair = requestedUsers.get(position);
@@ -56,12 +72,21 @@ public class RequestAdapter extends RecyclerView.Adapter {
         });
     }
 
+    /**
+     * Gets how many items should be displayed in this recycler view
+     *
+     * @return
+     */
     @Override
     public int getItemCount() {
         Log.d("Adapter", "" + requestedUsers.size());
         return requestedUsers.size();
     }
 
+    /**
+     * Internal class that represents a single RequestViewHolder object which the
+     * recycler view can display
+     */
     public static class RequestViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         TextView startTime;
@@ -96,6 +121,14 @@ public class RequestAdapter extends RecyclerView.Adapter {
 
     }
 
+    /**
+     * Gets the status of a particular rider
+     *
+     * @param context Context
+     * @param position Position in the recycler view
+     * @param tripUserPair The pair of a trip to a user
+     * @param status Status that you wish to set for the user
+     */
     public void setRiderStatus(Context context, int position, Pair<Trip,
             User> tripUserPair, String status) {
         ApiInterface apiInterface = ApiClient.getApiInstance();
