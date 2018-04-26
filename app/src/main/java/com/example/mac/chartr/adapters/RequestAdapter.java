@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
+import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
+import com.example.mac.chartr.objects.ConfirmationEmail;
 import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
 
@@ -148,6 +150,7 @@ public class RequestAdapter extends RecyclerView.Adapter {
 
                 if (status.equals("riding")) {
                     CharSequence text = "Accepted " + tripUserPair.second.getName();
+                    sendTripConfirmationEmail(context, tripUserPair);
                     Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 } else {
                     CharSequence text = "Rejected " + tripUserPair.second.getName();
@@ -159,6 +162,40 @@ public class RequestAdapter extends RecyclerView.Adapter {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Log.d(TAG, "Retrofit failed to get data");
+                Log.d(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
+    }
+
+    /**
+     * Makes a post api call to send ride approved confirmation emails.
+     *
+     * @param context Context
+     * @param tripUserPair The pair of a trip to a user
+     */
+    public void sendTripConfirmationEmail(Context context, Pair<Trip,
+            User> tripUserPair) {
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        CommonDependencyProvider provider = new CommonDependencyProvider();
+        Trip trip = tripUserPair.first;
+        User driver = provider.getAppHelper().getLoggedInUser();
+        User rider = tripUserPair.second;
+        ConfirmationEmail confirmationEmail = new ConfirmationEmail(driver.getName(),
+                rider.getName(), driver.getFormattedPhone(), rider.getFormattedPhone(),
+                driver.getEmail(), rider.getEmail(), trip.getStartTime());
+        Call<String> call = apiInterface.postTripConfirmationEmail(confirmationEmail);
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.d(TAG, response.code() + "");
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d(TAG, "Retrofit call failed");
                 Log.d(TAG, t.getMessage());
                 t.printStackTrace();
                 call.cancel();

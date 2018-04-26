@@ -115,6 +115,15 @@ public class User {
         this.reviewCount = reviewCount;
     }
 
+    /**
+     * Formats a stored phone number from the +12223334444 to the +1-222-333-4444 format.
+     * @return
+     */
+    public String getFormattedPhone() {
+        return phone.substring(0, 2) + "-" + phone.substring(2, 5) + "-" + phone.substring(5, 8)
+                + "-" + phone.substring(8);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
