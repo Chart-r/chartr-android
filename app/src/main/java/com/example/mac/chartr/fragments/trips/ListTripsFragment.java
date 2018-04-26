@@ -44,8 +44,8 @@ public class ListTripsFragment extends Fragment {
     }
 
     /**
-     * Sets the common dependency provider
-     * @param provider THe provider to which the class's provider is set
+     * Initialises the common dependency provider of the class
+     * @param provider The provider to which the class provider is set
      */
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
