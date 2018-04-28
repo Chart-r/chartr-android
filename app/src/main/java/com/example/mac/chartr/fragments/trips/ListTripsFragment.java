@@ -36,21 +36,40 @@ public class ListTripsFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private List<Trip> tripsData = new ArrayList<>();
 
+    /**
+     * Empty constructor of the class
+     */
     public ListTripsFragment() {
-        // Required empty public constructor
         setCommonDependencyProvider(new CommonDependencyProvider());
     }
 
+    /**
+     * Initialises the common dependency provider of the class
+     * @param provider The provider to which the class provider is set
+     */
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
     }
 
+    /**
+     * Method inherited from the Fragment class that is called upon creation of the fragment
+     *
+     * @param savedInstanceState Bundle of the saved instance state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uid = getLoggedInUid();
     }
 
+    /**
+     * Method inherited from the Fragment class that returns a view that has been inflated
+     * with the container argument
+     * @param inflater Used to inflate the returned object
+     * @param container The viewGroup used in the inflation of the returned object
+     * @param savedInstanceState Bundle of the saved instance state
+     * @return the inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

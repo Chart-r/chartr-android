@@ -6,7 +6,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Client for making api calls using Retrofit.
  */
-
 public class ApiClient {
 
     private static final String ROOT_URL =
@@ -17,6 +16,11 @@ public class ApiClient {
                 .addConverterFactory(GsonConverterFactory.create()).build();
     }
 
+    /**
+     * Returns an instance of the Retrofit api based on the ApiInterface class
+     *
+     * @return Instance of an API interface
+     */
     public static ApiInterface getApiInstance() {
         return getClientInstance().create(ApiInterface.class);
     }

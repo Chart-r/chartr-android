@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
+import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
+import com.example.mac.chartr.objects.ConfirmationEmail;
 import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
 
@@ -24,6 +26,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Adapter for a RecyclerView to view the Requests to join a trip
+ */
 public class RequestAdapter extends RecyclerView.Adapter {
     public static final String TAG = RequestAdapter.class.getSimpleName();
     private List<Pair<Trip, User>> requestedUsers;
@@ -32,6 +37,13 @@ public class RequestAdapter extends RecyclerView.Adapter {
         requestedUsers = data;
     }
 
+    /**
+     * Creates a ViewHolder that will hold the requests to join trips
+     *
+     * @param parent Parent ViewGroup for the RecyclerView
+     * @param viewType The View Type, typically 0
+     * @return A ViewHolder, which holds a single trip
+     */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,6 +52,12 @@ public class RequestAdapter extends RecyclerView.Adapter {
         return new RequestAdapter.RequestViewHolder(root);
     }
 
+    /**
+     * Method to bind a created view holder to a trip request
+     *
+     * @param holder ViewHolder on which to insert the trip request card
+     * @param position Position of the ViewHolder in the RecyclerView
+     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Pair<Trip, User> tripUserPair = requestedUsers.get(position);
@@ -56,12 +74,21 @@ public class RequestAdapter extends RecyclerView.Adapter {
         });
     }
 
+    /**
+     * Gets how many items should be displayed in this recycler view
+     *
+     * @return
+     */
     @Override
     public int getItemCount() {
         Log.d("Adapter", "" + requestedUsers.size());
         return requestedUsers.size();
     }
 
+    /**
+     * Internal class that represents a single RequestViewHolder object which the
+     * recycler view can display
+     */
     public static class RequestViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         TextView startTime;
@@ -96,6 +123,14 @@ public class RequestAdapter extends RecyclerView.Adapter {
 
     }
 
+    /**
+     * Gets the status of a particular rider
+     *
+     * @param context Context
+     * @param position Position in the recycler view
+     * @param tripUserPair The pair of a trip to a user
+     * @param status Status that you wish to set for the user
+     */
     public void setRiderStatus(Context context, int position, Pair<Trip,
             User> tripUserPair, String status) {
         ApiInterface apiInterface = ApiClient.getApiInstance();
@@ -115,6 +150,7 @@ public class RequestAdapter extends RecyclerView.Adapter {
 
                 if (status.equals("riding")) {
                     CharSequence text = "Accepted " + tripUserPair.second.getName();
+                    sendTripConfirmationEmail(context, tripUserPair);
                     Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 } else {
                     CharSequence text = "Rejected " + tripUserPair.second.getName();
@@ -126,6 +162,40 @@ public class RequestAdapter extends RecyclerView.Adapter {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Log.d(TAG, "Retrofit failed to get data");
+                Log.d(TAG, t.getMessage());
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
+    }
+
+    /**
+     * Makes a post api call to send ride approved confirmation emails.
+     *
+     * @param context Context
+     * @param tripUserPair The pair of a trip to a user
+     */
+    public void sendTripConfirmationEmail(Context context, Pair<Trip,
+            User> tripUserPair) {
+        ApiInterface apiInterface = ApiClient.getApiInstance();
+        CommonDependencyProvider provider = new CommonDependencyProvider();
+        Trip trip = tripUserPair.first;
+        User driver = provider.getAppHelper().getLoggedInUser();
+        User rider = tripUserPair.second;
+        ConfirmationEmail confirmationEmail = new ConfirmationEmail(driver.getName(),
+                rider.getName(), driver.getFormattedPhone(), rider.getFormattedPhone(),
+                driver.getEmail(), rider.getEmail(), trip.getStartTime());
+        Call<String> call = apiInterface.postTripConfirmationEmail(confirmationEmail);
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.d(TAG, response.code() + "");
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d(TAG, "Retrofit call failed");
                 Log.d(TAG, t.getMessage());
                 t.printStackTrace();
                 call.cancel();

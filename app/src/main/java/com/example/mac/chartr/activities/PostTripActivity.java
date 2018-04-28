@@ -171,6 +171,11 @@ public class PostTripActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Handles a click to invoke the Places API to select the location
+     *
+     * @param key Arbitrary int denoting the destination versus origin locations
+     */
     public void onPickButtonClick(int key) {
         // Construct an intent for the place picker
         try {
@@ -188,6 +193,13 @@ public class PostTripActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the result from the activity
+     *
+     * @param requestCode Code from the request
+     * @param resultCode Result from trying to post a trip
+     * @param data Intent data from the post
+     */
     @Override
     public void onActivityResult(int requestCode,
                                  int resultCode, Intent data) {
@@ -262,6 +274,11 @@ public class PostTripActivity extends AppCompatActivity {
         returnEditText.setText(sdf.format(returnCalendar.getTime()));
     }
 
+    /**
+     * Increment the seats that are available on a trip
+     *
+     * @param view Current view
+     */
     public void incrementSeats(View view) {
         inNumSeats = findViewById(R.id.textViewSeatValue);
         numSeats = Integer.parseInt(inNumSeats.getText().toString());
@@ -270,6 +287,11 @@ public class PostTripActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Decrement the seats that are available on a trip
+     *
+     * @param view Current view
+     */
     public void decrementSeats(View view) {
         inNumSeats = findViewById(R.id.textViewSeatValue);
         numSeats = Integer.parseInt(inNumSeats.getText().toString());
@@ -278,11 +300,21 @@ public class PostTripActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sets the common dependency provider for the class, allowing for mocks to be injected
+     *
+     * @param provider An instantiated or mocked CommonDependencyProvider
+     */
     public void setProvider(CommonDependencyProvider provider) {
         this.provider = provider;
     }
 
     //https://stackoverflow.com/questions/37390080/convert-local-time-to-utc-and-vice-versa
+    /**
+     * Converts the GMT to a local date
+     * @param date Date in GMT
+     * @return Local date object
+     */
     public static Date gmttoLocalDate(Date date) {
         String timeZone = Calendar.getInstance().getTimeZone().getID();
         Date local = new Date(date.getTime()
@@ -393,6 +425,11 @@ public class PostTripActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Wrapper for the toast function to make a long toast.
+     *
+     * @param message Message to display in the toast
+     */
     protected void makeLongToast(String message) {
         Toast.makeText(getApplicationContext(), message,
                 Toast.LENGTH_LONG).show();

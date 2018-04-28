@@ -86,16 +86,27 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     private Button filterButton;
     private FusedLocationProviderClient mFusedLocationClient;
 
-
+    /**
+     * Constructor of the class
+     */
     public SearchFragment() {
         // Required empty public constructor
         setCommonDependencyProvider(new CommonDependencyProvider());
     }
 
+    /**
+     * Initialises the common dependency provider of the class
+     * @param provider The provider to which the class' provider is set
+     */
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
     }
 
+    /**
+     * Method inherited from the Fragment class that is called upon creation of the fragment
+     *
+     * @param savedInstanceState Bundle of the saved instance state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +117,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         // TODO: Call api and filter for nearby trips
     }
 
+    /**
+     * Method inherited from the Fragment class that returns a view that has been inflated
+     * with the container argument
+     * @param inflater Used to inflate the returned object
+     * @param container The viewGroup used in the inflation of the returned object
+     * @param savedInstanceState Bundle of the saved instance state
+     * @return the inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -123,7 +142,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     private void initViews(View root) {
         initDatePicker(root);
         preferredDriverEditText = root.findViewById(R.id.searchFragmentEditTextPreferredDriver);
-        // TODO: Filter by driver
         priceMinEditText = root.findViewById(R.id.searchFragmentEditPriceRangeFrom);
         priceMaxEditText = root.findViewById(R.id.searchFragmentEditPriceRangeTo);
 
@@ -154,6 +172,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         textViewNoTrips = root.findViewById(R.id.textViewSearchNoTrips);
     }
 
+    /**
+     * Performs different actions according to the if of the button that has just been pressed
+     * @param  v The button that has just been pressed
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -228,6 +250,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Filters trips according to the inputs that has been entered by the user in the
+     * relativeLayoutSearchParameters layout and adds them to the adapter so they can be displayed
+     * in the fragment.
+     */
     public void searchTrips() {
         searchLayout.setVisibility(View.GONE);
         filterButton.setVisibility(View.VISIBLE);
@@ -416,14 +443,17 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    /**
+     * Construct an intent for the place picker and start the intent by requesting a result,
+      identified by a request code.
+     * @param key The request code
+     */
     public void onPickButtonClick(int key) {
-        // Construct an intent for the place picker
+
         try {
             PlacePicker.IntentBuilder intentBuilder =
                     new PlacePicker.IntentBuilder();
             Intent intent = intentBuilder.build(getActivity());
-            // Start the intent by requesting a result,
-            // identified by a request code.
             startActivityForResult(intent, key);
 
         } catch (GooglePlayServicesRepairableException e) {
@@ -433,6 +463,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Displays appropriate texts in the start and end destination edittexts based on the location
+     * chosen by the user in the Google service location interface
+     * @param requestCode The request identifier
+     * @param resultCode The result identifier
+     * @param data The intent
+     */
     @Override
     public void onActivityResult(int requestCode,
                                  int resultCode, Intent data) {

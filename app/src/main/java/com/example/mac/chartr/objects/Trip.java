@@ -17,6 +17,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * POJO for a Trip on Chartr representing all information that we have about
+ * each trip. Can be serialized back and forth in order to send to or receive from the database.
+ */
 public class Trip implements Serializable {
     private static final String TAG = Trip.class.getSimpleName();
 

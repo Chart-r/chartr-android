@@ -30,11 +30,23 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
     private String userName;
     private AlertDialog userDialog;
     GenericHandler confHandler = new GenericHandler() {
+        /**
+         * Handler implementation that specifies behavior on the success condition
+         *
+         * Specifically used to confirm that a user has been accepted for a ride.
+         */
         @Override
         public void onSuccess() {
             showDialogMessage("Success!", userName + " has been confirmed!", true);
         }
 
+        /**
+         * Handler implementation that specifies behavior on the failure condition
+         *
+         * Specifically used to specify that the user could not be accepted for the ride
+         *
+         * @param exception Exception that may have caused the failure to occur
+         */
         @Override
         public void onFailure(Exception exception) {
             TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
@@ -50,6 +62,12 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         }
     };
     VerificationHandler resendConfCodeHandler = new VerificationHandler() {
+
+        /**
+         * Handler implementation that specifies behavior on the success condition
+         *
+         * Specifically confirms the account creation
+         */
         @Override
         public void onSuccess(CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
             TextView mainTitle = (TextView) findViewById(R.id.textViewConfirmTitle);
@@ -61,6 +79,13 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
                     + cognitoUserCodeDeliveryDetails.getDeliveryMedium() + ".", false);
         }
 
+        /**
+         * Handler implementation that specifies behavior on the failure condition
+         *
+         * Specifically responses to failure events from the sign up process
+         *
+         * @param exception Exception that may have caused the failure to occur
+         */
         @Override
         public void onFailure(Exception exception) {
             TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
@@ -71,6 +96,12 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Inherited method from the Activity class that is generated when the
+     * activity is first created.
+     *
+     * @param savedInstanceState An instance of the saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +111,9 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         init();
     }
 
+    /**
+     * Initializes the needed fields, attaching listeners for each event
+     */
     protected void init() {
 
         Bundle extras = getIntent().getExtras();
@@ -95,6 +129,15 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
 
         username = (EditText) findViewById(R.id.editTextConfirmUserId);
         username.addTextChangedListener(new TextWatcher() {
+            /**
+             * Handles events on the username field before the change is made to the field.
+             * Indicates that the user has started typing
+             *
+             * @param s Character sequence being inputted
+             * @param start Start of the sequence
+             * @param count Count of how many characters
+             * @param after How many characters will be in the box afterward
+             */
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
@@ -104,12 +147,25 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
                 }
             }
 
+            /**
+             * Handles events on the username field as the change is made to the field.
+             * Indicates that the user has changed the text
+             *
+             * @param s Sequence of the change
+             * @param start Start index
+             * @param before Before index
+             * @param count Count of characters
+             */
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 TextView label = (TextView) findViewById(R.id.textViewConfirmUserIdMessage);
                 label.setText(" ");
             }
 
+            /**
+             * Called after the text has been entered
+             * @param s Editable object that has the users input into the text box
+             */
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
@@ -121,6 +177,15 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
 
         confCode = (EditText) findViewById(R.id.editTextConfirmCode);
         confCode.addTextChangedListener(new TextWatcher() {
+            /**
+             * Handles events on the confirmation code field before the change is made to the field.
+             * Indicates that the user has started typing
+             *
+             * @param s Character sequence being inputted
+             * @param start Start of the sequence
+             * @param count Count of how many characters
+             * @param after How many characters will be in the box afterward
+             */
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
@@ -130,12 +195,25 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
                 }
             }
 
+            /**
+             * Handles events on the username field as the change is made to the field.
+             * Indicates that the user has changed the text
+             *
+             * @param s Sequence of the change
+             * @param start Start index
+             * @param before Before index
+             * @param count Count of characters
+             */
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 TextView label = (TextView) findViewById(R.id.textViewConfirmCodeMessage);
                 label.setText(" ");
             }
 
+            /**
+             * Called after the text has been entered
+             * @param s Editable object that has the users input into the text box
+             */
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
@@ -152,6 +230,11 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         reqCode.setOnClickListener(v -> reqConfCode());
     }
 
+    /**
+     * Extracts known parameters from the bundle that is passed into the activity
+     *
+     * @param extras Bundle of parameters
+     */
     protected void extractFromExtras(Bundle extras) {
         userName = extras.getString("name");
         username = (EditText) findViewById(R.id.editTextConfirmUserId);
@@ -175,6 +258,11 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Sets the common dependency provider for tests that will mock it
+     *
+     * @param provider An initialized CommonDependencyProvider
+     */
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
     }
@@ -209,6 +297,9 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         return;
     }
 
+    /**
+     * Requests a confirmation code
+     */
     private void reqConfCode() {
         userName = username.getText().toString();
         if (userName == null || userName.length() < 1) {
@@ -220,6 +311,13 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Shows a dialog message to the user with the following parameters.
+     *
+     * @param title The title of the message
+     * @param body The body of the message
+     * @param exitActivity The activity to call on exit.
+     */
     protected void showDialogMessage(String title, String body, final boolean exitActivity) {
         final AlertDialog.Builder builder = provider.getAlertDialogBuilder(this);
         builder.setTitle(title).setMessage(body).setNeutralButton("OK",

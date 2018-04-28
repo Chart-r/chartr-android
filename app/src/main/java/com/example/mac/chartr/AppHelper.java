@@ -34,6 +34,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Helper class to do the connection with Cognito to accomplish the login and
+ * sign up functionalities.
+ */
 public class AppHelper {
     private static final String TAG = "AppHelper";
     /**
@@ -83,10 +87,21 @@ public class AppHelper {
 
     private User loggedInUser;
 
+    /**
+     * Construct the AppHelper using the app content
+     *
+     * @param context Current context from the app
+     */
     public AppHelper(Context context) {
         init(context);
     }
 
+    /**
+     * Init will initialize all the needed variables in order to use AppHelper for
+     * connection to Cognito.
+     *
+     * @param context Context of the app.
+     */
     public void init(Context context) {
         setData();
 
@@ -155,6 +170,12 @@ public class AppHelper {
         user = newUser;
     }
 
+    /**
+     * Formats an exception into a proper logging format with the proper tag.
+     *
+     * @param exception Exception to format into a string
+     * @return Result of formatting the exception
+     */
     public String formatException(Exception exception) {
         String formattedString = "Internal Error";
         Log.e(TAG, " -- Error: " + exception.toString());
@@ -180,6 +201,9 @@ public class AppHelper {
         return newDevice;
     }
 
+    /**
+     * Sets all internal data based on the known fields
+     */
     private void setData() {
         // Set attribute display sequence
         attributeDisplaySeq = new ArrayList<String>();
