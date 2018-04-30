@@ -21,6 +21,7 @@ Currently, the Android App supports the following actions:
 * Gabriel Hayat
 * Pawel Galusza
 * Shin Taniguchi
+* Michael Rush
 
 ## Contributing
 
