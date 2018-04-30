@@ -1,6 +1,6 @@
 package com.example.mac.chartr.fragments;
 
-import  android.os.Bundle;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,8 +18,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Profile fragment is one of the main fragments on the tabbed interface of Chartr. Currently,
+ * profile only displays the bare minimum for a user, but shall be updated to include information
+ * like rating in the future.
+ */
 public class ProfileFragment extends Fragment {
-    public static final String TAG = ProfileFragment.class.getSimpleName();
+    private static final String TAG = ProfileFragment.class.getSimpleName();
     private CommonDependencyProvider provider;
     private String uid;
 
@@ -42,7 +47,7 @@ public class ProfileFragment extends Fragment {
      * @param provider The provider to which the class's provider is set
      */
 
-    public void setCommonDependencyProvider(CommonDependencyProvider provider) {
+    private void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
     }
 

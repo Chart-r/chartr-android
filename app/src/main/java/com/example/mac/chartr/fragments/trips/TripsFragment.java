@@ -9,21 +9,15 @@ import android.view.ViewGroup;
 
 import com.example.mac.chartr.R;
 
+/**
+ * Trip fragment is the main fragment that supports the different type of trips, namely:
+ * Confirmed, Pending, and Posted. The different tabs are controlled from this fragment.
+ */
 public class TripsFragment extends Fragment {
     public static final String TAG = TripsFragment.class.getSimpleName();
 
     public TripsFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Method inherited from the Fragment class that is called upon creation of the fragment
-     *
-     * @param savedInstanceState Bundle of the saved instance state
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     /**

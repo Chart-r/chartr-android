@@ -38,6 +38,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
+/**
+ * Activity that is launched when a user clicks on the "+" icon that allows them to
+ * enter a new trip into the system.
+ */
 public class PostTripActivity extends AppCompatActivity {
     private static final String TAG = PostTripActivity.class.getSimpleName();
     private static final int START_PLACE_PICKER = 1;
@@ -49,28 +53,28 @@ public class PostTripActivity extends AppCompatActivity {
 
     private CommonDependencyProvider provider = null;
 
-    Calendar departureCalendar = Calendar.getInstance();
-    Calendar returnCalendar = Calendar.getInstance();
+    private final Calendar departureCalendar = Calendar.getInstance();
+    private final Calendar returnCalendar = Calendar.getInstance();
 
-    EditText departureEditText;
-    DatePickerDialog.OnDateSetListener departureDate;
+    private EditText departureEditText;
+    private DatePickerDialog.OnDateSetListener departureDate;
 
-    EditText returnEditText;
-    DatePickerDialog.OnDateSetListener returnDate;
+    private EditText returnEditText;
+    private DatePickerDialog.OnDateSetListener returnDate;
 
-    EditText departureTimeText;
-    TimePickerDialog.OnTimeSetListener departTime;
+    private EditText departureTimeText;
+    private TimePickerDialog.OnTimeSetListener departTime;
 
-    EditText returnTimeText;
-    TimePickerDialog.OnTimeSetListener returnTime;
+    private EditText returnTimeText;
+    private TimePickerDialog.OnTimeSetListener returnTime;
 
-    EditText startLocationEditText;
-    Double startLocationLat;
-    Double startLocationLng;
+    private EditText startLocationEditText;
+    private Double startLocationLat;
+    private Double startLocationLng;
 
-    EditText endLocationEditText;
-    Double endLocationLat;
-    Double endLocationLng;
+    private EditText endLocationEditText;
+    private Double endLocationLat;
+    private Double endLocationLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,21 +93,11 @@ public class PostTripActivity extends AppCompatActivity {
         startLocationEditText = findViewById(R.id.editTextStartLocation);
         startLocationEditText.setFocusable(false);
         startLocationEditText.setClickable(true);
-        startLocationEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPickButtonClick(START_PLACE_PICKER);
-            }
-        });
+        startLocationEditText.setOnClickListener(v -> onPickButtonClick(START_PLACE_PICKER));
         endLocationEditText = findViewById(R.id.editTextEndLocation);
         endLocationEditText.setFocusable(false);
         endLocationEditText.setClickable(true);
-        endLocationEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPickButtonClick(DEST_PLACE_PICKER);
-            }
-        });
+        endLocationEditText.setOnClickListener(v -> onPickButtonClick(DEST_PLACE_PICKER));
     }
 
     /**
@@ -117,58 +111,52 @@ public class PostTripActivity extends AppCompatActivity {
         /*
         SETUP DEPARTURE DATE PICKER
          */
-        departureEditText = (EditText) findViewById(R.id.editTextDepartureDate);
+        departureEditText = findViewById(R.id.editTextDepartureDate);
         departureDate  = (view, year, monthOfYear, dayOfMonth) -> {
             departureCalendar.set(Calendar.YEAR, year);
             departureCalendar.set(Calendar.MONTH, monthOfYear);
             departureCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             updateDepartureDateLabel();
         };
-        departureEditText.setOnClickListener(v -> {
-            new DatePickerDialog(PostTripActivity.this, departureDate, departureCalendar
-                    .get(Calendar.YEAR), departureCalendar.get(Calendar.MONTH),
-                    departureCalendar.get(Calendar.DAY_OF_MONTH)).show();
-        });
+        departureEditText.setOnClickListener(v ->
+                new DatePickerDialog(PostTripActivity.this, departureDate, departureCalendar
+                .get(Calendar.YEAR), departureCalendar.get(Calendar.MONTH),
+                departureCalendar.get(Calendar.DAY_OF_MONTH)).show());
 
         /*
         SETUP RETURN DATE PICKER
          */
-        returnEditText = (EditText) findViewById(R.id.editTextReturnDate);
+        returnEditText = findViewById(R.id.editTextReturnDate);
         returnDate  = (view, year, monthOfYear, dayOfMonth) -> {
             returnCalendar.set(Calendar.YEAR, year);
             returnCalendar.set(Calendar.MONTH, monthOfYear);
             returnCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             updateReturnDateLabel();
         };
-        returnEditText.setOnClickListener(v -> {
-            new DatePickerDialog(PostTripActivity.this, returnDate, returnCalendar
-                    .get(Calendar.YEAR), returnCalendar.get(Calendar.MONTH),
-                    returnCalendar.get(Calendar.DAY_OF_MONTH)).show();
-        });
+        returnEditText.setOnClickListener(v ->
+                new DatePickerDialog(PostTripActivity.this, returnDate, returnCalendar
+                .get(Calendar.YEAR), returnCalendar.get(Calendar.MONTH),
+                returnCalendar.get(Calendar.DAY_OF_MONTH)).show());
 
         /*
         SETUP DEPARTURE TIME PICKER
          */
-        departureTimeText = (EditText) findViewById(R.id.editTextDepartureTime);
-        departTime  = (TimePicker timePicker, int selectedHour, int selectedMinute) -> {
-            setTimeField(selectedHour, selectedMinute, departureTimeText);
-        };
-        departureTimeText.setOnClickListener(v -> {
-            new TimePickerDialog(PostTripActivity.this, departTime, 0, 0,
-                    false).show();
-        });
+        departureTimeText = findViewById(R.id.editTextDepartureTime);
+        departTime  = (TimePicker timePicker, int selectedHour, int selectedMinute) ->
+                setTimeField(selectedHour, selectedMinute, departureTimeText);
+        departureTimeText.setOnClickListener(v ->
+                new TimePickerDialog(PostTripActivity.this, departTime,
+                        0, 0, false).show());
 
         /*
         SETUP RETURN TIME PICKER
          */
-        returnTimeText = (EditText) findViewById(R.id.editTextReturnTime);
-        returnTime  = (TimePicker timePicker, int selectedHour, int selectedMinute) -> {
-            setTimeField(selectedHour, selectedMinute, returnTimeText);
-        };
-        returnTimeText.setOnClickListener(v -> {
-            new TimePickerDialog(PostTripActivity.this, returnTime, 0, 0,
-                    false).show();
-        });
+        returnTimeText = findViewById(R.id.editTextReturnTime);
+        returnTime  = (TimePicker timePicker, int selectedHour, int selectedMinute) ->
+                setTimeField(selectedHour, selectedMinute, returnTimeText);
+        returnTimeText.setOnClickListener(v ->
+                new TimePickerDialog(PostTripActivity.this, returnTime,
+                        0, 0, false).show());
     }
 
     /**
@@ -176,7 +164,7 @@ public class PostTripActivity extends AppCompatActivity {
      *
      * @param key Arbitrary int denoting the destination versus origin locations
      */
-    public void onPickButtonClick(int key) {
+    private void onPickButtonClick(int key) {
         // Construct an intent for the place picker
         try {
             PlacePicker.IntentBuilder intentBuilder =
@@ -186,9 +174,8 @@ public class PostTripActivity extends AppCompatActivity {
             // identified by a request code.
             startActivityForResult(intent, key);
 
-        } catch (GooglePlayServicesRepairableException e) {
-            // ...
-        } catch (GooglePlayServicesNotAvailableException e) {
+        } catch (GooglePlayServicesRepairableException
+                | GooglePlayServicesNotAvailableException e) {
             // ...
         }
     }
@@ -315,7 +302,7 @@ public class PostTripActivity extends AppCompatActivity {
      * @param date Date in GMT
      * @return Local date object
      */
-    public static Date gmttoLocalDate(Date date) {
+    private static Date gmttoLocalDate(Date date) {
         String timeZone = Calendar.getInstance().getTimeZone().getID();
         Date local = new Date(date.getTime()
                 + TimeZone.getTimeZone(timeZone).getOffset(date.getTime()));
@@ -330,7 +317,6 @@ public class PostTripActivity extends AppCompatActivity {
     public void postTrip(View view) {
         String startLocation = startLocationEditText.getText().toString();
         String endLocation = endLocationEditText.getText().toString();
-        boolean canPickUp = getBooleanFromSwitch(R.id.switchCanPickUp);
         int numSeats = getIntegerFromTextView(R.id.textViewSeatValue, 4);
         boolean noSmoking = getBooleanFromSwitch(R.id.switchNoSmoking);
         boolean isQuiet = getBooleanFromSwitch(R.id.switchQuite);
@@ -430,7 +416,7 @@ public class PostTripActivity extends AppCompatActivity {
      *
      * @param message Message to display in the toast
      */
-    protected void makeLongToast(String message) {
+    private void makeLongToast(String message) {
         Toast.makeText(getApplicationContext(), message,
                 Toast.LENGTH_LONG).show();
     }
@@ -476,7 +462,7 @@ public class PostTripActivity extends AppCompatActivity {
      * @param defaultVal The default value to use in case of an empty EditText
      * @return The int contents of the EditText or the default value
      */
-    protected int getIntegerFromTextView(int id, int defaultVal) {
+    private int getIntegerFromTextView(int id, int defaultVal) {
         TextView textView = findViewById(id);
         int result = textView.getText().toString().isEmpty()
                 ? defaultVal : Integer.valueOf(textView.getText().toString());
@@ -488,7 +474,7 @@ public class PostTripActivity extends AppCompatActivity {
      * @param id         The id of the EditText
      * @return The boolean contents of the Switch
      */
-    protected Boolean getBooleanFromSwitch(int id) {
+    private Boolean getBooleanFromSwitch(int id) {
         Switch s = findViewById(id);
         return s.isChecked();
     }

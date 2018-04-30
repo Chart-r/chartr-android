@@ -50,38 +50,42 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
+/**
+ * One of the main fragments that allows the user to search through posted trips based upon a
+ * certain set of criteria that are contained in this class.
+ */
 public class SearchFragment extends Fragment implements View.OnClickListener {
-    public static final String TAG = SearchFragment.class.getSimpleName();
+    private static final String TAG = SearchFragment.class.getSimpleName();
     private static final int START_PLACE_PICKER = 1;
     private static final int DEST_PLACE_PICKER = 2;
-    EditText startLocationEditText;
-    ImageView startLocationImageView;
-    Double startLocationLat;
-    Double startLocationLng;
-    EditText endLocationEditText;
-    ImageView endLocationImageView;
-    Double endLocationLat;
-    Double endLocationLng;
-    EditText departureDateEditText;
-    ImageView departureDateImageView;
-    DatePickerDialog.OnDateSetListener departureDate;
-    Calendar departureCalendar = Calendar.getInstance();
-    EditText preferredDriverEditText;
-    String preferredDriver;
-    EditText priceMinEditText;
-    float priceMin;
-    EditText priceMaxEditText;
-    float priceMax;
-    Button submitSearchButton;
-    TextView textViewNoTrips;
+    private EditText startLocationEditText;
+    private ImageView startLocationImageView;
+    private Double startLocationLat;
+    private Double startLocationLng;
+    private EditText endLocationEditText;
+    private ImageView endLocationImageView;
+    private Double endLocationLat;
+    private Double endLocationLng;
+    private EditText departureDateEditText;
+    private ImageView departureDateImageView;
+    private DatePickerDialog.OnDateSetListener departureDate;
+    private final Calendar departureCalendar = Calendar.getInstance();
+    private EditText preferredDriverEditText;
+    private String preferredDriver;
+    private EditText priceMinEditText;
+    private float priceMin;
+    private EditText priceMaxEditText;
+    private float priceMax;
+    private Button submitSearchButton;
+    private TextView textViewNoTrips;
     // Search radius in meters
-    float searchRadius;
+    private float searchRadius;
     private CommonDependencyProvider provider;
     private String uid;
     private RecyclerView recyclerView;
     private TripAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<Trip> tripsData = new ArrayList<>();
+    private final List<Trip> tripsData = new ArrayList<>();
     private ScrollView searchLayout;
     private Button filterButton;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -150,18 +154,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         startLocationEditText.setClickable(true);
         startLocationEditText.setOnClickListener(this);
         startLocationImageView = root.findViewById(R.id.searchFragmentImageViewStartLocation);
-        startLocationImageView.setOnClickListener(v -> {
-            startLocationEditText.setText("");
-        });
+        startLocationImageView.setOnClickListener(v -> startLocationEditText.setText(""));
 
         endLocationEditText = root.findViewById(R.id.searchFragmentEditTextEndLocation);
         endLocationEditText.setFocusable(false);
         endLocationEditText.setClickable(true);
         endLocationEditText.setOnClickListener(this);
         endLocationImageView = root.findViewById(R.id.searchFragmentImageViewEndLocation);
-        endLocationImageView.setOnClickListener(v -> {
-            endLocationEditText.setText("");
-        });
+        endLocationImageView.setOnClickListener(v -> endLocationEditText.setText(""));
 
         filterButton = root.findViewById(R.id.filterButton);
         filterButton.setOnClickListener(this);
@@ -218,15 +218,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             departureCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             updateDepartureDateLabel();
         };
-        departureDateEditText.setOnClickListener(v -> {
-            new DatePickerDialog(getActivity(), departureDate, departureCalendar
-                    .get(Calendar.YEAR), departureCalendar.get(Calendar.MONTH),
-                    departureCalendar.get(Calendar.DAY_OF_MONTH)).show();
-        });
+        departureDateEditText.setOnClickListener(v ->
+                new DatePickerDialog(getActivity(), departureDate, departureCalendar
+                .get(Calendar.YEAR), departureCalendar.get(Calendar.MONTH),
+                departureCalendar.get(Calendar.DAY_OF_MONTH)).show());
         departureDateImageView = root.findViewById(R.id.searchFragmentImageViewDate);
-        departureDateImageView.setOnClickListener(v -> {
-            departureDateEditText.setText("");
-        });
+        departureDateImageView.setOnClickListener(v -> departureDateEditText.setText(""));
     }
 
     private void updateDepartureDateLabel() {
@@ -255,7 +252,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
      * relativeLayoutSearchParameters layout and adds them to the adapter so they can be displayed
      * in the fragment.
      */
-    public void searchTrips() {
+    private void searchTrips() {
         searchLayout.setVisibility(View.GONE);
         filterButton.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
@@ -294,7 +291,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 Log.d(TAG, response.code() + "");
 
                 List<Trip> tripList = response.body();
-                List<Trip> result = new ArrayList<Trip>();
+                List<Trip> result = new ArrayList<>();
                 for (int i = 0; i < tripList.size(); i++) {
                     Trip currTrip = tripList.get(i);
 
@@ -355,7 +352,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 Log.d(TAG, response.code() + "");
 
                 List<Trip> tripList = response.body();
-                List<Trip> result = new ArrayList<Trip>();
+                List<Trip> result = new ArrayList<>();
 
                 for (int i = 0; i < tripList.size(); i++) {
                     Trip currTrip = tripList.get(i);
@@ -402,7 +399,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                                 Log.d(TAG, response.code() + "");
 
                                 List<Trip> tripList = response.body();
-                                List<Trip> result = new ArrayList<Trip>();
+                                List<Trip> result = new ArrayList<>();
 
                                 for (int i = 0; i < tripList.size(); i++) {
                                     Trip currTrip = tripList.get(i);
@@ -448,7 +445,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
       identified by a request code.
      * @param key The request code
      */
-    public void onPickButtonClick(int key) {
+    private void onPickButtonClick(int key) {
 
         try {
             PlacePicker.IntentBuilder intentBuilder =
@@ -456,9 +453,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             Intent intent = intentBuilder.build(getActivity());
             startActivityForResult(intent, key);
 
-        } catch (GooglePlayServicesRepairableException e) {
-            // ...
-        } catch (GooglePlayServicesNotAvailableException e) {
+        } catch (GooglePlayServicesRepairableException
+                | GooglePlayServicesNotAvailableException e) {
             // ...
         }
     }
@@ -533,7 +529,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
      * @param lng2 second point longitude
      * @return The straight line distance in meters between two points.
      */
-    protected float computeDistanceBetween(double lat1, double lng1, double lat2, double lng2) {
+    private float computeDistanceBetween(double lat1, double lng1, double lat2, double lng2) {
         float[] distance = new float[1];
         Location.distanceBetween(lat1, lng1, lat2, lng2, distance);
         return distance[0];

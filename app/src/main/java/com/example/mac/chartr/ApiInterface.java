@@ -18,7 +18,6 @@ import retrofit2.http.Path;
 /**
  * Interface for implemented API calls.
  */
-
 public interface ApiInterface {
     // User API calls
     /**
