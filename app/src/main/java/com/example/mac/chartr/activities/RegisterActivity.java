@@ -50,7 +50,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText birthday;
     private EditText phone;
 
-    private Button signUp;
     private AlertDialog userDialog;
     private ProgressDialog waitDialog;
     private String emailInput;
@@ -59,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private CommonDependencyProvider provider;
 
-    SignUpHandler signUpHandler = new SignUpHandler() {
+    private final SignUpHandler signUpHandler = new SignUpHandler() {
         @Override
         public void onSuccess(CognitoUser cognitoUser, boolean signUpConfirmationState,
                               CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
@@ -85,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onFailure(Exception exception) {
             closeWaitDialog();
-            TextView label = (TextView) findViewById(R.id.textViewRegEmailMessage);
+            TextView label = findViewById(R.id.textViewRegEmailMessage);
             label.setText("Sign up failed");
             email.setBackground(getDrawable(R.drawable.text_border_error));
             showDialogMessage("Sign up failed", provider.getAppHelper()
@@ -165,7 +164,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void initSignup() {
         user = new User();
 
-        signUp = (Button) findViewById(R.id.signUp);
+        Button signUp = findViewById(R.id.signUp);
         signUp.setOnClickListener(v -> {
             // Read user data and register
             CognitoUserAttributes userAttributes = new CognitoUserAttributes();
@@ -180,7 +179,7 @@ public class RegisterActivity extends AppCompatActivity {
              Check for a valid EMAIL
              */
             emailInput = email.getText().toString();
-            TextView emailMessage = (TextView) findViewById(R.id.textViewRegEmailMessage);
+            TextView emailMessage = findViewById(R.id.textViewRegEmailMessage);
             if (emailInput.isEmpty() || !emailMessage.getText().toString().equals("")) {
                 email.setBackground(getDrawable(R.drawable.text_border_error));
                 Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_LONG)
@@ -193,7 +192,7 @@ public class RegisterActivity extends AppCompatActivity {
              Check for a valid PASSWORD
              */
             String userpasswordInput = password.getText().toString();
-            TextView passwordMessage = (TextView) findViewById(R.id.textViewUserRegPasswordMessage);
+            TextView passwordMessage = findViewById(R.id.textViewUserRegPasswordMessage);
             userPasswd = userpasswordInput;
             if (userpasswordInput.isEmpty() || !passwordMessage.getText().toString().equals("")) {
                 password.setBackground(getDrawable(R.drawable.text_border_error));
@@ -206,7 +205,7 @@ public class RegisterActivity extends AppCompatActivity {
              Check for a valid NAME
              */
             String name = givenName.getText().toString();
-            TextView nameMessage = (TextView) findViewById(R.id.textViewRegGivenNameMessage);
+            TextView nameMessage = findViewById(R.id.textViewRegGivenNameMessage);
             if (name.isEmpty() || !nameMessage.getText().toString().equals("")) {
                 givenName.setBackground(getDrawable(R.drawable.text_border_error));
                 Toast.makeText(getApplicationContext(), "Invalid Name", Toast.LENGTH_LONG)
@@ -218,7 +217,7 @@ public class RegisterActivity extends AppCompatActivity {
              Check for a valid BIRTHDAY
              */
             String birthdayInput = givenName.getText().toString();
-            TextView birthdayMessage = (TextView) findViewById(R.id.textViewRegBirthdayMessage);
+            TextView birthdayMessage = findViewById(R.id.textViewRegBirthdayMessage);
             if (birthdayInput.isEmpty() || !birthdayMessage.getText().toString().equals("")) {
                 birthday.setBackground(getDrawable(R.drawable.text_border_error));
                 Toast.makeText(getApplicationContext(), "Invalid Birthday", Toast.LENGTH_LONG)
@@ -230,7 +229,7 @@ public class RegisterActivity extends AppCompatActivity {
              Check for a valid PHONE NUMBER
              */
             String phoneInput = givenName.getText().toString();
-            TextView phoneMessage = (TextView) findViewById(R.id.textViewRegPhoneMessage);
+            TextView phoneMessage = findViewById(R.id.textViewRegPhoneMessage);
             if (phoneInput.isEmpty() || !phoneMessage.getText().toString().equals("")) {
                 phone.setBackground(getDrawable(R.drawable.text_border_error));
                 Toast.makeText(getApplicationContext(), "Invalid Phone Number",
@@ -292,16 +291,16 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initPhone() {
-        phone = (EditText) findViewById(R.id.editTextRegPhone);
+        phone = findViewById(R.id.editTextRegPhone);
         phone.addTextChangedListener(new TextWatcher() {
-            private MaskWatcher maskWatcher = new MaskWatcher("+#-###-###-####");
+            private final MaskWatcher maskWatcher = new MaskWatcher("+#-###-###-####");
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 maskWatcher.beforeTextChanged(s, start, count, after);
 
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegPhoneLabel);
+                    TextView label = findViewById(R.id.textViewRegPhoneLabel);
                     label.setText("Phone number with country code\n(example: +1-888-333-4444)");
                     phone.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
@@ -311,7 +310,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 maskWatcher.onTextChanged(s, start, before, count);
 
-                TextView message = (TextView) findViewById(R.id.textViewRegPhoneMessage);
+                TextView message = findViewById(R.id.textViewRegPhoneMessage);
                 Pattern pattern =
                         Pattern.compile("^\\+1\\-([1-9])(\\d{2})\\-(\\d{3})\\-(\\d{4})");
                 Matcher matcher = pattern.matcher(phone.getText().toString());
@@ -328,7 +327,7 @@ public class RegisterActivity extends AppCompatActivity {
                 maskWatcher.afterTextChanged(s);
 
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegPhoneLabel);
+                    TextView label = findViewById(R.id.textViewRegPhoneLabel);
                     label.setText("");
                 }
             }
@@ -336,14 +335,14 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initBirthday() {
-        birthday = (EditText) findViewById(R.id.editTextRegBirthday);
+        birthday = findViewById(R.id.editTextRegBirthday);
         birthday.addTextChangedListener(new TextWatcher() {
-            private MaskWatcher maskWatcher = new MaskWatcher("##/##/####");
+            private final MaskWatcher maskWatcher = new MaskWatcher("##/##/####");
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegBirthdayLabel);
+                    TextView label = findViewById(R.id.textViewRegBirthdayLabel);
                     label.setText(birthday.getHint());
                     birthday.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
@@ -353,7 +352,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView message = (TextView) findViewById(R.id.textViewRegBirthdayMessage);
+                TextView message = findViewById(R.id.textViewRegBirthdayMessage);
 
                 String enteredBirthday = birthday.getText().toString();
                 //https://stackoverflow.com/questions/5978510/regex-to-match-date
@@ -388,7 +387,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegBirthdayLabel);
+                    TextView label = findViewById(R.id.textViewRegBirthdayLabel);
                     label.setText("");
                 }
 
@@ -398,12 +397,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initGivenName() {
-        givenName = (EditText) findViewById(R.id.editTextRegGivenName);
+        givenName = findViewById(R.id.editTextRegGivenName);
         givenName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegGivenNameLabel);
+                    TextView label = findViewById(R.id.textViewRegGivenNameLabel);
                     label.setText(givenName.getHint());
                     givenName.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
@@ -411,14 +410,14 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView label = (TextView) findViewById(R.id.textViewRegGivenNameMessage);
+                TextView label = findViewById(R.id.textViewRegGivenNameMessage);
                 label.setText("");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegGivenNameLabel);
+                    TextView label = findViewById(R.id.textViewRegGivenNameLabel);
                     label.setText("");
                 }
             }
@@ -426,7 +425,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initPassword() {
-        password = (EditText) findViewById(R.id.editTextRegUserPassword);
+        password = findViewById(R.id.editTextRegUserPassword);
         password.addTextChangedListener(new TextWatcher() {
             /**
              * Make the label text up top change once the user starts typing (thus, the current
@@ -440,7 +439,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegUserPasswordLabel);
+                    TextView label = findViewById(R.id.textViewRegUserPasswordLabel);
                     //ADD CHECK FOR REQUIREMENTS TO SET THIS LABEL
                     label.setText("Password");
                     password.setBackground(getDrawable(R.drawable.text_border_selector));
@@ -458,7 +457,7 @@ public class RegisterActivity extends AppCompatActivity {
              */
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView message = (TextView) findViewById(R.id.textViewUserRegPasswordMessage);
+                TextView message = findViewById(R.id.textViewUserRegPasswordMessage);
 
 
                 //https://stackoverflow.com/questions/19605150/
@@ -486,7 +485,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegUserPasswordLabel);
+                    TextView label = findViewById(R.id.textViewRegUserPasswordLabel);
                     label.setText("");
                 }
             }
@@ -494,12 +493,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initEmail() {
-        email = (EditText) findViewById(R.id.editTextRegEmail);
+        email = findViewById(R.id.editTextRegEmail);
         email.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegEmailLabel);
+                    TextView label = findViewById(R.id.textViewRegEmailLabel);
                     label.setText("Email");
                     email.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
@@ -507,7 +506,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView message = (TextView) findViewById(R.id.textViewRegEmailMessage);
+                TextView message = findViewById(R.id.textViewRegEmailMessage);
 
                 //http://emailregex.com/
                 Pattern pattern =
@@ -533,21 +532,11 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewRegEmailLabel);
+                    TextView label = findViewById(R.id.textViewRegEmailLabel);
                     label.setText("");
                 }
             }
         });
-    }
-
-    private void confirmSignUp(CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
-        Intent intent = new Intent(this, ConfirmRegisterActivity.class);
-        intent.putExtra("source", "signup");
-        intent.putExtra("name", emailInput);
-        intent.putExtra("destination", cognitoUserCodeDeliveryDetails.getDestination());
-        intent.putExtra("deliveryMed", cognitoUserCodeDeliveryDetails.getDeliveryMedium());
-        intent.putExtra("attribute", cognitoUserCodeDeliveryDetails.getAttributeName());
-        startActivityForResult(intent, 10);
     }
 
     /**

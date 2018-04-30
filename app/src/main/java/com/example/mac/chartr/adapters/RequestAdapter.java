@@ -30,8 +30,8 @@ import retrofit2.Response;
  * Adapter for a RecyclerView to view the Requests to join a trip
  */
 public class RequestAdapter extends RecyclerView.Adapter {
-    public static final String TAG = RequestAdapter.class.getSimpleName();
-    private List<Pair<Trip, User>> requestedUsers;
+    private static final String TAG = RequestAdapter.class.getSimpleName();
+    private final List<Pair<Trip, User>> requestedUsers;
 
     public RequestAdapter(List<Pair<Trip, User>> data) {
         requestedUsers = data;
@@ -62,7 +62,7 @@ public class RequestAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Pair<Trip, User> tripUserPair = requestedUsers.get(position);
         RequestViewHolder placeholder = (RequestViewHolder) holder;
-        placeholder.bindData(tripUserPair, position);
+        placeholder.bindData(tripUserPair);
 
         placeholder.acceptButton.setOnClickListener(v -> {
             Log.d(TAG, "accept button pressed");
@@ -77,7 +77,7 @@ public class RequestAdapter extends RecyclerView.Adapter {
     /**
      * Gets how many items should be displayed in this recycler view
      *
-     * @return
+     * @return Count of the number of requested users
      */
     @Override
     public int getItemCount() {
@@ -90,12 +90,12 @@ public class RequestAdapter extends RecyclerView.Adapter {
      * recycler view can display
      */
     public static class RequestViewHolder extends RecyclerView.ViewHolder {
-        TextView name;
-        TextView startTime;
-        TextView start;
-        TextView destination;
-        Button acceptButton;
-        Button rejectButton;
+        final TextView name;
+        final TextView startTime;
+        final TextView start;
+        final TextView destination;
+        final Button acceptButton;
+        final Button rejectButton;
 
         RequestViewHolder(View itemView) {
             super(itemView);
@@ -107,7 +107,7 @@ public class RequestAdapter extends RecyclerView.Adapter {
             rejectButton = itemView.findViewById(R.id.reject_button);
         }
 
-        void bindData(Pair<Trip, User> tripPair, int position) {
+        void bindData(Pair<Trip, User> tripPair) {
             Trip trip = tripPair.first;
             String nameRetrieved = tripPair.second.getName();
             name.setText("" + nameRetrieved);
@@ -131,7 +131,7 @@ public class RequestAdapter extends RecyclerView.Adapter {
      * @param tripUserPair The pair of a trip to a user
      * @param status Status that you wish to set for the user
      */
-    public void setRiderStatus(Context context, int position, Pair<Trip,
+    private void setRiderStatus(Context context, int position, Pair<Trip,
             User> tripUserPair, String status) {
         ApiInterface apiInterface = ApiClient.getApiInstance();
         Trip trip = tripUserPair.first;
@@ -150,7 +150,7 @@ public class RequestAdapter extends RecyclerView.Adapter {
 
                 if (status.equals("riding")) {
                     CharSequence text = "Accepted " + tripUserPair.second.getName();
-                    sendTripConfirmationEmail(context, tripUserPair);
+                    sendTripConfirmationEmail(tripUserPair);
                     Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 } else {
                     CharSequence text = "Rejected " + tripUserPair.second.getName();
@@ -172,10 +172,9 @@ public class RequestAdapter extends RecyclerView.Adapter {
     /**
      * Makes a post api call to send ride approved confirmation emails.
      *
-     * @param context Context
      * @param tripUserPair The pair of a trip to a user
      */
-    public void sendTripConfirmationEmail(Context context, Pair<Trip,
+    private void sendTripConfirmationEmail(Pair<Trip,
             User> tripUserPair) {
         ApiInterface apiInterface = ApiClient.getApiInstance();
         CommonDependencyProvider provider = new CommonDependencyProvider();

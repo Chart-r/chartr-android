@@ -23,7 +23,6 @@ import android.util.Log;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession;
 import com.amazonaws.regions.Regions;
 import com.example.mac.chartr.objects.User;
 
@@ -41,39 +40,15 @@ import java.util.Set;
 public class AppHelper {
     private static final String TAG = "AppHelper";
     /**
-     * Add your pool id here
-     */
-    private final String userPoolId = "us-east-2_OHZrHKLGQ";
-    /**
-     * Add you app id
-     */
-    private final String clientId = "20d0tqg8ulln6v52hau17ttsc2";
-    /**
-     * App secret associated with your app id - if the App id does
-     * not have an associated App secret,
-     * set the App secret to null.
-     * e.g. clientSecret = null;
-     */
-    private final String clientSecret = "1iskopdp36s0eponkvduvfmqh0cj6aol31e74pan4bkjbn3722d1";
-    /**
      * Set Your User Pools region.
      * e.g. if your user pools are in US East (N Virginia) then set
      * cognitoRegion = Regions.US_EAST_1.
      */
     private final Regions cognitoRegion = Regions.US_EAST_2;
-    // App settings
-    private List<String> attributeDisplaySeq;
     private Map<String, String> signUpFieldsC2O;
-    private Map<String, String> signUpFieldsO2C;
     private CognitoUserPool userPool;
     private String user;
     private CognitoDevice newDevice;
-    private int itemCount;
-    private CognitoDevice thisDevice;
-    private boolean thisDeviceTrustState;
-    private Map<String, String> firstTimeLogInUpDatedAttributes;
-    // User details from the service
-    private CognitoUserSession currSession;
     private CognitoUserDetails userDetails;
 
     // User details to display - they are the current values, including any local modification
@@ -102,7 +77,7 @@ public class AppHelper {
      *
      * @param context Context of the app.
      */
-    public void init(Context context) {
+    private void init(Context context) {
         setData();
 
         if (userPool != null) {
@@ -110,6 +85,21 @@ public class AppHelper {
         }
 
         // Create a user pool with default ClientConfiguration
+        /*
+      App secret associated with your app id - if the App id does
+      not have an associated App secret,
+      set the App secret to null.
+      e.g. clientSecret = null;
+     */
+        String clientSecret = "1iskopdp36s0eponkvduvfmqh0cj6aol31e74pan4bkjbn3722d1";
+        /*
+      Add you app id
+     */
+        String clientId = "20d0tqg8ulln6v52hau17ttsc2";
+        /*
+      Add your pool id here
+     */
+        String userPoolId = "us-east-2_OHZrHKLGQ";
         userPool = new CognitoUserPool(context, userPoolId, clientId, clientSecret, cognitoRegion);
 
         phoneVerified = false;
@@ -118,11 +108,8 @@ public class AppHelper {
         emailAvailable = false;
 
         currUserAttributes = new HashSet<>();
-        firstTimeLogInUpDatedAttributes = new HashMap<>();
 
         newDevice = null;
-        thisDevice = null;
-        thisDeviceTrustState = false;
     }
 
     public void setCurrUserAttributes(Set<String> currUserAttributes) {
@@ -151,10 +138,6 @@ public class AppHelper {
 
     public Map<String, String> getSignUpFieldsC2O() {
         return signUpFieldsC2O;
-    }
-
-    public void setCurrSession(CognitoUserSession session) {
-        currSession = session;
     }
 
     public void setUserDetails(CognitoUserDetails details) {
@@ -206,7 +189,7 @@ public class AppHelper {
      */
     private void setData() {
         // Set attribute display sequence
-        attributeDisplaySeq = new ArrayList<String>();
+        List<String> attributeDisplaySeq = new ArrayList<>();
         attributeDisplaySeq.add("name");
         attributeDisplaySeq.add("middle_name");
         attributeDisplaySeq.add("family_name");
@@ -215,7 +198,7 @@ public class AppHelper {
         attributeDisplaySeq.add("email");
         attributeDisplaySeq.add("birthdate");
 
-        signUpFieldsC2O = new HashMap<String, String>();
+        signUpFieldsC2O = new HashMap<>();
         signUpFieldsC2O.put("Given name", "name");
         signUpFieldsC2O.put("Family name", "family_name");
         signUpFieldsC2O.put("Nick name", "nickname");
@@ -226,7 +209,7 @@ public class AppHelper {
         signUpFieldsC2O.put("Middle name", "middle_name");
         signUpFieldsC2O.put("Birthday", "birthdate");
 
-        signUpFieldsO2C = new HashMap<String, String>();
+        Map<String, String> signUpFieldsO2C = new HashMap<>();
         signUpFieldsO2C.put("given_name", "Given name");
         signUpFieldsO2C.put("family_name", "Family name");
         signUpFieldsO2C.put("nickname", "Nick name");
@@ -252,7 +235,6 @@ public class AppHelper {
 
         // currDisplayedItems = new ArrayList<ItemToDisplay>();
         currUserAttributes.clear();
-        itemCount = 0;
 
         for (Map.Entry<String, String> attr : userDetails.getAttributes()
                 .getAttributes().entrySet()) {

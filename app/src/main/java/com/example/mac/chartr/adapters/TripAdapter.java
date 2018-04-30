@@ -31,9 +31,10 @@ import static com.example.mac.chartr.activities.MainActivity.TAG;
  * in our app.
  */
 public class TripAdapter extends RecyclerView.Adapter {
-    private List<Trip> tripsData;
+    private final List<Trip> tripsData;
 
-    private Comparator<Trip> comparator = (a, b) -> (int) (b.getStartTime() - a.getStartTime());
+    private final Comparator<Trip> comparator = (a, b) ->
+            (int) (b.getStartTime() - a.getStartTime());
 
     /**
      * Constructor takes in a list of trips
@@ -101,13 +102,13 @@ public class TripAdapter extends RecyclerView.Adapter {
      */
     public static class TripViewHolder extends RecyclerView.ViewHolder {
         Trip trip;
-        TextView name;
-        TextView rating;
-        TextView seats;
-        TextView seatsText;
-        TextView start;
-        TextView destination;
-        TextView departureDate;
+        final TextView name;
+        final TextView rating;
+        final TextView seats;
+        final TextView seatsText;
+        final TextView start;
+        final TextView destination;
+        final TextView departureDate;
 
         TripViewHolder(View itemView) {
             super(itemView);
@@ -119,14 +120,11 @@ public class TripAdapter extends RecyclerView.Adapter {
             destination = itemView.findViewById(R.id.textViewDestination);
             departureDate = itemView.findViewById(R.id.textViewDate);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(itemView.getContext(), TripDetailActivity.class);
-                    intent.putExtra("trip", trip);
-                    intent.putExtra("type", "mytrips");
-                    itemView.getContext().startActivity(intent);
-                }
+            itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(itemView.getContext(), TripDetailActivity.class);
+                intent.putExtra("trip", trip);
+                intent.putExtra("type", "mytrips");
+                itemView.getContext().startActivity(intent);
             });
         }
 

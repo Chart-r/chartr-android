@@ -34,7 +34,7 @@ import retrofit2.Response;
  * the driver to go through and reject or accept each rider.
  */
 public class RequestsFragment extends Fragment {
-    public static final String TAG = RequestsFragment.class.getSimpleName();
+    private static final String TAG = RequestsFragment.class.getSimpleName();
     private CommonDependencyProvider provider;
     private String uid;
 
@@ -42,8 +42,8 @@ public class RequestsFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<Pair<Trip, User>> requestedUsers = new ArrayList<>();
-    private Comparator<Pair<Trip, User>> comparator =
+    private final List<Pair<Trip, User>> requestedUsers = new ArrayList<>();
+    private final Comparator<Pair<Trip, User>> comparator =
             (a, b) -> (int) (b.first.getStartTime() - a.first.getStartTime());
 
     /**

@@ -18,10 +18,8 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ChallengeContinuation;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ChooseMfaContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ForgotPasswordContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.NewPasswordContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.ForgotPasswordHandler;
 import com.example.mac.chartr.ApiClient;
@@ -72,20 +70,15 @@ public class LoginActivity extends AppCompatActivity {
                     formatException(e));
         }
     };
-    //Continuations
-    private MultiFactorAuthenticationContinuation multiFactorAuthenticationContinuation;
     private ForgotPasswordContinuation forgotPasswordContinuation;
-    private NewPasswordContinuation newPasswordContinuation;
-    private ChooseMfaContinuation mfaOptionsContinuation;
     // User Details
     private String username;
     private String password;
     //
-    AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
+    private final AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
         @Override
         public void onSuccess(CognitoUserSession cognitoUserSession, CognitoDevice device) {
             Log.d(TAG, " -- Auth Success");
-            provider.getAppHelper().setCurrSession(cognitoUserSession);
             provider.getAppHelper().newDevice(device);
             provider.getAppHelper().setLoggedInUser(new User(username, "Person", (float) 4.5));
             closeWaitDialog();
@@ -108,11 +101,11 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onFailure(Exception e) {
             closeWaitDialog();
-            TextView label = (TextView) findViewById(R.id.textViewUserIdMessage);
+            TextView label = findViewById(R.id.textViewUserIdMessage);
             label.setText("Sign-in failed");
             inPassword.setBackground(getDrawable(R.drawable.text_border_error));
 
-            label = (TextView) findViewById(R.id.textViewUserIdMessage);
+            label = findViewById(R.id.textViewUserIdMessage);
             label.setText("Sign-in failed");
             inUsername.setBackground(getDrawable(R.drawable.text_border_error));
 
@@ -123,7 +116,6 @@ public class LoginActivity extends AppCompatActivity {
         public void authenticationChallenge(ChallengeContinuation continuation) {
             if ("NEW_PASSWORD_REQUIRED".equals(continuation.getChallengeName())) {
                 // This is the first sign-in attempt for an admin created user
-                newPasswordContinuation = (NewPasswordContinuation) continuation;
                 closeWaitDialog();
             }
         }
@@ -194,7 +186,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param resultCode Result from the registration activity
      * @param data The Intent data
      */
-    protected void userBack(int resultCode, Intent data) {
+    private void userBack(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             clearInput();
             String name = data.getStringExtra("TODO");
@@ -293,7 +285,7 @@ public class LoginActivity extends AppCompatActivity {
     public void logIn(View view) {
         username = inUsername.getText().toString();
         if (username == null || username.length() < 1) {
-            TextView label = (TextView) findViewById(R.id.textViewUserIdMessage);
+            TextView label = findViewById(R.id.textViewUserIdMessage);
             label.setText(inUsername.getHint() + " cannot be empty");
             inUsername.setBackground(getDrawable(R.drawable.text_border_error));
             return;
@@ -303,7 +295,7 @@ public class LoginActivity extends AppCompatActivity {
 
         password = inPassword.getText().toString();
         if (password == null || password.length() < 1) {
-            TextView label = (TextView) findViewById(R.id.textViewUserPasswordMessage);
+            TextView label = findViewById(R.id.textViewUserPasswordMessage);
             label.setText(inPassword.getHint() + " cannot be empty");
             inPassword.setBackground(getDrawable(R.drawable.text_border_error));
             return;
@@ -322,13 +314,6 @@ public class LoginActivity extends AppCompatActivity {
      * @param view Current view
      */
     public void forgotPassword(View view) {
-    }
-
-    private void confirmUser() {
-//        Intent confirmActivity = new Intent(this, SignUpConfirm.class);
-//        confirmActivity.putExtra("source","main");
-//        startActivityForResult(confirmActivity, 2);
-
     }
 
     /**
@@ -389,14 +374,14 @@ public class LoginActivity extends AppCompatActivity {
             inUsername.setText(username);
             password = inPassword.getText().toString();
             if (password == null) {
-                TextView label = (TextView) findViewById(R.id.textViewUserPasswordMessage);
+                TextView label = findViewById(R.id.textViewUserPasswordMessage);
                 label.setText(inPassword.getHint() + " enter password");
                 inPassword.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
             }
 
             if (password.length() < 1) {
-                TextView label = (TextView) findViewById(R.id.textViewUserPasswordMessage);
+                TextView label = findViewById(R.id.textViewUserPasswordMessage);
                 label.setText(inPassword.getHint() + " enter password");
                 inPassword.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
@@ -410,12 +395,12 @@ public class LoginActivity extends AppCompatActivity {
 
     // initialize app
     private void initApp() {
-        inUsername = (EditText) findViewById(R.id.editTextUserId);
+        inUsername = findViewById(R.id.editTextUserId);
         inUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewUserIdLabel);
+                    TextView label = findViewById(R.id.textViewUserIdLabel);
                     label.setText(R.string.Username);
                     inUsername.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
@@ -423,25 +408,25 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView label = (TextView) findViewById(R.id.textViewUserIdMessage);
+                TextView label = findViewById(R.id.textViewUserIdMessage);
                 label.setText("");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewUserIdLabel);
+                    TextView label = findViewById(R.id.textViewUserIdLabel);
                     label.setText("");
                 }
             }
         });
 
-        inPassword = (EditText) findViewById(R.id.editTextUserPassword);
+        inPassword = findViewById(R.id.editTextUserPassword);
         inPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewUserPasswordLabel);
+                    TextView label = findViewById(R.id.textViewUserPasswordLabel);
                     label.setText(R.string.Password);
                     inPassword.setBackground(getDrawable(R.drawable.text_border_selector));
                 }
@@ -449,14 +434,14 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextView label = (TextView) findViewById(R.id.textViewUserPasswordMessage);
+                TextView label = findViewById(R.id.textViewUserPasswordMessage);
                 label.setText("");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
-                    TextView label = (TextView) findViewById(R.id.textViewUserPasswordLabel);
+                    TextView label = findViewById(R.id.textViewUserPasswordLabel);
                     label.setText("");
                 }
             }
@@ -465,11 +450,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void clearInput() {
         if (inUsername == null) {
-            inUsername = (EditText) findViewById(R.id.editTextUserId);
+            inUsername = findViewById(R.id.editTextUserId);
         }
 
         if (inPassword == null) {
-            inPassword = (EditText) findViewById(R.id.editTextUserPassword);
+            inPassword = findViewById(R.id.editTextUserPassword);
         }
 
         inUsername.setText("");
