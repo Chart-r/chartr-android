@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.example.mac.chartr.ApiClient;
 import com.example.mac.chartr.ApiInterface;
+import com.example.mac.chartr.objects.ConfirmationEmail;
 import com.example.mac.chartr.objects.Review;
 import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
@@ -164,6 +165,11 @@ public class ProfileFragmentTest {
 
             @Override
             public Call<List<Review>> getAllReviewsForUser(String uid) {
+                return null;
+            }
+
+            @Override
+            public Call<String> postTripConfirmationEmail(ConfirmationEmail email) {
                 return null;
             }
         });

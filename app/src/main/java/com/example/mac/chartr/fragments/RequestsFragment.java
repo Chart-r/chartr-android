@@ -29,8 +29,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * This fragment will display all the riders who have requested to join different trips, and allow
+ * the driver to go through and reject or accept each rider.
+ */
 public class RequestsFragment extends Fragment {
-    public static final String TAG = RequestsFragment.class.getSimpleName();
+    private static final String TAG = RequestsFragment.class.getSimpleName();
     private CommonDependencyProvider provider;
     private String uid;
 
@@ -38,18 +42,30 @@ public class RequestsFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<Pair<Trip, User>> requestedUsers = new ArrayList<>();
-    private Comparator<Pair<Trip, User>> comparator =
+    private final List<Pair<Trip, User>> requestedUsers = new ArrayList<>();
+    private final Comparator<Pair<Trip, User>> comparator =
             (a, b) -> (int) (b.first.getStartTime() - a.first.getStartTime());
 
+    /**
+     * Constructor of the class
+     */
     public RequestsFragment() {
         setCommonDependencyProvider(new CommonDependencyProvider());
     }
 
+    /**
+     * Initialises the common dependency provider of the class
+     * @param provider The provider to which the class' provider is set
+     */
     public void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
     }
 
+    /**
+     * Method inherited from the Fragment class that is called upon creation of the fragment
+     *
+     * @param savedInstanceState Bundle of the saved instance state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "start onCreate()");
@@ -58,6 +74,14 @@ public class RequestsFragment extends Fragment {
         Log.d(TAG, "end onCreate()");
     }
 
+    /**
+     * Method inherited from the Fragment class that returns a view that has been inflated
+     * with the container argument
+     * @param inflater Used to inflate the returned object
+     * @param container The viewGroup used in the inflation of the returned object
+     * @param savedInstanceState Bundle of the saved instance state
+     * @return the inflated view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

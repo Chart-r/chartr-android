@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -22,21 +21,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Activity will give detailed information about a trip that is clicked on. This activity
+ * can be launched by any context where trip cards are displayed.
+ */
 public class TripDetailActivity extends AppCompatActivity {
-    public static final String TAG = TripDetailActivity.class.getSimpleName();
+    private static final String TAG = TripDetailActivity.class.getSimpleName();
 
     private Trip trip;
     private String type;
 
-    EditText departureEditText;
-    EditText departureTimeText;
-    EditText startLocationEditText;
-    EditText endLocationEditText;
-    TextView numSeatsEditText;
-    Switch smokingSwitch;
-    Button submitButton;
-    String uid;
+    private String uid;
 
+    /**
+     * Inherited class from the Activity class that handles what happens
+     * when the activity starts up
+     *
+     * @param savedInstanceState Bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,46 +62,36 @@ public class TripDetailActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        departureEditText = findViewById(R.id.editTextDepartureDate);
+        EditText departureEditText = findViewById(R.id.editTextDepartureDate);
         departureEditText.setInputType(InputType.TYPE_NULL);
         departureEditText.setFocusable(false);
         departureEditText.setText(trip.getStartDateString());
 
-        departureTimeText = findViewById(R.id.editTextDepartureTime);
+        EditText departureTimeText = findViewById(R.id.editTextDepartureTime);
         departureTimeText.setInputType(InputType.TYPE_NULL);
         departureTimeText.setText(trip.getStartTimeString());
 
-        startLocationEditText = findViewById(R.id.editTextStartLocation);
+        EditText startLocationEditText = findViewById(R.id.editTextStartLocation);
         startLocationEditText.setInputType(InputType.TYPE_NULL);
         startLocationEditText.setText(trip.getStartLocationLongName(this));
 
-        endLocationEditText = findViewById(R.id.editTextEndLocation);
+        EditText endLocationEditText = findViewById(R.id.editTextEndLocation);
         endLocationEditText.setInputType(InputType.TYPE_NULL);
         endLocationEditText.setText(trip.getEndLocationLongName(this));
 
-        numSeatsEditText = findViewById(R.id.textViewSeatValue);
+        TextView numSeatsEditText = findViewById(R.id.textViewSeatValue);
         numSeatsEditText.setText(String.format("%d / %d", trip.getRidingCount(), trip.getSeats()));
 
-        smokingSwitch = findViewById(R.id.switchNoSmoking);
+        Switch smokingSwitch = findViewById(R.id.switchNoSmoking);
         smokingSwitch.setChecked(trip.getSmoking());
 
-        submitButton = findViewById(R.id.button);
+        Button submitButton = findViewById(R.id.button);
         if (type.equals("mytrips")) {
             submitButton.setText(R.string.back);
-            submitButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
+            submitButton.setOnClickListener(v -> onBackPressed());
         } else {
             submitButton.setText(R.string.request);
-            submitButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    requestTrip(v.getContext(), trip);
-                }
-            });
+            submitButton.setOnClickListener(v -> requestTrip(v.getContext(), trip));
         }
     }
 

@@ -26,15 +26,32 @@ import retrofit2.Response;
 
 import static com.example.mac.chartr.activities.MainActivity.TAG;
 
+/**
+ * Recycle view adapter that will allow us to show trip cards in multiple different places
+ * in our app.
+ */
 public class TripAdapter extends RecyclerView.Adapter {
-    private List<Trip> tripsData;
+    private final List<Trip> tripsData;
 
-    private Comparator<Trip> comparator = (a, b) -> (int) (b.getStartTime() - a.getStartTime());
+    private final Comparator<Trip> comparator = (a, b) ->
+            (int) (b.getStartTime() - a.getStartTime());
 
+    /**
+     * Constructor takes in a list of trips
+     *
+     * @param data List of trips
+     */
     public TripAdapter(List<Trip> data) {
        tripsData = data;
     }
 
+    /**
+     * Creates the view holder that will allow us to show the trips
+     *
+     * @param parent Parent ViewGroup
+     * @param viewType View type (typically 0)
+     * @return A new instance of the View Holder
+     */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,6 +60,13 @@ public class TripAdapter extends RecyclerView.Adapter {
         return new TripViewHolder(root);
     }
 
+    /**
+     * Happens when the view holder gets bound, we want to fetch the trip in the list that
+     * corresponds to the holder
+     *
+     * @param holder Holder to hold a Trip
+     * @param position Position of that holder in the list
+     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Trip item = tripsData.get(position);
@@ -50,11 +74,21 @@ public class TripAdapter extends RecyclerView.Adapter {
         placeholder.bindData(item);
     }
 
+    /**
+     * Get number of items in the recycler
+     *
+     * @return Number of items in the trips list
+     */
     @Override
     public int getItemCount() {
         return tripsData.size();
     }
 
+    /**
+     * Clears the current items and copies over the trips from Data
+     *
+     * @param data Populated list of trips
+     */
     public void addItems(List<Trip> data) {
         tripsData.clear();
         tripsData.addAll(data);
@@ -63,15 +97,18 @@ public class TripAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    /**
+     * Internal class that holds a trip for the RecyclerView
+     */
     public static class TripViewHolder extends RecyclerView.ViewHolder {
         Trip trip;
-        TextView name;
-        TextView rating;
-        TextView seats;
-        TextView seatsText;
-        TextView start;
-        TextView destination;
-        TextView departureDate;
+        final TextView name;
+        final TextView rating;
+        final TextView seats;
+        final TextView seatsText;
+        final TextView start;
+        final TextView destination;
+        final TextView departureDate;
 
         TripViewHolder(View itemView) {
             super(itemView);
@@ -83,14 +120,11 @@ public class TripAdapter extends RecyclerView.Adapter {
             destination = itemView.findViewById(R.id.textViewDestination);
             departureDate = itemView.findViewById(R.id.textViewDate);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(itemView.getContext(), TripDetailActivity.class);
-                    intent.putExtra("trip", trip);
-                    intent.putExtra("type", "mytrips");
-                    itemView.getContext().startActivity(intent);
-                }
+            itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(itemView.getContext(), TripDetailActivity.class);
+                intent.putExtra("trip", trip);
+                intent.putExtra("type", "mytrips");
+                itemView.getContext().startActivity(intent);
             });
         }
 

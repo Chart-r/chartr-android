@@ -3,6 +3,10 @@ package com.example.mac.chartr.objects;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * POJO for a User on Chartr representing all information that we have about
+ * each user. Can be serialized back and forth in order to send to or receive from the database.
+ */
 public class User {
     @SerializedName("uid")
     @Expose
@@ -109,6 +113,15 @@ public class User {
 
     public void setReviewCount(int reviewCount) {
         this.reviewCount = reviewCount;
+    }
+
+    /**
+     * Formats a stored phone number from the +12223334444 to the +1-222-333-4444 format.
+     * @return
+     */
+    public String getFormattedPhone() {
+        return phone.substring(0, 2) + "-" + phone.substring(2, 5) + "-" + phone.substring(5, 8)
+                + "-" + phone.substring(8);
     }
 
     @Override

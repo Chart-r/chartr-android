@@ -1,5 +1,6 @@
 package com.example.mac.chartr;
 
+import com.example.mac.chartr.objects.ConfirmationEmail;
 import com.example.mac.chartr.objects.Review;
 import com.example.mac.chartr.objects.Trip;
 import com.example.mac.chartr.objects.User;
@@ -17,7 +18,6 @@ import retrofit2.http.Path;
 /**
  * Interface for implemented API calls.
  */
-
 public interface ApiInterface {
     // User API calls
     /**
@@ -149,4 +149,13 @@ public interface ApiInterface {
      */
     @GET("user/{uid}/review")
     Call<List<Review>> getAllReviewsForUser(@Path("uid") String uid);
+
+    /**
+     * Posts the information for confirmation emails to the API.  The API will send confirmation
+     * emails.
+     * @param email An object containing necessary information for the confirmation emails.
+     * @return A call to post the confirmation emails.
+     */
+    @POST("email/confirmation")
+    Call<String> postTripConfirmationEmail(@Body ConfirmationEmail email);
 }

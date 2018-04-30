@@ -1,6 +1,5 @@
 package com.example.mac.chartr.activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
@@ -28,17 +26,21 @@ import com.example.mac.chartr.fragments.SearchFragment;
 import com.example.mac.chartr.fragments.trips.TripsFragment;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+/**
+ * This is the main activity of the app that controls what you see on the main screen after
+ * you login to the app. It has knowledge about the currently logged in user and will
+ * display the proper data corresponding to that user.
+ */
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    Toolbar toolbar;
     private String username;
     private CognitoUser user;
     private AlertDialog userDialog;
     private ProgressDialog waitDialog;
 
     private CommonDependencyProvider provider;
-    GenericHandler trustedDeviceHandler = new GenericHandler() {
+    private final GenericHandler trustedDeviceHandler = new GenericHandler() {
         @Override
         public void onSuccess() {
             // Close wait dialog
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     provider.getAppHelper().formatException(exception), true);
         }
     };
-    GetDetailsHandler detailsHandler = new GetDetailsHandler() {
+    private final GetDetailsHandler detailsHandler = new GetDetailsHandler() {
         @Override
         public void onSuccess(CognitoUserDetails cognitoUserDetails) {
             closeWaitDialog();
@@ -70,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Method inherited from the Activity class that is called upon creation of the activity
+     *
+     * @param savedInstanceState Bundle of the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
         setupToolbarListener();
 
         // Get the user name
-        Bundle extras = getIntent().getExtras();
         username = provider.getAppHelper().getCurrUser();
         user = provider.getAppHelper().getPool().getUser(username);
         getDetails();
@@ -109,14 +115,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupTopToolbar() {
         final Context context = this;
-        toolbar = (Toolbar) findViewById(R.id.topToolBar);
+        Toolbar toolbar = findViewById(R.id.topToolBar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
         Button logoutButton = findViewById(R.id.buttonLogOut);
         Button editProfileButton = findViewById(R.id.buttonEditProfile);
         Button goToCreateTrip = findViewById(R.id.buttonAddTrip);
-        logoutButton.setOnClickListener(v -> logout(v));
-        editProfileButton.setOnClickListener(v -> editProfile(v));
+        logoutButton.setOnClickListener(this::logout);
+        editProfileButton.setOnClickListener(this::editProfile);
         goToCreateTrip.setOnClickListener(v -> {
             Intent intent = new Intent(context, PostTripActivity.class);
             startActivity(intent);
@@ -127,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
      * Listener for changing the toolbar title and go to add trip button.
      */
     private void setupToolbarListener() {
-        final Activity activity = this;
         getSupportFragmentManager().addOnBackStackChangedListener(
                 () -> {
                     int topOfBackstack = getSupportFragmentManager()
@@ -165,18 +170,33 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void setCommonDependencyProvider(CommonDependencyProvider provider) {
+    /**
+     * Sets the common dependency provider to allow mocks to be inserted
+     *
+     * @param provider Instantiated or mocked CommonDependencyProvider
+     */
+    private void setCommonDependencyProvider(CommonDependencyProvider provider) {
         this.provider = provider;
     }
 
-    public void logout(View view) {
+    /**
+     * Method that will invoke a new activity to sign the user out
+     *
+     * @param view Current view
+     */
+    private void logout(View view) {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         user.signOut();
         exit();
         startActivity(intent);
     }
 
-    public void editProfile(View view) {
+    /**
+     * Method that would allow the user to edit their profile. Currently, unused.
+     *
+     * @param view Current view
+     */
+    private void editProfile(View view) {
         //TODO
         CharSequence text = "to be implemented";
         Toast.makeText(view.getContext(), text, Toast.LENGTH_SHORT).show();
@@ -200,15 +220,6 @@ public class MainActivity extends AppCompatActivity {
     private void trustedDeviceDialog(final CognitoDevice newDevice) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Remember this device?");
-        //final EditText input = new EditText(UserActivity.this);
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-
-        //input.setLayoutParams(lp);
-        //input.requestFocus();
-        //builder.setView(input);
 
         builder.setPositiveButton("Yes", (dialog, which) -> {
             try {
@@ -237,7 +248,6 @@ public class MainActivity extends AppCompatActivity {
     private void setupBottomNavigation() {
         Log.d(TAG, "Setting up Bottom Navigation");
         final BottomNavigationViewEx navBar = findViewById(R.id.bottomNavigationBar);
-        final Context context = this;
         navBar.enableAnimation(false);
         navBar.enableShiftingMode(false);
         navBar.enableItemShiftingMode(false);
@@ -328,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    protected void exit() {
+    private void exit() {
         Intent intent = new Intent();
         if (username == null) {
             username = "";
@@ -338,6 +348,9 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * From the Activity class, allows for back stack navigation
+     */
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
