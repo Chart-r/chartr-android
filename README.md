@@ -28,7 +28,9 @@ The contributing guide can be found [here](CONTRIBUTING.md).
 
 ## Project Documentation
 
-The final project documentation can be found [here](project_documentation.pdf). 
+The final project documentation can be found [here](project_documentation.pdf).
+
+Javadoc HTML documentation can be generated in Android Studio by going to `Tools -> Generate Javadoc`. This will give you a selection of which packages to generate the Javadoc for, as well as the output location. From there, documentation for all of our public classes and methods can be viewed.
 
 ## Installation
 
