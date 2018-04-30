@@ -37,6 +37,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Activity used to allow the user to register for the Chartr App. Includes listeners for the
+ * various fields and will attempt to sign-up the user once they have completed the fields.
+ */
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
 

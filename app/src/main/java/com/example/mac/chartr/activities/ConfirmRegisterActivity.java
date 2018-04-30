@@ -17,6 +17,10 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.Verificat
 import com.example.mac.chartr.CommonDependencyProvider;
 import com.example.mac.chartr.R;
 
+/**
+ * Activity class used to confirm that the user is registered for the app and, if so,
+ * allows sign-in.
+ */
 public class ConfirmRegisterActivity extends AppCompatActivity {
     private static final String TAG = ConfirmRegisterActivity.class.getSimpleName();
 

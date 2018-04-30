@@ -22,6 +22,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Activity will give detailed information about a trip that is clicked on. This activity
+ * can be launched by any context where trip cards are displayed.
+ */
 public class TripDetailActivity extends AppCompatActivity {
     public static final String TAG = TripDetailActivity.class.getSimpleName();
 

@@ -24,6 +24,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Fragment that lists all of the trips in cards that are in a Recycle View
+ */
 public class ListTripsFragment extends Fragment {
     public static final String TRIP_TYPE_KEY = "TripTypeKey";
     private static final String TAG = ListTripsFragment.class.getSimpleName();

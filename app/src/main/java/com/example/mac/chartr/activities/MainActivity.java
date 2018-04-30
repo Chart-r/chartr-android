@@ -28,6 +28,11 @@ import com.example.mac.chartr.fragments.SearchFragment;
 import com.example.mac.chartr.fragments.trips.TripsFragment;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+/**
+ * This is the main activity of the app that controls what you see on the main screen after
+ * you login to the app. It has knowledge about the currently logged in user and will
+ * display the proper data corresponding to that user.
+ */
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();

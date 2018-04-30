@@ -36,6 +36,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Activity that allows users to log into the app from the first page that is presented in the app.
+ * Interfaces with Cognito to verify the login.
+ */
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
     private CommonDependencyProvider provider;

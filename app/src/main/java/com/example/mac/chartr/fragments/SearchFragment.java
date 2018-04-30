@@ -50,6 +50,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
+/**
+ * One of the main fragments that allows the user to search through posted trips based upon a
+ * certain set of criteria that are contained in this class.
+ */
 public class SearchFragment extends Fragment implements View.OnClickListener {
     public static final String TAG = SearchFragment.class.getSimpleName();
     private static final int START_PLACE_PICKER = 1;

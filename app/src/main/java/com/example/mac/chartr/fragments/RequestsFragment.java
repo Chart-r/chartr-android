@@ -29,6 +29,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * This fragment will display all the riders who have requested to join different trips, and allow
+ * the driver to go through and reject or accept each rider.
+ */
 public class RequestsFragment extends Fragment {
     public static final String TAG = RequestsFragment.class.getSimpleName();
     private CommonDependencyProvider provider;

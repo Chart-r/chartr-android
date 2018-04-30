@@ -38,6 +38,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
+/**
+ * Activity that is launched when a user clicks on the "+" icon that allows them to
+ * enter a new trip into the system.
+ */
 public class PostTripActivity extends AppCompatActivity {
     private static final String TAG = PostTripActivity.class.getSimpleName();
     private static final int START_PLACE_PICKER = 1;
